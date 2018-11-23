@@ -8,10 +8,18 @@ export class MainController {
     this.toastr = toastr;
 
     this.myfirstsService = []
+    this.TablePerson = [];
+
 
     this.activate($timeout, webDevTec);
   }
+ 
 
+addFace(person,post){
+    if (person.idPerson === post.idPerson) {
+        return person.PictureFace;
+    }
+}
   activate($timeout, webDevTec) {
     this.getWebDevTec(webDevTec);
     $timeout(() => {
@@ -29,11 +37,16 @@ export class MainController {
   }
   getMydata(webDevTec){
     this.myfirstsService = webDevTec.getYesNodata();
+    this.TablePerson = webDevTec.getdata();
     angular.forEach(this.myfirstsService, (cont) => {
       cont.rank = Math.random();
     })
   }
-
+  addName(person,post){
+    if (person.idPerson === post.idPerson) {
+        return person.Name;
+    }
+}
   showToastr() {
     this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
     this.classAnimation = '';

@@ -91,7 +91,19 @@ export class WebDevTecService {
         'IdFollows':[]
 
       }
+    ];
+    this.TablePerson =[ {
+          'idPerson':"1000",
+          'idFolows':[],
+          'idMyFolows':[],
+          'Name':"Vasya",
+          'PictureFace':"js/image/face/MyFace.jpeg"
+
+      }
     ]
+  
+
+  
   }
 
   getTec() {
@@ -99,5 +111,8 @@ export class WebDevTecService {
   }
   getYesNodata(){
     return this.dataYesNO;
+  }
+  getdata(){
+    return this.TablePerson;
   }
 }
