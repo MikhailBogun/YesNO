@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "sooprit",
+    "password": "1",
+    "database": "YesNO",
+    "host": "LocalHost",
+    "dialect": "postgres",
+    "operatorsAliases": false
+  }
+}

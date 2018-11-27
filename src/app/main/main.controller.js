@@ -13,7 +13,7 @@ export class MainController {
 
     this.activate($timeout, webDevTec);
   }
- 
+
 
 addFace(person,post){
     if (person.idPerson === post.idPerson) {
@@ -50,5 +50,8 @@ addFace(person,post){
   showToastr() {
     this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
     this.classAnimation = '';
+  }
+  showFollows(person){
+    this.toastr.info('Follow ' +person);
   }
 }

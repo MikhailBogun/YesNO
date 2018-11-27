@@ -6,7 +6,12 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       templateUrl: 'app/main/main.html',
       controller: 'MainController',
       controllerAs: 'main'
-    });
-
+    })
+    .state('follows',{
+      url:'/follows',
+      templateUrl: 'app/friend/friend.html',
+      controller:'FriendController',
+      controllerAs:'friend'
+    })
   $urlRouterProvider.otherwise('/');
 }

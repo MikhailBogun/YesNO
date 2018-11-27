@@ -58,37 +58,38 @@ export class WebDevTecService {
         'idPerson':"1000",
         'Namehash':["#cat"],
         'massage':"Котик красивый?",
-        'Picture':"js/image/catOne.jpeg",
+        'Picture':"assets/images/PostAll/Cat1.jpg",
         'Yes': "",
         'No':"",
-        'IdFollows':[]
+        'voted':[]
       },
       {
         'idPerson':"1001",
         'Namehash':["#house"],
         'massage':"Дом большой",
-        'Picture':"js/image/catOne.jpeg",
+        'Picture':"assets/images/PostAll/House1.jpg",
         'Yes': "",
         'No':"",
-        'IdFollows':[]
+        'voted':[]
       },
       {
         'idPerson':"1002",
         'massage':"Телефон новый?",
         'Namehash':["#phone"],
-        'Picture':"js/image/catOne.jpeg",
+        'Picture':"assets/images/PostAll/phone1.jpg",
         'Yes': "",
         'No':"",
-        'IdFollows':[]
+        'voted':[]
       },
       {
-        'idPerson':"1003",
+        'idPerson':"1001",
         'Namehash':["#dog"],
         'massage':"Собака породистая?",
-        'Picture':"js/image/catOne.jpeg",
+        'Picture':"assets/images/PostAll/Dog1.jpg",
         'Yes': "",
         'No':"",
-        'IdFollows':[]
+        'voted':[]
+
 
       }
     ];
@@ -97,13 +98,29 @@ export class WebDevTecService {
           'idFolows':[],
           'idMyFolows':[],
           'Name':"Vasya",
-          'PictureFace':"js/image/face/MyFace.jpeg"
+          'PictureFace':"assets/images/persons//1000.jpeg"
+
+      },{
+      'idPerson':"1001",
+      'idFolows':[],
+      'idMyFolows':[],
+      'Name':"Anatolii",
+      'PictureFace':"assets/images/persons/1001.jpeg"
+
+    },
+      {
+        'idPerson':"1002",
+        'idFolows':[],
+        'idMyFolows':[],
+        'Name':"Natasha",
+        'PictureFace':"assets/images/persons/1002.jpg"
 
       }
-    ]
-  
 
-  
+    ]
+
+
+
   }
 
   getTec() {
