@@ -5,9 +5,11 @@ import { routerConfig } from './index.route';
 import { runBlock } from './index.run';
 import { MainController } from './main/main.controller';
 import { FriendController } from './friend/friends.controller';
+import { RegistrationController } from './registration/registration.controller';
 import { GithubContributorService } from '../app/components/githubContributor/githubContributor.service';
 import { WebDevTecService } from '../app/components/webDevTec/webDevTec.service';
 import { FriendsService } from "../app/friend/friend.service";
+import { RegistrationService } from "../app/registration/registration.service";
 import { NavbarDirective } from '../app/components/navbar/navbar.directive';
 import { MalarkeyDirective } from '../app/components/malarkey/malarkey.directive';
 import { PostAllDirective } from '../app//PostAll/directivePostAll.directive';
@@ -23,8 +25,10 @@ angular.module('yesno', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngM
   .service('githubContributor', GithubContributorService)
   .service('webDevTec', WebDevTecService)
   .service('friendsService', FriendsService)
+  .service('registration', RegistrationService)
   .controller('MainController', MainController)
   .controller('FriendController', FriendController)
+  .controller('RegistrationController', RegistrationController)
   .directive('acmeNavbar', NavbarDirective)
   .directive('acmeMalarkey', MalarkeyDirective)
   .directive('post', PostAllDirective);

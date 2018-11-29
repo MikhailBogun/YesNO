@@ -94,14 +94,14 @@ export class WebDevTecService {
       }
     ];
     this.TablePerson =[ {
-          'idPerson':"1000",
+          'idPerson':"1",
           'idFolows':[],
           'idMyFolows':[],
           'Name':"Vasya",
           'PictureFace':"assets/images/persons//1000.jpeg"
 
       },{
-      'idPerson':"1001",
+      'idPerson':"2",
       'idFolows':[],
       'idMyFolows':[],
       'Name':"Anatolii",
@@ -109,7 +109,7 @@ export class WebDevTecService {
 
     },
       {
-        'idPerson':"1002",
+        'idPerson':"3",
         'idFolows':[],
         'idMyFolows':[],
         'Name':"Natasha",

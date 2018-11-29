@@ -13,5 +13,11 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
       controller:'FriendController',
       controllerAs:'friend'
     })
+    .state('registration',{
+    url:'/registration',
+    templateUrl: 'app/Registration/registration.html',
+    controller:'RegistrationController',
+    controllerAs:'reg'
+  })
   $urlRouterProvider.otherwise('/');
 }

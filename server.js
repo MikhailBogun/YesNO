@@ -10,7 +10,8 @@ app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended:true }));
 app.use("/", express.static(__dirname + "/"));
 app.use(cors());
-app.get("/follows", controller.PostAll);
+app.get("/PostAll", controller.PostAll);
+app.post("/register_user", controller.register_user);
 
 
 server.listen(8000);

@@ -1,15 +1,18 @@
 export class FriendsService{
-  constructor (){
+  constructor ($http){
     'ngInject';
-    this.promise =[];
-    // $http.get('http://localhost:8000/follows')
-    //   .then(function(promise) {
-    //       //this.data=success.data;
-    //       this.promise= promise;
-    //     },
-    //     function(error) {
-    //       this.promise= error;
-    //     });
+    let that = this;
+    $http.get('http://localhost:8000/follows')
+      .then(function(promise) {
+          //this.data=success.data;
+          that.promise = promise.data;
+        },
+        function(error) {
+          that.promise = error;
+        });
+    this.senk = function(){
+      return "hello";
+    };
 
     this.data = [
       {
@@ -17,21 +20,47 @@ export class FriendsService{
         'myFriend': ["1001","1002"]
       }
     ]
-
   }
    getFriends() {
     return this.data;
   }
-   getData(){
-       // $http.get('http://localhost:8000/follows')
-       //   .then(function(success){
-       //   //this.data=success.data;
-       //   return success.data;
-       // },
-       // function(error){
-       //   return error;
-       // });
-     return this.promise;
 
-  }
 }
+// (function () {
+//   'use strict';
+//
+//   angular
+//     .module('yesno')
+//     .service('FriendsService', FriendsService);
+//
+//   function FriendsService($http) {
+//     var _FriendsService = this;
+//     var data = [
+//       {
+//         'id':'1000',
+//         'myFriend': ["1001","1002"]
+//       }
+//     ];
+//
+//     function getFriends(){
+//       return data;
+//     }
+//     function getData(){
+//       return this.promise;
+//     }
+//
+//     function _list() {
+//       return $http.get('http://localhost:8000/follows')
+//         .then(function (res) {
+//           return res;
+//         })
+//         .catch(function (err) {
+//           return err;
+//         })
+//     }
+//
+//     _FriendsService.getFriends = getFriends;
+//     _FriendsService.getData = getData;
+//     _FriendsService.list = _list;
+//   }
+// })();

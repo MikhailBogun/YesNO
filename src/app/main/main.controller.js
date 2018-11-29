@@ -1,7 +1,15 @@
 export class MainController {
-  constructor ($timeout, webDevTec, toastr) {
+  constructor ($timeout, webDevTec, toastr, $http) {
     'ngInject';
-
+    let that = this;
+    $http.get('http://localhost:8000/PostAll')
+      .then(function(promise) {
+          //this.data=success.data;
+          that.promise = promise.data;
+        },
+        function(error) {
+          this.promise = error;
+        });
     this.awesomeThings = [];
     this.classAnimation = '';
     this.creationDate = 1542888925003;
@@ -16,7 +24,7 @@ export class MainController {
 
 
 addFace(person,post){
-    if (person.idPerson === post.idPerson) {
+    if (person.idPerson === post.voted) {
         return person.PictureFace;
     }
 }
@@ -43,7 +51,7 @@ addFace(person,post){
     })
   }
   addName(person,post){
-    if (person.idPerson === post.idPerson) {
+    if (person.idPerson === post.voted) {
         return person.Name;
     }
 }

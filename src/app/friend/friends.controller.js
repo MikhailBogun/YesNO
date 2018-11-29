@@ -3,19 +3,17 @@ export class FriendController {
     'ngInject'
 
     let that = this;
-    $http.get('http://localhost:8000/follows')
+    $http.get('http://localhost:8000/PostAll')
       .then(function(promise) {
           //this.data=success.data;
-        $scope.pr = promise.data;
         that.promise = promise.data;
         },
         function(error) {
-          this.promis = error;
+          that.promise = error;
         });
     this.promise = $scope.pr;
     this.TablePerson = [];
-    this.myfirstsService = []
-    this.success =null;
+
     this.activate($timeout, friendsService, webDevTec, $http);
   }
   activate($timeout, friendsService, webDevTec, $http) {
@@ -24,6 +22,6 @@ export class FriendController {
   getDataFriends(friendsService, webDevTec){
     this.friendsData = friendsService.getFriends();
     this.TablePerson = webDevTec.getdata();
-    this.success = friendsService.getData();
+
   }
 }
