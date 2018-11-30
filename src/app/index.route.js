@@ -1,5 +1,6 @@
-export function routerConfig ($stateProvider, $urlRouterProvider) {
+export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvider, $urlMatcherFactoryProvider) {
   'ngInject';
+  $urlMatcherFactoryProvider.caseInsensitive(true);
   $stateProvider
     .state('home', {
       url: '/',
@@ -19,5 +20,12 @@ export function routerConfig ($stateProvider, $urlRouterProvider) {
     controller:'RegistrationController',
     controllerAs:'reg'
   })
+    .state('addPost',{
+      url:'/addPost',
+      templateUrl: 'app/addPost/addPost.html',
+      controller:'addPostController',
+      controllerAs:'addPost'
+    })
   $urlRouterProvider.otherwise('/');
+  $locationProvider.html5Mode(true);
 }

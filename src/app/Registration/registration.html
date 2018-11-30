@@ -2,13 +2,20 @@
   <h1>Hello</h1>
   <h2>{{reg.Hello+reg.data}}</h2>
   <form ng-submit="reg.submit()">
-    <input type="text" ng-model="login"> Логин
+    <div>
+    <input type="text" ng-model="reg.dataUsers.login"> Логин
+    </div>
     <p></p>
-    <input type="text" ng-model="password"> Пароль
+  <div>
+    <input type="text" ng-model="reg.dataUsers.password"> Пароль
     <p></p>
-    <input type="button" ng-click='reg.RegPost(login,password)' value="Registr">
+  </div>
+    <button>Post</button>
   </form>
-  {{reg.registr}}
-  <div ng-repeat="users in reg.registr"><h3>{{users}}</h3></div>
-  <h3>{{users}}</h3>
+  <div ng-repeat="data in reg.MyData">
+    {{data}}
+  </div>
+  {{reg.dataUsers}}
+
+  <div > </div>
 </div>

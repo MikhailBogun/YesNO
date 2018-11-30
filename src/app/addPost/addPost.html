@@ -1,0 +1,19 @@
+<div class="container">
+  {{addPost.hello}}
+  <script src=""></script>
+  <form ng-submit="addPost.submit()">
+    <div>
+      <label for="">title</label>
+      <input type="text" ng-model="addPost.dataUsers.login">
+    </div>
+    <p></p>
+    <div>
+      <label for="">image</label>
+      <input type="file" name="" id="" file-model="addPost.dataUsers.image">
+      <p></p>
+    </div>
+    <button>Post</button>
+  </form>
+  {{addPost.dataUsers}}
+  {{addPost.hello}}
+</div>
