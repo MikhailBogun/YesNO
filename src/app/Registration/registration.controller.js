@@ -30,7 +30,7 @@ export class RegistrationController {
     this.http.post('http://localhost:8000/registration_user', this.dataUsers)
       .then(function(res){
           this.res = res;
-          this.dataUsers={};
+          this.dataUsers=null;
         },
         function(error){
           this.error =error;

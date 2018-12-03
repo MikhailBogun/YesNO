@@ -22,8 +22,8 @@ export class addPostController {
        .then(function(res){
            this.res = res;
            this.dataUsers={};
-         },
-         function(error){
+         })
+       .catch(function(error){
            this.error =error;
          });
 
