@@ -15,3 +15,10 @@
 .fig {
   text-align: center; /* Выравнивание по центру */
 }
+.my {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  margin-top: -200px;
+  margin-left: -200px;
+}

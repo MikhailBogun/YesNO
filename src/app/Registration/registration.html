@@ -1,21 +1,18 @@
 <div class="container">
-  <h1>Hello</h1>
-  <h2>{{reg.Hello+reg.data}}</h2>
   <form ng-submit="reg.submit()">
-    <div>
-    <input type="text" ng-model="reg.dataUsers.login"> Логин
+    <div class="form-group">
+      <label for=""><h2>Enter your future Login</h2></label>
+    <input class="form-control" type="text" ng-model="reg.dataUsers.login">
     </div>
     <p></p>
-  <div>
-    <input type="text" ng-model="reg.dataUsers.password"> Пароль
+    <div class="form-group">
+      <label for=""><h2>Enter your Password</h2></label>
+    <input class="form-control" type="text" ng-model="reg.dataUsers.password">
     <p></p>
   </div>
     <button>Post</button>
   </form>
-  <div ng-repeat="data in reg.MyData">
-    {{data}}
-  </div>
-  {{reg.dataUsers}}
 
-  <div > </div>
+{{reg.Mydata}}
+  {{reg.data}}
 </div>

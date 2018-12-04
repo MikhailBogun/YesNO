@@ -4,11 +4,12 @@ export class RegistrationController {
     var that =this;
     this.Hello = "Hello";
     this.data=registration.getData();
-    this.MyData=["siski"];
+    this.MyData="siski";
     this.dataUsers={}
 
     this.http = $http;
     this.scope=$scope;
+    //this.Mydata = registration.Data.user;
     // this.submit=function(){
     //   var formData= new FormData;
     //
