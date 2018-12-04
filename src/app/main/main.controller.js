@@ -5,7 +5,8 @@ export class MainController {
     $http.get('http://localhost:8000/PostAll')
       .then(function(promise) {
           //this.data=success.data;
-          that.promise = promise.data;
+          that.promise = promise.data.reverse();
+
         },
         function(error) {
           this.promise = error;

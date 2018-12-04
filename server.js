@@ -7,6 +7,7 @@ var storage = multer.diskStorage( {
     cb(null, '/Users/sooprit/project/yesno/src/assets/images/PostAll')
     console.log(file.fieldname)
     console.log(file.fieldname+'-'+Date.now())
+    console.log(file.originalname)
   },
   filename: function(req,file, cb){
   cb(null, file.fieldname +'-'+Date.now()+'.jpg');
@@ -34,6 +35,7 @@ app.use(cors());
 app.get("/PostAll", controller.PostAll);
 app.post("/registration_user", controller.register_user);
 app.post('/addPost',upload.array('image'), controller.addPost)
+app.post('/authorization', controller.Authorization);
 
 server.listen(8000);
 console.log("Запуск сервера..");

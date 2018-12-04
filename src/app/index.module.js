@@ -7,6 +7,7 @@ import { MainController } from './main/main.controller';
 import { FriendController } from './friend/friends.controller';
 import { RegistrationController } from './registration/registration.controller';
 import { addPostController } from './addPost/addPost.contoller';
+import { authorization } from './authorization/authoriazation.controller.js';
 import { GithubContributorService } from '../app/components/githubContributor/githubContributor.service';
 import { WebDevTecService } from '../app/components/webDevTec/webDevTec.service';
 import { FriendsService } from "../app/friend/friend.service";
@@ -32,6 +33,7 @@ angular.module('yesno', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngM
   .controller('FriendController', FriendController)
   .controller('addPostController', addPostController)
   .controller('RegistrationController', RegistrationController)
+  .controller('authorization', authorization)
   .directive('acmeNavbar', NavbarDirective)
   .directive('acmeMalarkey', MalarkeyDirective)
   .directive('post', PostAllDirective)

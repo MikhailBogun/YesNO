@@ -3,7 +3,7 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
   $urlMatcherFactoryProvider.caseInsensitive(true);
   $stateProvider
     .state('home', {
-      url: '/',
+      url: '/home',
       templateUrl: 'app/main/main.html',
       controller: 'MainController',
       controllerAs: 'main'
@@ -25,6 +25,12 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
       templateUrl: 'app/addPost/addPost.html',
       controller:'addPostController',
       controllerAs:'addPost'
+    })
+    .state('authorization',{
+      url:'/',
+      templateUrl: 'app/authorization/authorization.html',
+      controller:'authorization',
+      controllerAs:'authorization'
     })
   $urlRouterProvider.otherwise('/');
   $locationProvider.html5Mode(true);

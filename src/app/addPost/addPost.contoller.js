@@ -1,10 +1,11 @@
 export class addPostController {
-
+  //localStorage.setItem('mykey','myvalue');
   constructor($http){
     'ngInject'
     this.http = $http;
     this.hello ="hello World!";
     this.dataUsers={};
+    ///localStorage.setItem('mykey','myvalue');
   }
   submit(){
     var formData= new FormData;

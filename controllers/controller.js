@@ -27,6 +27,23 @@ module.exports = {
 
       res.send(200);
   },
+  Authorization: async function(req, res){
+      console.log(req.body.login);
+      console.log(req.body.password);
+      let login = req.body.login;
+      let password = req.body.password;
+      let all_users_data = await db.User.findAll();
+      all_users_data.forEach(obj => {
+        console.log(obj.dataValues.login)
+        if (obj.dataValues.login == login) {
+          let hash_password = require("crypto").createHash("sha256").update(password + obj.dataValues.salt).digest("base64");
+          if (obj.dataValues.password == hash_password){
+            console.log("pobeda");
+            res.send(String(obj.dataValues.id));
+          }
+        }
+      });
+  },
   register_user: async function(req, res){
       console.log("Password!");
 
