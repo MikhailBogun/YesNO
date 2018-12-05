@@ -3,7 +3,7 @@ export class FriendController {
     'ngInject'
 
     let that = this;
-    $http.get('http://localhost:8000/PostAll')
+    $http.get('api/PostAll')
       .then(function(promise) {
           //this.data=success.data;
         that.promise = promise.data;

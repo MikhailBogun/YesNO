@@ -3,39 +3,34 @@ export class RegistrationController {
     'ngInject'
     var that =this;
     this.Hello = "Hello";
-    this.data=registration.getData();
-    this.MyData="siski";
-    this.dataUsers={}
-
-    this.http = $http;
     this.scope=$scope;
-    //this.Mydata = registration.Data.user;
-    // this.submit=function(){
-    //   var formData= new FormData;
-    //
-    //   this.http.post('http://localhost:8000/registration_user', this.dataUsers)
-    //     .then(function(res){
-    //       that.res = res;
-    //       this.dataUsers={};
-    //       },
-    //       function(error){
-    //         that.error =error;
-    //       });
-    //
-    // }
+    this.MyData=["siski"];
+    this.dataUsers={}
+    this.http = $http;
+     this.Mydata = registration.Mydata;
+     this.Mydata.getData().then(res=>{
+       that.info = res;
+     });
+
+
   }
 
-  submit(){
-    var formData= new FormData;
+  submit() {
+    var that = this;
 
-    this.http.post('http://localhost:8000/registration_user', this.dataUsers)
-      .then(function(res){
-          this.res = res;
-          this.dataUsers=null;
-        },
-        function(error){
-          this.error =error;
-        });
+    this.Mydata.getUser(this.dataUsers).then(res => {
+        that.ret = res;
+      }
+    )
+
+    // this.http.post('http://localhost:8000/registration_user', this.dataUsers)
+    //   .then(function(res){
+    //       this.res = res;
+    //       this.dataUsers=null;
+    //     },
+    //     function(error){
+    //       this.error =error;
+    //     });
 
   }
 }

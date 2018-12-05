@@ -1,21 +1,26 @@
-export class  RegistrationService{
-  constructor(){
-    'ngInject';
-    this.hello = "World!";
-    this.data =  {
-      user: {
-        getUsers: function(userId){
-          return $http.get("http://localhost:8000/PostAll" ).then(
-            data => {return data.data}
+export function RegistrationService($http, $location) {
+  'ngInject';
+  return {
+    Mydata: {
+
+      getData: function () {
+        return $http.get('api/PostAll')
+          .then(
+            res =>{return res.data}
           );
-        }
+      },
+
+      getUser: function(data){
+        return $http.post('api/registration_user', {
+          login: data.login,
+          password: data.password
+        }).then(res =>{
+
+            localStorage.setItem("id",res.data.token)
+            $location.path('/home');
+
+          })
       }
     }
-  }
-  getData(){
-    return this.hello;
-  }
-  Data(){
-    return this.data;
   }
 }

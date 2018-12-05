@@ -13,8 +13,9 @@ export class addPostController {
     for (var data in this.dataUsers){
       formData.append(data, this.dataUsers[data]);
     }
+    formData.append("id",localStorage.getItem("id"));
 
-     this.http.post('http://localhost:8000/addPost', formData,{
+     this.http.post('api/addPost', formData,{
             transformRequest: angular.identity,
               headers: {
                 'Content-Type':undefined

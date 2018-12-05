@@ -1,8 +1,8 @@
 export class MainController {
-  constructor ($timeout, webDevTec, toastr, $http) {
+  constructor ($timeout, webDevTec,mainService, toastr, $http) {
     'ngInject';
     let that = this;
-    $http.get('http://localhost:8000/PostAll')
+    $http.get('api/PostAll')
       .then(function(promise) {
           //this.data=success.data;
           that.promise = promise.data.reverse();
@@ -18,15 +18,18 @@ export class MainController {
 
     this.myfirstsService = []
     this.TablePerson = [];
-
+    this.Mydata = mainService.Mydata;
+    this.Mydata.getUsers().then(res=>{
+      that.info = res;
+    });
 
     this.activate($timeout, webDevTec);
   }
 
 
 addFace(person,post){
-    if (person.idPerson === post.voted) {
-        return person.PictureFace;
+    if (String(person.id)=== post.voted) {
+        return person.face;
     }
 }
   activate($timeout, webDevTec) {
@@ -52,8 +55,8 @@ addFace(person,post){
     })
   }
   addName(person,post){
-    if (person.idPerson === post.voted) {
-        return person.Name;
+    if (String(person.id) === post.voted) {
+        return person.login;
     }
 }
   showToastr() {
@@ -63,4 +66,5 @@ addFace(person,post){
   showFollows(person){
     this.toastr.info('Follow ' +person);
   }
+
 }

@@ -11,12 +11,12 @@ export class authorization {
   submit(){
     var that = this;
 
-    this.http.post('http://localhost:8000/authorization', this.Users)
+    this.http.post('/api/authorization', this.Users)
       .then(function(res){
         that.res = res;
         if (res.data!="") {
           localStorage.clear()
-          localStorage.setItem("id",res.data)
+          localStorage.setItem("id",res.data.token)
           that.location.path('/home')
         }
         this.Users={};
