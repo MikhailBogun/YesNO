@@ -37,6 +37,8 @@ app.get("/api/users", controller.allUsers)
 app.post("/api/registration_user", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost)
 app.post('/api/authorization', controller.Authorization);
+app.post('/api/follow', controller.follows)
+app.post('/api/friends', controller.getFriends)
 
 
 

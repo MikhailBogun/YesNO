@@ -17,6 +17,26 @@ export function MainService($http){
           )
       }
 
+    },
+    UsersAction: {
+      Follow: function (person,post){
+        return $http.post('api/follow',{
+          person,
+          post,
+          id: localStorage.getItem(("id"))})
+          .then(res =>{
+            return res.data;
+          })
+
+      },
+      getFriend: function(){
+        return $http.post('api/friends',{
+          id:localStorage.getItem('id')
+        })
+          .then(res => {
+            return res.data;
+          })
+      }
     }
   }
 }

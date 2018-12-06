@@ -3,22 +3,16 @@
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
   <div>
-    <h2>SISKI</h2>
     <table class="table table-hover table-striped table-bordered">
-      <tr ng-repeat='awesome in friend.TablePerson'>
-        <th scope="col"><p><img src="{{awesome.PictureFace}}" width="35" height="35" alt='Фотография'>{{awesome.Name}}</p></th>
+      <tr ng-repeat='awesome in friend.follows[0]'>
+        <th scope="col"><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>{{awesome.login}}</p></th>
         <th><button type="button">Отписка</button></th>
 
       </tr>
     </table>
-    <h1>{{friend.success}}</h1>
-    <h3>{{friend.promise}}</h3>
 
 
   </div>
-<form name ="unload" id="upload">
-  <input type="file" name="myfile">
-  <input type="submit" value ="Download">
-</form>
+
 
 </div>

@@ -67,6 +67,98 @@ module.exports = {
     let all_post_data = await db.User.findAll();
 
     res.send(all_post_data);
+  },
+  follows: async function (req, res){
+      console.log(req.body.id);
+      console.log(req.body.post);
+      console.log(req.body.person);
+      let all_User_data = await db.User.findAll();
+      let all_Follow_data = await db.follows.findAll()
+      let error ='';
+      let decode_follow = jwt.verify(req.body.id,secret)
+      all_Follow_data.forEach(obj => {
+        console.log(error)
+          if (obj.dataValues.idPerson == String(req.body.person.id) && String(decode_follow.userid)==obj.dataValues.idFollows) {
+
+           error = "err";
+           // console.log("err")
+
+          }
+        }
+      )
+      console.log(decode_follow.userid)
+
+    if(error=='') {
+      all_User_data.forEach(obj => {
+        if (decode_follow.userid == obj.dataValues.id) {
+          db.follows.create({idPerson: String(req.body.person.id), idFollows: String(decode_follow.userid)})
+
+          res.send("ok")
+
+        }
+      })
+    }
+
+  },
+  getFriends: async function (req ,res){
+      let my_decoded = jwt.verify(req.body.id,secret);
+      let data =[[],[],[]]
+
+    let friend_data=await db.follows.findAll({
+      where: {
+        idPerson: String(my_decoded.userid)
+      }
+    })
+    let myFollow=await db.follows.findAll({
+      where: {
+        idFollows: String(my_decoded.userid)
+      }
+    })
+    let user=await db.User.findAll();
+    friend_data.forEach(obj =>{
+      user.forEach(u=>{
+        if(String(u.dataValues.id)==obj.dataValues.idFollows){
+          data[0].push({
+            login: u.dataValues.login,
+            face: u.dataValues.face,
+            id: jwt.sign({userId: u.dataValues.id}, String(u.dataValues.createdAt))
+          })
+        }
+      })
+    })
+    myFollow.forEach(obj =>{
+      user.forEach(u=>{
+        if(String(u.dataValues.id)==obj.dataValues.idPerson){
+          data[1].push({
+            login: u.dataValues.login,
+            face: u.dataValues.face,
+            id: jwt.sign({userId: u.dataValues.id}, String(u.dataValues.createdAt))
+          })
+        }
+      })
+    })
+    var index ;
+    data[0].forEach(obj =>
+    {
+      data[1].forEach(d =>
+      {
+
+        if(obj.login==d.login){
+
+          data[2].push(obj)
+          index = data[1].indexOf(obj.login)
+          data[1].splice(index,1)
+        }
+      })
+    })
+    console.log(data[1])
+    console.log(index)
+    res.send(data)
+
+    // myFollow.forEach( obj =>
+    // {
+    //   console.log(obj.dataValues)
+    // })
   }
 
 }

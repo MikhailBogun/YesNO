@@ -15,7 +15,7 @@ export class MainController {
     this.classAnimation = '';
     this.creationDate = 1542888925003;
     this.toastr = toastr;
-
+    this.UserAction = mainService.UsersAction;
     this.myfirstsService = []
     this.TablePerson = [];
     this.Mydata = mainService.Mydata;
@@ -63,8 +63,17 @@ addFace(person,post){
     this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
     this.classAnimation = '';
   }
-  showFollows(person){
-    this.toastr.info('Follow ' +person);
+  showFollows(person,post){
+    let that = this;
+    //this.toastr.info('Follow ' +person.login);
+    this.p = person;
+    this.post=post;
+    this.UserAction.Follow(person,post).then(res =>{
+      that.res = res;
+      if(res == "ok"){
+        this.toastr.info('Follow',+ person.login)
+      }
+    })
   }
 
 }

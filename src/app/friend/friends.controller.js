@@ -1,5 +1,5 @@
 export class FriendController {
-  constructor ($timeout, friendsService, webDevTec, $http, $scope) {
+  constructor ($timeout, friendsService,mainService, webDevTec, $http, $scope) {
     'ngInject'
 
     let that = this;
@@ -13,6 +13,12 @@ export class FriendController {
         });
     this.promise = $scope.pr;
     this.TablePerson = [];
+    this.UserAction = mainService.UsersAction;
+
+    this.UserAction.getFriend().then(res=>{
+      that.follows = res;
+    });
+
 
     this.activate($timeout, friendsService, webDevTec, $http);
   }
