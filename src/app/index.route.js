@@ -32,6 +32,18 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
       controller:'authorization',
       controllerAs:'authorization'
     })
+    .state('profile',{
+      url:'/profile',
+      templateUrl: 'app/profile/profile.html',
+      controller:'ProfileCtrl',
+      controllerAs:'profile'
+    })
+    .state('privatePost',{
+      url:'/privatepost',
+      templateUrl: 'app/privatepost/privatepost.html',
+      controller:'PrivatePostCtrl',
+      controllerAs:'privatePost'
+    })
   $urlRouterProvider.otherwise('/');
   $locationProvider.html5Mode(true);
 }

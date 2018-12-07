@@ -4,9 +4,7 @@ var multer  = require('multer')
 var storage = multer.diskStorage( {
   destination: function (req, file, cb) {
     cb(null, '/Users/sooprit/project/yesno/src/assets/images/PostAll')
-    console.log(file.fieldname)
-    console.log(file.fieldname+'-'+Date.now())
-    console.log(file.originalname)
+
   },
   filename: function(req,file, cb){
   cb(null, file.fieldname +'-'+Date.now()+'.jpg');
@@ -39,6 +37,8 @@ app.post('/api/addPost',upload.array('image'), controller.addPost)
 app.post('/api/authorization', controller.Authorization);
 app.post('/api/follow', controller.follows)
 app.post('/api/friends', controller.getFriends)
+app.post('/api/removeFace',upload.array('image'), controller.removeFace)
+app.post('/api/removePassword', controller.removePassword)
 
 
 

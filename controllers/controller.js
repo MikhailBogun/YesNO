@@ -100,6 +100,19 @@ module.exports = {
     }
 
   },
+  removeFace: async function(req, res){
+      console.log("REMOVEFACE_________-")
+    console.log(req.files[0]);
+    console.log(req.files[0].filename)
+
+  },
+  removePassword: async function(req, res){
+    console.log("REMOVEFASWORD_________-")
+    console.log(req.body.password)
+    console.log(req.body.newPassword)
+    console.log(req.body.id)
+
+  },
   getFriends: async function (req ,res){
       let my_decoded = jwt.verify(req.body.id,secret);
       let data =[[],[],[]]
@@ -137,22 +150,22 @@ module.exports = {
         }
       })
     })
-    var index ;
+    //console.log(data)
     data[0].forEach(obj =>
     {
       data[1].forEach(d =>
       {
 
-        if(obj.login==d.login){
+        if(obj!=null && d!=null && obj.login==d.login){
 
           data[2].push(obj)
-          index = data[1].indexOf(obj.login)
-          data[1].splice(index,1)
+          console.log(data[0].indexOf(obj))
+
         }
       })
     })
-    console.log(data[1])
-    console.log(index)
+
+    console.log(data)
     res.send(data)
 
     // myFollow.forEach( obj =>

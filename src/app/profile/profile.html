@@ -1,0 +1,31 @@
+<div>
+  <div>
+    <acme-navbar creation-date="main.creationDate"></acme-navbar>
+  </div>
+
+</div>
+<div class="center-block">
+
+  <form ng-submit="profile.submit()">
+    <div class="form-group">
+      <label for="">Текущий пароль</label>
+      <input type="text" class="form-control" ng-model="profile.dataUsers.password">
+    </div>
+    <div class="form-group">
+      <label for="">Новый пароль</label>
+      <input type="text" class="form-control" ng-model="profile.dataUsers.newPassword">
+    </div>
+    <button>Отправить</button>
+  </form>
+  <br>
+  <br>
+  <form ng-submit="profile.removeFace()">
+    <div class="form-group">
+      <label for="">Изменить фото</label>
+      <input type="file" name="" id="" file-model="profile.face.image">
+      <p></p>
+    </div>
+    <button>Отправить</button>
+  </form>
+
+</div>

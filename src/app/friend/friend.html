@@ -4,13 +4,30 @@
   </div>
   <div>
     <table class="table table-hover table-striped table-bordered">
-      <tr ng-repeat='awesome in friend.follows[0]'>
+      <caption><h3>Друзья</h3></caption>
+      <tr ng-repeat='awesome in friend.follows[2]'>
         <th scope="col"><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>{{awesome.login}}</p></th>
-        <th><button type="button">Отписка</button></th>
+        <th><button type="button">Отписаться</button></th>
 
       </tr>
     </table>
+    <table class="table table-hover table-striped table-bordered">
+      <caption><h3>Мои подписчики</h3></caption>
+      <tr ng-repeat='awesome in friend.follows[0]'>
+        <th scope="col" ><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>{{awesome.login}}</p></th>
+        <th><button type="button">Подписаться</button></th>
 
+      </tr>
+    </table>
+    <table class="table table-hover table-striped table-bordered">
+      <caption><h3>Мои подписки</h3></caption>
+      <tr ng-repeat='awesome in friend.follows[1]'>
+        <th scope="col"><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>{{awesome.login}}</p></th>
+        <th><button type="button">Отписаться</button></th>
+
+      </tr>
+    </table>
+{{friend.follows}}
 
   </div>
 
