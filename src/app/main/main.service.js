@@ -15,6 +15,26 @@ export function MainService($http){
           .then(
             res =>{return res.data}
           )
+      },
+      takeReacions: function () {
+        return $http.post('api/myReactions',{
+          id:localStorage.getItem(("id"))
+        })
+          .then(
+            res => {
+              return res.data
+            }
+          );
+      },
+      getReaction: function(reaction,posts){
+        return $http.post('api/getReaction',{
+            reaction:reaction,
+            post: posts,
+            id: localStorage.getItem(("id"))
+        })
+          .then(
+            res =>{return res.data}
+          )
       }
 
     },

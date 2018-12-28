@@ -11,6 +11,8 @@ export class MainController {
         function(error) {
           this.promise = error;
         });
+    this.cheack ="";
+    this.cheack1="";
     this.awesomeThings = [];
     this.classAnimation = '';
     this.creationDate = 1542888925003;
@@ -18,6 +20,7 @@ export class MainController {
     this.UserAction = mainService.UsersAction;
     this.myfirstsService = []
     this.TablePerson = [];
+    this.myReaction ="";
     this.Mydata = mainService.Mydata;
     this.Mydata.getUsers().then(res=>{
       that.info = res;
@@ -38,6 +41,14 @@ addFace(person,post){
       this.classAnimation = 'rubberBand';
     }, 4000);
     this.getMydata(webDevTec);
+    this.takeMyReactions();
+  }
+  takeMyReactions() {
+    var that = this;
+    this.Mydata.takeReacions().then(res=>{
+      that.myReaction = res;
+      }
+    )
   }
 
   getWebDevTec(webDevTec) {
@@ -53,6 +64,14 @@ addFace(person,post){
     angular.forEach(this.myfirstsService, (cont) => {
       cont.rank = Math.random();
     })
+  }
+  getReaction(reaction,posts){
+    var that = this;
+    that.cheack = reaction;
+    this.cheack1 =posts;
+     this.Mydata.getReaction(reaction, posts).then(res=>{
+       that.myReaction = res;
+     });
   }
   addName(person,post){
     if (String(person.id) === post.voted) {

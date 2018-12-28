@@ -3,19 +3,19 @@ export class ProfileCtrl {
     'ngInject'
     this.http = $http;
     this.hello ="hello World!";
-    this.dataUsers={};
+    this.info={};
     this.face={};
     ///localStorage.setItem('mykey','myvalue');
   }
   submit(){
 
-    this.dataUsers.append("id",localStorage.getItem("id"));
-    this.dataUsers.push()
 
-    this.http.post('api/removePassword', this.dataUsers)
+
+    this.info.id = localStorage.getItem("id");
+    this.http.post('api/removePassword', this.info)
       .then(function(res){
         this.res = res;
-        this.dataUsers={};
+        this.info={};
       })
       .catch(function(error){
         this.error =error;

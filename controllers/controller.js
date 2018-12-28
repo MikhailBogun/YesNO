@@ -12,6 +12,36 @@ module.exports = {
         }
       ];
       let all_post_data = await db.PostAll.findAll();
+      for (let i = 0; i<all_post_data.length;i++){
+        //console.log(all_post_data[i].id)
+        let dataYes = await db.reaction.findAll({
+          where : {
+            idPost: all_post_data[i].id,
+            reaction: 1
+          }
+        })
+        //console.log("massiv", dataYes.length)
+        let dataNo = await db.reaction.findAll({
+          where : {
+            idPost: all_post_data[i].id,
+            reaction: 0
+          }
+        })
+        let count = dataNo.length+dataYes.length;
+        let countOne = dataYes.length/((dataNo.length+dataYes.length)/100);
+        console.log(count)
+        console.log(countOne)
+        db.PostAll.update({
+          yes:dataYes.length,
+          no: dataNo.length
+
+        }, {
+          where : {
+            id: all_post_data[i].id
+          }
+        });
+      }
+
 
       res.send(all_post_data);
     },
@@ -59,7 +89,7 @@ module.exports = {
 
     db.User.create({login:login, password: hash_password, salt:salt, face:"assets/images/persons/inkognito.jpg"})
       .then(data => {
-        const token_register = jwt.sign({userId: data.dataValues.id}, secret);
+        const token_register = jwt.sign({userid: data.dataValues.id}, secret);
         res.json({token: token_register})
       })
   },
@@ -67,6 +97,30 @@ module.exports = {
     let all_post_data = await db.User.findAll();
 
     res.send(all_post_data);
+  },
+  getReaction: async function(req, res){
+    console.log("GETREACTION")
+    const decode = jwt.verify(req.body.id,secret)
+    console.log(decode.userid)
+
+    db.reaction.create({idPerson:Number(decode.userid),idPost:req.body.post.id,reaction:req.body.reaction});
+    console.log(req.body)
+  },
+  myReactions: async function(req, res){
+      console.log("I tyta")
+
+    let decode_follow = jwt.verify(req.body.id,secret)
+    console.log(decode_follow.userid)
+    let data = await db.reaction.findAll({
+      where : {
+        idPerson: decode_follow.userid
+      }
+    });
+    for( let i = 0; i<data.length; i++) {
+
+      console.log(data[i].dataValues)
+    }
+    res.send(data);
   },
   follows: async function (req, res){
       console.log(req.body.id);
@@ -104,6 +158,15 @@ module.exports = {
       console.log("REMOVEFACE_________-")
     console.log(req.files[0]);
     console.log(req.files[0].filename)
+    console.log(req.body.id);
+    let decode_follow = jwt.verify(req.body.id,secret)
+
+    db.User.update({face:"assets/images/persons/"+req.files[0].filename}, {
+      where : {
+        id: decode_follow.userid,
+      }
+    });
+
 
   },
   removePassword: async function(req, res){
@@ -111,6 +174,38 @@ module.exports = {
     console.log(req.body.password)
     console.log(req.body.newPassword)
     console.log(req.body.id)
+    let decode_follow = jwt.verify(req.body.id,secret)
+    console.log(decode_follow.userid)
+    let data = await db.User.findAll({
+      where : {
+        id: decode_follow.userid
+      }
+    });
+    for (let i = 0; i<data.length; i++) {
+      console.log(data[i].dataValues.id)
+      let hash_password = require("crypto").createHash("sha256").update(req.body.password + data[i].dataValues.salt).digest("base64");
+      if (hash_password == data[i].dataValues.password){
+        let salt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        console.log("zdesssss")
+        let hash = require("crypto").createHash("sha256").update(req.body.newPassword+salt).digest("base64");
+        db.User.update({
+          password:hash,
+          salt: salt
+        }, {
+          where : {
+            id: decode_follow.userid,
+          }
+        });
+      } else  {
+        console.log("ERRorr Update")
+      }
+
+
+
+    }
+    //let hash_password = require("crypto").createHash("sha256").update(req.body.password + obj.dataValues.salt).digest("base64");
+    //console.log("ThISSS persons"+ data.dataValues)
+
 
   },
   getFriends: async function (req ,res){
