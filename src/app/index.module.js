@@ -18,6 +18,7 @@ import { MainService } from "../app/main/main.service";
 import { NavbarDirective } from '../app/components/navbar/navbar.directive';
 import { MalarkeyDirective } from '../app/components/malarkey/malarkey.directive';
 import { PostAllDirective } from '../app//PostAll/directivePostAll.directive';
+import { ProgressBar } from '../app//PostAll/directiveProgressBarYesNo.directive';
 import { fileModel } from '../app//Registration/fileModel.directive';
 
 
@@ -43,4 +44,5 @@ angular.module('yesno', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngM
   .directive('acmeNavbar', NavbarDirective)
   .directive('acmeMalarkey', MalarkeyDirective)
   .directive('post', PostAllDirective)
+  .directive('prbar', ProgressBar)
   .directive('fileModel', fileModel);

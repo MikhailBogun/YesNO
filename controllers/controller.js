@@ -6,11 +6,7 @@ const secret ="siski";
 
 module.exports = {
     PostAll: async function(req, res){
-      books =[
-        {
-          name:'World!',
-        }
-      ];
+
       let all_post_data = await db.PostAll.findAll();
       for (let i = 0; i<all_post_data.length;i++){
         //console.log(all_post_data[i].id)
@@ -20,7 +16,6 @@ module.exports = {
             reaction: 1
           }
         })
-        //console.log("massiv", dataYes.length)
         let dataNo = await db.reaction.findAll({
           where : {
             idPost: all_post_data[i].id,
@@ -29,8 +24,6 @@ module.exports = {
         })
         let count = dataNo.length+dataYes.length;
         let countOne = dataYes.length/((dataNo.length+dataYes.length)/100);
-        console.log(count)
-        console.log(countOne)
         db.PostAll.update({
           yes:dataYes.length,
           no: dataNo.length
@@ -53,7 +46,7 @@ module.exports = {
       console.log(req.files[0].filename)
 
       const decode = jwt.verify(req.body.id,secret)
-      console.log("liveeeeeee")
+
       console.log(req.body.id)
     console.log(decode.userid)
       db.PostAll.create({Name:req.body.hashteg, massage:req.body.massage, image:"assets/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
@@ -61,8 +54,6 @@ module.exports = {
       res.send(200);
   },
   Authorization: async function(req, res){
-      console.log(req.body.login);
-      console.log(req.body.password);
       let login = req.body.login;
       let password = req.body.password;
       let all_users_data = await db.User.findAll();
@@ -71,7 +62,6 @@ module.exports = {
         if (obj.dataValues.login == login) {
           let hash_password = require("crypto").createHash("sha256").update(password + obj.dataValues.salt).digest("base64");
           if (obj.dataValues.password == hash_password){
-            console.log("pobeda");
             const token_authorization = jwt.sign({userid: obj.dataValues.id},secret)
             res.json({token: token_authorization});
           }
@@ -79,7 +69,6 @@ module.exports = {
       });
   },
   register_user: async function(req, res){
-      console.log("Password!");
 
     let login = req.body.login;
     let password = req.body.password;
@@ -99,15 +88,13 @@ module.exports = {
     res.send(all_post_data);
   },
   getReaction: async function(req, res){
-    console.log("GETREACTION")
     const decode = jwt.verify(req.body.id,secret)
-    console.log(decode.userid)
 
     db.reaction.create({idPerson:Number(decode.userid),idPost:req.body.post.id,reaction:req.body.reaction});
-    console.log(req.body)
+    res.send(200);
   },
   myReactions: async function(req, res){
-      console.log("I tyta")
+
 
     let decode_follow = jwt.verify(req.body.id,secret)
     console.log(decode_follow.userid)
@@ -123,9 +110,7 @@ module.exports = {
     res.send(data);
   },
   follows: async function (req, res){
-      console.log(req.body.id);
-      console.log(req.body.post);
-      console.log(req.body.person);
+
       let all_User_data = await db.User.findAll();
       let all_Follow_data = await db.follows.findAll()
       let error ='';
@@ -135,12 +120,12 @@ module.exports = {
           if (obj.dataValues.idPerson == String(req.body.person.id) && String(decode_follow.userid)==obj.dataValues.idFollows) {
 
            error = "err";
-           // console.log("err")
+           console.log("err")
 
           }
         }
       )
-      console.log(decode_follow.userid)
+
 
     if(error=='') {
       all_User_data.forEach(obj => {
@@ -155,10 +140,7 @@ module.exports = {
 
   },
   removeFace: async function(req, res){
-      console.log("REMOVEFACE_________-")
-    console.log(req.files[0]);
-    console.log(req.files[0].filename)
-    console.log(req.body.id);
+
     let decode_follow = jwt.verify(req.body.id,secret)
 
     db.User.update({face:"assets/images/persons/"+req.files[0].filename}, {
@@ -166,14 +148,11 @@ module.exports = {
         id: decode_follow.userid,
       }
     });
+    res.send("assets/images/persons/"+req.files[0].filename)
 
 
   },
   removePassword: async function(req, res){
-    console.log("REMOVEFASWORD_________-")
-    console.log(req.body.password)
-    console.log(req.body.newPassword)
-    console.log(req.body.id)
     let decode_follow = jwt.verify(req.body.id,secret)
     console.log(decode_follow.userid)
     let data = await db.User.findAll({
@@ -203,8 +182,6 @@ module.exports = {
 
 
     }
-    //let hash_password = require("crypto").createHash("sha256").update(req.body.password + obj.dataValues.salt).digest("base64");
-    //console.log("ThISSS persons"+ data.dataValues)
 
 
   },

@@ -22,6 +22,9 @@ export class MainController {
     this.TablePerson = [];
     this.myReaction ="";
     this.Mydata = mainService.Mydata;
+    this.votersYes = "";
+    this.count = "Hello"
+    this.test = "123";
     this.Mydata.getUsers().then(res=>{
       that.info = res;
     });
@@ -72,6 +75,25 @@ addFace(person,post){
      this.Mydata.getReaction(reaction, posts).then(res=>{
        that.myReaction = res;
      });
+  }
+  checkReaction(id){
+    for(let i = 0; i<this.myReaction.length;i++){
+      if(id == this.myReaction[i].idPost) {
+        return false;
+      }
+    }
+    return true;
+  }
+  checkMyReaction(post){
+    for(let i = 0; i<this.myReaction.length;i++){
+      if(post.id == this.myReaction[i].idPost) {
+        // let count = dataNo.length+dataYes.length;
+        // let countOne = dataYes.length/((dataNo.length+dataYes.length)/100);
+        this.count = parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
+        return true;
+      }
+    }
+    return false;
   }
   addName(person,post){
     if (String(person.id) === post.voted) {
