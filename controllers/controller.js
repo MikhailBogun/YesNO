@@ -22,8 +22,6 @@ module.exports = {
             reaction: 0
           }
         })
-        let count = dataNo.length+dataYes.length;
-        let countOne = dataYes.length/((dataNo.length+dataYes.length)/100);
         db.PostAll.update({
           yes:dataYes.length,
           no: dataNo.length
@@ -38,17 +36,36 @@ module.exports = {
 
       res.send(all_post_data);
     },
+    PrivateData: async function(req, res){
+        let decode_follow = jwt.verify(req.body.id,secret)
+        console.log(decode_follow.userid)
+
+        let myFollow = await db.follows.findAll({
+            where : {
+                idPerson: decode_follow.userid
+            }
+        })
+        let Follow = await db.follows.findAll({
+            where : {
+                idFollows: decode_follow.userid
+            }
+        })
+
+
+
+        res.send("PrivatePost");
+    },
+    addPrivatePost: async function(req, res){
+
+        const decode = jwt.verify(req.body.id,secret)
+        db.privatePosts.create({name:req.body.hashteg, message:req.body.massage, image:"assets/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
+
+        res.send(200);
+    },
   addPost: async function(req, res){
-      console.log("addpost");
-      console.log(req.body);
-      console.log(req.body.massage);
-      console.log(req.files[0]);
-      console.log(req.files[0].filename)
 
       const decode = jwt.verify(req.body.id,secret)
 
-      console.log(req.body.id)
-    console.log(decode.userid)
       db.PostAll.create({Name:req.body.hashteg, massage:req.body.massage, image:"assets/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
 
       res.send(200);
@@ -57,6 +74,7 @@ module.exports = {
       let login = req.body.login;
       let password = req.body.password;
       let all_users_data = await db.User.findAll();
+      console.log("Hek")
       all_users_data.forEach(obj => {
         console.log(obj.dataValues.login)
         if (obj.dataValues.login == login) {

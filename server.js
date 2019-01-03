@@ -3,7 +3,7 @@ var app = express();
 var multer  = require('multer')
 var storage = multer.diskStorage( {
   destination: function (req, file, cb) {
-    cb(null, '/Users/sooprit/project/yesno/src/assets/images/PostAll')
+    cb(null, '/Users/sooprit/project/yesno/client/src/assets/images/PostAll')
 
   },
   filename: function(req,file, cb){
@@ -13,7 +13,7 @@ var storage = multer.diskStorage( {
 });
 var storage_face = multer.diskStorage( {
   destination: function (req, file, cb) {
-    cb(null, '/Users/sooprit/project/yesno/src/assets/images/persons')
+    cb(null, '/Users/sooprit/project/yesno/client/src/assets/images/persons')
 
   },
   filename: function(req,file, cb){
@@ -40,11 +40,13 @@ app.use("/", express.static(__dirname + "/"));
 //app.use(cors());
 
 app.get("/api/PostAll", controller.PostAll);
+app.get("/api/PrivateData", controller.PrivateData);
 app.get("/api/users", controller.allUsers)
 app.post("/api/myReactions", controller.myReactions)
 
 app.post("/api/registration_user", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost)
+app.post('/api/addPrivatePost',upload.array('image'), controller.addPrivatePost)
 app.post('/api/authorization', controller.Authorization);
 app.post('/api/follow', controller.follows)
 app.post('/api/friends', controller.getFriends)

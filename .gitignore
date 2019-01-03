@@ -1,8 +1,9 @@
 node_modules/
-bower_components/
+client/bower_components/
 coverage/
 .sass-cache/
 .idea/
-.tmp/
-dist/
+client/.tmp/
+client/dist/
 config/
+client/node_modules/
