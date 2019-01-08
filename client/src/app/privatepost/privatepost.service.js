@@ -4,9 +4,9 @@ export function privatePostService($http) {
   return {
     PrivateData: {
       getData: function () {
-        return $http.get('api/PrivateData', {
-          id: localStorage.getItem(("id"))
-        })
+        return $http.get('api/PrivateData',{params: {
+          id:localStorage.getItem(("id"))
+        }})
           .then(
             res => {
               return res.data

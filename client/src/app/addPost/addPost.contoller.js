@@ -17,6 +17,7 @@ export class addPostController {
         formData.append(data, this.dataUsers[data]);
       }
       formData.append("id", localStorage.getItem("id"));
+      that.ll = formData;
     if (this.checkbox == false) {
       this.addPost.addPublicPost(formData).then(res=>{
         that.res = res;

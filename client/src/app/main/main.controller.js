@@ -1,7 +1,9 @@
 export class MainController {
-  constructor ($timeout, webDevTec,mainService, toastr, $http) {
+  constructor ($timeout,$scope, webDevTec,mainService, toastr, $http) {
     'ngInject';
     let that = this;
+    this.scope = $scope;
+    this.scope.Go = "huilo"
     $http.get('api/PostAll')
       .then(function(promise) {
           //this.data=success.data;
@@ -89,7 +91,7 @@ addFace(person,post){
       if(post.id == this.myReaction[i].idPost) {
         // let count = dataNo.length+dataYes.length;
         // let countOne = dataYes.length/((dataNo.length+dataYes.length)/100);
-        this.count = parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
+        this.scope.count = parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
         return true;
       }
     }

@@ -1,15 +1,18 @@
 var db = require("../models/index");
 var path = require("path");
 const jwt = require('jsonwebtoken');
-const secret ="siski";
+
+var now = new Date()
+var random= Math.random().toString(36).substring(2, 15)
+const secret = require("crypto").createHash("sha256").update(String(now)+random).digest("base64");
+
 
 
 module.exports = {
     PostAll: async function(req, res){
-
-      let all_post_data = await db.PostAll.findAll();
+        let all_post_data = await db.PostAll.findAll();
       for (let i = 0; i<all_post_data.length;i++){
-        //console.log(all_post_data[i].id)
+
         let dataYes = await db.reaction.findAll({
           where : {
             idPost: all_post_data[i].id,
@@ -33,27 +36,53 @@ module.exports = {
         });
       }
 
+      let data = await db.PostAll.findAll({
+          order: [
+              ['id','ASC'],
+          ]
+      });
 
-      res.send(all_post_data);
+      res.send(data);
     },
     PrivateData: async function(req, res){
-        let decode_follow = jwt.verify(req.body.id,secret)
-        console.log(decode_follow.userid)
+        const Op = db.Sequelize.Op;
+        var data = []
+        let decode = jwt.verify(req.query.id,secret)
 
         let myFollow = await db.follows.findAll({
             where : {
-                idPerson: decode_follow.userid
-            }
-        })
-        let Follow = await db.follows.findAll({
-            where : {
-                idFollows: decode_follow.userid
+                idPerson: String(decode.userid)
             }
         })
 
 
+        for(let i=0;i<myFollow.length;i++){
+            let bufer = await db.follows.findAll({
+                where: {
+                    idPerson: myFollow[i].dataValues.idFollows,
+                    [Op.and]: {idFollows: myFollow[i].dataValues.idPerson}
+                }
+            }).then(res=>{
+                data.push(res[0].dataValues.idPerson)
+            })
 
-        res.send("PrivatePost");
+
+        }
+        var data_posts=[]
+        for(let i = 0;i<data.length;i++){
+            let bufer = await db.privatePosts.findAll({
+                where: {
+                    voted: data[i]
+                }
+            }).then(res=>{
+                if(res.length!=0){
+                    for (let j =0;j<res.length;j++)
+                data_posts.push(res[j].dataValues)
+                }}
+            )
+        }
+
+        res.json({posts: data_posts, friend:data});
     },
     addPrivatePost: async function(req, res){
 
@@ -65,6 +94,7 @@ module.exports = {
   addPost: async function(req, res){
 
       const decode = jwt.verify(req.body.id,secret)
+      console.log(req.body)
 
       db.PostAll.create({Name:req.body.hashteg, massage:req.body.massage, image:"assets/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
 
@@ -74,9 +104,7 @@ module.exports = {
       let login = req.body.login;
       let password = req.body.password;
       let all_users_data = await db.User.findAll();
-      console.log("Hek")
       all_users_data.forEach(obj => {
-        console.log(obj.dataValues.login)
         if (obj.dataValues.login == login) {
           let hash_password = require("crypto").createHash("sha256").update(password + obj.dataValues.salt).digest("base64");
           if (obj.dataValues.password == hash_password){
@@ -255,7 +283,7 @@ module.exports = {
       })
     })
 
-    console.log(data)
+    //console.log(data)
     res.send(data)
 
     // myFollow.forEach( obj =>
