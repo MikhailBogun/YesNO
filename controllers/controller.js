@@ -38,11 +38,22 @@ module.exports = {
 
       let data = await db.PostAll.findAll({
           order: [
-              ['id','ASC'],
+              ['id','DESC'],
           ]
       });
+          let result = await db.PostAll.findAll({
+              order: [
+                  ['id','DESC'],
+              ],
+             include: [{
+                 model: db.reaction,
+                 attributes:["reaction"],
+                 where: {idPerson:8},
+                 required: false
+             }]
 
-      res.send(data);
+          });
+        res.send(result);
     },
     PrivateData: async function(req, res){
         const Op = db.Sequelize.Op;

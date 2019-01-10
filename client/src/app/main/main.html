@@ -11,7 +11,7 @@
   <div>
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
-  <div class="container"
+  <div class="container">
   <form class="form-inline my-2 my-lg-0">
     <input class="center-block" type="search" placeholder="Search" aria-label="Search" ng-model="searchText">
     <button class="center-block" type="submit" ><h4>Search</h4></button>
@@ -47,9 +47,12 @@
   <!--</div>-->
   <!--{{1+3}}-->
   <!--<div ng-repeat="hello in main.TablePerson">{{"Petuh"}}</div>-->
-  <post></post>
+  <!--<post></post>-->
 
-{{main.post}}
-{{main.p}}
-{{main.res}}
+  <div class='fig' ng-repeat='posts in main.promise | filter:searchText'> <h2>{{posts.massage+posts.Name+"------------------------"+posts.reactions[0].reaction}}</h2><br>
+    <div> <p class='fig'><img src="{{posts.image}}" width="700" height="600" alt='Фотография'></p>
+      <div ng-if='!posts.reactions[0].reaction'><br><button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)"  >Yes</button><button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
+      <div class="progressB" ng-if = 'posts.reactions[0].reaction'><br><prbar></prbar></div><div ng-repeat='Person in main.info'><h4 ng-if = 'Person.id == posts.voted' >{{main.addName(Person,posts )}}<img  ng-src="{{main.addFace(Person,posts)}}" width="35" height="35" alt='Фотография'>
+        <button type="button" class="btn btn-lg btn-success" ng-click="main.showFollows(Person,posts)" >Подписаться</button></h4></div>
+      </div></div>
 </div>

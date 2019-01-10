@@ -1,8 +1,9 @@
 export class addPostController {
   //localStorage.setItem('mykey','myvalue');
-  constructor($http,addPostService){
+  constructor($document,$http,addPostService){
     'ngInject'
     this.addPost = addPostService.addData;
+    this.document = $document
     this.http = $http;
     this.hello ="hello World!";
     this.dataUsers={};
@@ -22,6 +23,7 @@ export class addPostController {
       this.addPost.addPublicPost(formData).then(res=>{
         that.res = res;
         that.dataUsers = {}
+        this.document.getElementById("fileUpload").value = null
       })
 
     }

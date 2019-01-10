@@ -7,7 +7,7 @@ export class MainController {
     $http.get('api/PostAll')
       .then(function(promise) {
           //this.data=success.data;
-          that.promise = promise.data.reverse();
+          that.promise = promise.data;
 
         },
         function(error) {
@@ -85,6 +85,10 @@ addFace(person,post){
       }
     }
     return true;
+  }
+  procent(post){
+    return 12;
+    //return parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
   }
   checkMyReaction(post){
     for(let i = 0; i<this.myReaction.length;i++){
