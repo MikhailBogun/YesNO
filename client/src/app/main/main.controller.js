@@ -4,7 +4,11 @@ export class MainController {
     let that = this;
     this.scope = $scope;
     this.scope.Go = "huilo"
-    $http.get('api/PostAll')
+    $http.get('api/PostAll', {
+      headers: {
+        id: localStorage.getItem("id")
+      }
+    })
       .then(function(promise) {
           //this.data=success.data;
           that.promise = promise.data;
@@ -30,6 +34,9 @@ export class MainController {
     this.Mydata.getUsers().then(res=>{
       that.info = res;
     });
+    this.scope.procent = function(post){
+      return parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
+    }
 
     this.activate($timeout, webDevTec);
   }
@@ -46,7 +53,7 @@ addFace(person,post){
       this.classAnimation = 'rubberBand';
     }, 4000);
     this.getMydata(webDevTec);
-    this.takeMyReactions();
+
   }
   takeMyReactions() {
     var that = this;
@@ -75,7 +82,7 @@ addFace(person,post){
     that.cheack = reaction;
     this.cheack1 =posts;
      this.Mydata.getReaction(reaction, posts).then(res=>{
-       that.myReaction = res;
+       that.scope.percent = res;
      });
   }
   checkReaction(id){
@@ -86,10 +93,7 @@ addFace(person,post){
     }
     return true;
   }
-  procent(post){
-    return 12;
-    //return parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
-  }
+
   checkMyReaction(post){
     for(let i = 0; i<this.myReaction.length;i++){
       if(post.id == this.myReaction[i].idPost) {
@@ -117,8 +121,10 @@ addFace(person,post){
     this.post=post;
     this.UserAction.Follow(person,post).then(res =>{
       that.res = res;
+      this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       if(res == "ok"){
         this.toastr.info('Follow',+ person.login)
+        this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       }
     })
   }

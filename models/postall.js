@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   PostAll.associate = function(models) {
     // associations can be defined here
       PostAll.hasMany(models.reaction, {foreignKey:"idPost"})// {foreignKey:"idPost"});//, {foreignKey: "id"});//, {foreignKey: 'idPost'});//, {foreignKey: 'id', targetKey:'idPost'})
+      PostAll.belongsTo(models.User, {foreignKey:"voted"})
 
   };
   return PostAll;

@@ -4,38 +4,15 @@ const jwt = require('jsonwebtoken');
 
 var now = new Date()
 var random= Math.random().toString(36).substring(2, 15)
-const secret = require("crypto").createHash("sha256").update(String(now)+random).digest("base64");
+const secret = "secret"
 
 
 
 module.exports = {
     PostAll: async function(req, res){
-        let all_post_data = await db.PostAll.findAll();
-      for (let i = 0; i<all_post_data.length;i++){
-
-        let dataYes = await db.reaction.findAll({
-          where : {
-            idPost: all_post_data[i].id,
-            reaction: 1
-          }
-        })
-        let dataNo = await db.reaction.findAll({
-          where : {
-            idPost: all_post_data[i].id,
-            reaction: 0
-          }
-        })
-        db.PostAll.update({
-          yes:dataYes.length,
-          no: dataNo.length
-
-        }, {
-          where : {
-            id: all_post_data[i].id
-          }
-        });
-      }
-
+        console.log("Zzzzzzzzzzzz")
+       var decode = jwt.verify(req.headers.id,secret).userid
+        console.log(decode)
       let data = await db.PostAll.findAll({
           order: [
               ['id','DESC'],
@@ -48,7 +25,7 @@ module.exports = {
              include: [{
                  model: db.reaction,
                  attributes:["reaction"],
-                 where: {idPerson:8},
+                 where: {idPerson:decode},
                  required: false
              }]
 
@@ -148,20 +125,39 @@ module.exports = {
     const decode = jwt.verify(req.body.id,secret)
 
     db.reaction.create({idPerson:Number(decode.userid),idPost:req.body.post.id,reaction:req.body.reaction});
-    res.send(200);
+    if (req.body.reaction==1) {
+        db.PostAll.findById(req.body.post.id)
+            .then(post => {
+
+
+                return post.increment('yes', {by:1})
+
+            })
+    } else  {
+        db.PostAll.findById(req.body.post.id)
+            .then(post => {
+                return post.increment('no', {by:1})
+
+            })
+    }
+    let post= await db.PostAll.findById(req.body.post.id)
+      let percent = (post.dataValues.yes)/((post.dataValues.no+post.dataValues.yes)/100)
+
+    res.json({percent:percent });
   },
   myReactions: async function(req, res){
 
 
     let decode_follow = jwt.verify(req.body.id,secret)
     console.log(decode_follow.userid)
+      console.log("________________________________________________")
     let data = await db.reaction.findAll({
       where : {
         idPerson: decode_follow.userid
       }
     });
     for( let i = 0; i<data.length; i++) {
-
+        console.log("212122121221122")
       console.log(data[i].dataValues)
     }
     res.send(data);
@@ -171,9 +167,12 @@ module.exports = {
       let all_User_data = await db.User.findAll();
       let all_Follow_data = await db.follows.findAll()
       let error ='';
+      console.log(req.body)
       let decode_follow = jwt.verify(req.body.id,secret)
+      console.log(decode_follow)
       all_Follow_data.forEach(obj => {
         console.log(error)
+
           if (obj.dataValues.idPerson == String(req.body.person.id) && String(decode_follow.userid)==obj.dataValues.idFollows) {
 
            error = "err";
@@ -243,9 +242,10 @@ module.exports = {
 
   },
   getFriends: async function (req ,res){
+      console.log("Hello1")
       let my_decoded = jwt.verify(req.body.id,secret);
       let data =[[],[],[]]
-
+        console.log("Hello2")
     let friend_data=await db.follows.findAll({
       where: {
         idPerson: String(my_decoded.userid)
@@ -294,13 +294,8 @@ module.exports = {
       })
     })
 
-    //console.log(data)
     res.send(data)
 
-    // myFollow.forEach( obj =>
-    // {
-    //   console.log(obj.dataValues)
-    // })
   }
 
 }

@@ -5,7 +5,11 @@ export function MainService($http){
     Mydata: {
 
       getData: function () {
-        return $http.get('api/PostAll')
+        return $http.get('api/PostAll',{
+          headers: {
+            id: localStorage.getItem("id")
+          }
+        })
           .then(
             res =>{return res.data}
           );
