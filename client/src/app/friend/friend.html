@@ -2,12 +2,13 @@
   <div>
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
+  {{friend.follows}}
   <div>
     <table class="table table-hover table-striped table-bordered">
       <caption><h3>Друзья</h3></caption>
       <tr ng-repeat='awesome in friend.follows[2]'>
-        <th scope="col"><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>{{awesome.login}}</p></th>
-        <th><button type="button">Отписаться</button></th>
+        <th ng-show="friend.test" scope="col"><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>{{awesome.login}}</p></th>
+        <th ng-show="friend.test"><button type="button" ng-click="friend.testF()">Отписаться</button></th>
 
       </tr>
     </table>
@@ -30,6 +31,8 @@
 {{friend.follows}}
 
   </div>
+  <!--<button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="friend.Follow(Person,posts)" ng-show="!posts.follows" >Подписаться</button>-->
+  <!--<button  type="button"  ng-show="posts.follows" class="btn btn-warning" ng-click="main.deleteFollow (posts)">Отписаться</button>-->
 
 
 </div>

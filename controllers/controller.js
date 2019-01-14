@@ -1,23 +1,37 @@
 var db = require("../models/index");
 var path = require("path");
-const jwt = require('jsonwebtoken');
+var jwt = require('jsonwebtoken');
+
+const config = require(__dirname + '/../config/config.json')
 
 var now = new Date()
 var random= Math.random().toString(36).substring(2, 15)
-const secret = "secret"
+const secret = config.secret
 
 
 
 module.exports = {
+    jwt: jwt,
+    secret:secret,
+    db:db,
     PostAll: async function(req, res){
         console.log("Zzzzzzzzzzzz")
        var decode = jwt.verify(req.headers.id,secret).userid
+
         console.log(decode)
+        var bufer_one = [];
       let data = await db.PostAll.findAll({
           order: [
               ['id','DESC'],
           ]
       });
+        let follow = await db.follows.findAll({
+            attributes:["idPerson"],
+            where:{idFollows:String(decode)}
+        })
+        for(let i =0;i<follow.length;i++){
+            bufer_one.push(follow[i].idPerson)
+        }
           let result = await db.PostAll.findAll({
               order: [
                   ['id','DESC'],
@@ -30,7 +44,17 @@ module.exports = {
              }]
 
           });
-        res.send(result);
+
+         for(let j = 0;j<result.length;j++){
+             console.log(result[j].voted)
+             if(bufer_one.includes(result[j].voted)){
+                 result[j].dataValues.follows = true
+             } else{
+                 result[j].dataValues.follows = false
+             }
+
+         }
+        res.json({result:result});
     },
     PrivateData: async function(req, res){
         const Op = db.Sequelize.Op;
@@ -75,7 +99,7 @@ module.exports = {
     addPrivatePost: async function(req, res){
 
         const decode = jwt.verify(req.body.id,secret)
-        db.privatePosts.create({name:req.body.hashteg, message:req.body.massage, image:"assets/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
+        db.privatePosts.create({name:req.body.hashteg, message:req.body.massage, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
 
         res.send(200);
     },
@@ -84,7 +108,7 @@ module.exports = {
       const decode = jwt.verify(req.body.id,secret)
       console.log(req.body)
 
-      db.PostAll.create({Name:req.body.hashteg, massage:req.body.massage, image:"assets/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
+      db.PostAll.create({Name:req.body.hashteg, massage:req.body.massage, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
 
       res.send(200);
   },
@@ -296,6 +320,14 @@ module.exports = {
 
     res.send(data)
 
-  }
+  },
+    deleteFollow: async function(req,res){
+        var Op = db.Sequelize.Op
+
+        db.follows.destroy({where:{
+            [Op.and]:[{idFollows:String(req.headers.id)},{idPerson:String(req.params.id)}]
+
+            }})
+    }
 
 }

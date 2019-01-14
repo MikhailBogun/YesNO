@@ -7,5 +7,6 @@
     "host": "LocalHost",
     "dialect": "postgres",
     "operatorsAliases": false
-  }
+  },
+  "secret": "secretniy_parol"
 }

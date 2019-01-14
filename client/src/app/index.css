@@ -39,11 +39,11 @@
 
 .animate-show-hide.ng-hide-add,
 .animate-show-hide.ng-hide-remove {
-  transition: all linear 0.5s;
+  transition: all linear 0.0s;
 }
 
 .check-element {
-  border: 1px solid black;
+  border: 0px solid black;
   opacity: 1;
   padding: 10px;
 }

@@ -1,7 +1,7 @@
 export class FriendController {
   constructor ($timeout, friendsService,mainService, webDevTec, $http, $scope) {
     'ngInject'
-
+    this.test=true;
     let that = this;
     $http.get('api/PostAll')
       .then(function(promise) {
@@ -29,5 +29,10 @@ export class FriendController {
     this.friendsData = friendsService.getFriends();
     this.TablePerson = webDevTec.getdata();
 
+  }
+  Follow(person){
+  }
+  testF(){
+    this.test=false;
   }
 }

@@ -53,6 +53,16 @@ export function MainService($http){
           })
 
       },
+      DeleteFollow: function(followId){
+        return $http.delete('api/follow/delete'+ followId, {
+          headers:{
+            token:localStorage.getItem(("id"))
+          }
+        })
+          .then(res=>{
+            return res.data;
+          })
+      },
       getFriend: function(){
         return $http.post('api/friends',{
           id:localStorage.getItem('id')
