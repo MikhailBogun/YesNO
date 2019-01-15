@@ -10,10 +10,12 @@
 
   </form>
   </div>
-  <div class='fig' ng-repeat='posts in privatePost.dataPosts.posts | filter:searchText'> <h2>{{posts.message+posts.name}}</h2>
-    <div><p class='fig'><img src="{{posts.image}}"  width="500" height="500" alt='Фотография'></p>
-      <div ng-if='main.checkReaction(posts.id)'><button type=\"button\" class="btn btn-success" ng-click="main.getReaction(1,posts)" >Yes</button><button type=\"button\" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
-      <div class=\"progressB\" ng-if = 'main.checkMyReaction(posts)'><prbar></prbar></div>"+"<div ng-repeat='Person in main.info'><h4 ng-if = 'Person.id == posts.voted' >{{main.addName(Person,posts )}}<img  ng-src=\"{{main.addFace(Person,posts)}}\" width=\"35\" height=\"35\" alt='Фотография'>"
-        <button type=\"button\" class="btn btn-lg btn-success" ng-click="main.showFollows(Person,posts)" >Подписаться</button></h4></div>
-      </div></div>
+  <div class='fig' ng-repeat='posts in    privatePost.data.result | filter:searchText'> <h2>{{posts.massage+posts.Name+"------------------------"+posts.reactions[0].reaction}}</h2><br>
+    <div> <p class='fig'><img src="{{posts.image}}" width="700" height="600" alt='Фотография'></p>
+      <div ng-show="!posts.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br><button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)"  >Yes</button><button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)" >No</button></div>
+      <div class="progressB" ng-show="posts.reactions[0].reaction" ><!-- ng-if = 'posts.reactions[0].reaction'--><br><prbar></prbar></div><div ng-repeat='Person in privatePost.info'><h4 ng-if = 'Person.id == posts.voted' >{{privatePost.addName(Person,posts )}}  <img  ng-src="{{privatePost.addFace(Person,posts)}}" width="35" height="35" alt='Фотография'>
+        <button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="privatePost.showFollows(Person,posts)" ng-show="!posts.follows" >Подписаться</button> <button  type="button"  ng-show="posts.follows" class="btn btn-warning" ng-click="privatePost.deleteFollows(posts)">Отписаться</button></h4>
+
+      </div>
+    </div></div>
 </div>

@@ -2,7 +2,7 @@ export class FriendsService{
   constructor ($http){
     'ngInject';
     let that = this;
-    $http.get('api/follows')
+    $http.get('api/follow')
       .then(function(promise) {
           //this.data=success.data;
           that.promise = promise.data;

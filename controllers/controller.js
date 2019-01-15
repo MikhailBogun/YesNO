@@ -16,7 +16,7 @@ module.exports = {
     db:db,
     PostAll: async function(req, res){
         console.log("Zzzzzzzzzzzz")
-       var decode = jwt.verify(req.headers.id,secret).userid
+       var decode = jwt.verify(req.headers.token,secret).userid
 
         console.log(decode)
         var bufer_one = [];
@@ -187,7 +187,6 @@ module.exports = {
     res.send(data);
   },
   follows: async function (req, res){
-
       let all_User_data = await db.User.findAll();
       let all_Follow_data = await db.follows.findAll()
       let error ='';

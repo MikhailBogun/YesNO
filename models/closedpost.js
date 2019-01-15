@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   closedPost.associate = function(models) {
     // associations can be defined here
+      closedPost.hasMany(models.privateReactions, {foreignKey:"idPost"})
   };
   return closedPost;
 };

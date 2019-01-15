@@ -3,14 +3,14 @@ export class FriendController {
     'ngInject'
     this.test=true;
     let that = this;
-    $http.get('api/PostAll')
-      .then(function(promise) {
-          //this.data=success.data;
-        that.promise = promise.data;
-        },
-        function(error) {
-          that.promise = error;
-        });
+    // $http.get('api/PostAll')
+    //   .then(function(promise) {
+    //       //this.data=success.data;
+    //     that.promise = promise.data;
+    //     },
+    //     function(error) {
+    //       that.promise = error;
+    //     });
     this.promise = $scope.pr;
     this.TablePerson = [];
     this.UserAction = mainService.UsersAction;
@@ -30,8 +30,8 @@ export class FriendController {
     this.TablePerson = webDevTec.getdata();
 
   }
-  Follow(person){
-  }
+  // Follow(person){
+  // }
   testF(){
     this.test=false;
   }

@@ -1,12 +1,13 @@
 export class MainController {
-  constructor ($timeout,$scope, webDevTec,mainService, toastr, $http) {
+  constructor ($log,$timeout,$scope, webDevTec,mainService, toastr, $http) {
     'ngInject';
     let that = this;
+    this.log = $log;
     this.scope = $scope;
     this.scope.Go = "huilo"
     $http.get('api/PostAll', {
       headers: {
-        id: localStorage.getItem("id")
+        token: localStorage.getItem("id")
       }
     })
       .then(function(promise) {
@@ -85,6 +86,16 @@ addFace(person,post){
     var that = this;
     that.cheack = reaction;
     this.cheack1 =posts;
+
+    for(let j=0;j<this.promise.result.length;j++){
+      if(this.promise.result[j]==posts){
+       this.promise.result[j].reactions.push({reaction:"true"})
+        if(reaction==0){
+          this.promise.result[j].no++;
+        } else this.promise.result[j].yes++;
+      }
+    }
+
      this.Mydata.getReaction(reaction, posts).then(res=>{
        that.scope.percent = res;
      });
@@ -150,7 +161,6 @@ addFace(person,post){
     this.post=post;
     for(let j=0;j<this.promise.result.length;j++){
       if(this.promise.result[j]==post){
-        console.log(post)
         this.promise.result[j].follows = true;
       }
     }

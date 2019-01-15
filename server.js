@@ -64,8 +64,8 @@ app.use("/", express.static(__dirname + "/"));
 app.use('/',express.static(__dirname+'/public/images'))
 //app.use(cors());
 
-app.get("/api/PostAll", controller.PostAll);
-app.get("/api/PrivateData", controller.PrivateData);
+app.get("/api/PostAll",checkToken,controller.PostAll);
+app.get("/api/PrivateData",checkToken, controller.PrivateData);
 app.get("/api/users", controller.allUsers)
 app.post("/api/myReactions", controller.myReactions)
 
