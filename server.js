@@ -3,7 +3,7 @@ var app = express();
 var multer  = require('multer')
 var storage = multer.diskStorage( {
   destination: function (req, file, cb) {
-    cb(null, '/Users/sooprit/project/yesno/client/src/assets/images/PostAll')
+    cb(null, '/Users/sooprit/project/yesno/public/images/PostAll')
 
   },
   filename: function(req,file, cb){
@@ -27,6 +27,7 @@ var upload_face = multer({ storage: storage_face });
 
 //var router = express.Router();
 var checkToken = function(req, res, next) {
+    console.log("Zdes token")
     console.log(req.headers.token)
     if (typeof req.headers.token === 'undefined') {
         res.sendStatus(401);

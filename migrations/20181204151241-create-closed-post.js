@@ -11,7 +11,7 @@ module.exports = {
       Name: {
         type: Sequelize.STRING
       },
-      massage: {
+      message: {
         type: Sequelize.STRING
       },
       image: {
@@ -24,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       idPerson: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

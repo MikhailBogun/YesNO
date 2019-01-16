@@ -15,24 +15,21 @@ module.exports = {
     secret:secret,
     db:db,
     PostAll: async function(req, res){
-        console.log("Zzzzzzzzzzzz")
-       var decode = jwt.verify(req.headers.token,secret).userid
-
-        console.log(decode)
+       var decode = req.headers.idPerson
         var bufer_one = [];
-      let data = await db.PostAll.findAll({
+      let data = await db.post.findAll({
           order: [
               ['id','DESC'],
           ]
       });
-        let follow = await db.follows.findAll({
+        let follow = await db.follow.findAll({
             attributes:["idPerson"],
-            where:{idFollows:String(decode)}
+            where:{idFollows:decode}
         })
         for(let i =0;i<follow.length;i++){
             bufer_one.push(follow[i].idPerson)
         }
-          let result = await db.PostAll.findAll({
+          let result = await db.post.findAll({
               order: [
                   ['id','DESC'],
               ],
@@ -57,49 +54,44 @@ module.exports = {
         res.json({result:result});
     },
     PrivateData: async function(req, res){
-        const Op = db.Sequelize.Op;
-        var data = []
-        let decode = jwt.verify(req.query.id,secret)
-
-        let myFollow = await db.follows.findAll({
-            where : {
-                idPerson: String(decode.userid)
-            }
+        let user = req.headers.idPerson
+        // let test = await db.User.findAll({
+        //     attributes:["login","face"],
+        //     include:[{
+        //         model:db.follow,
+        //         attributes:["idFollows"],
+        //         where:{idPerson:user}
+        //     },
+        //         {
+        //             model:db.closedPost,
+        //             required: true
+        //         }
+        //     ],
+        //      order: [[{ model: db.closedPost},"id","DESC"]]
+        // })
+        let privateDateFriend =  await db.post.findAll({
+            where:{private:1},
+            order: [
+                ['id','DESC'],
+            ],
+            include:[{
+                model:db.User, include: [
+                    {
+                        model:db.follow,
+                        attributes:["idFollows"],
+                        where:{idPerson:user}
+                    }
+                ],
+                attributes:["login","face"],
+                required: true
+            }]
         })
-
-
-        for(let i=0;i<myFollow.length;i++){
-            let bufer = await db.follows.findAll({
-                where: {
-                    idPerson: myFollow[i].dataValues.idFollows,
-                    [Op.and]: {idFollows: myFollow[i].dataValues.idPerson}
-                }
-            }).then(res=>{
-                data.push(res[0].dataValues.idPerson)
-            })
-
-
-        }
-        var data_posts=[]
-        for(let i = 0;i<data.length;i++){
-            let bufer = await db.privatePosts.findAll({
-                where: {
-                    voted: data[i]
-                }
-            }).then(res=>{
-                if(res.length!=0){
-                    for (let j =0;j<res.length;j++)
-                data_posts.push(res[j].dataValues)
-                }}
-            )
-        }
-
-        res.json({posts: data_posts, friend:data});
+        res.json({post:privateDateFriend});
     },
     addPrivatePost: async function(req, res){
 
         const decode = jwt.verify(req.body.id,secret)
-        db.privatePosts.create({name:req.body.hashteg, message:req.body.massage, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
+        db.post.create({name:req.body.hashteg, message:req.body.massage, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,idUser:decode.userid,private:1});
 
         res.send(200);
     },
@@ -108,7 +100,7 @@ module.exports = {
       const decode = jwt.verify(req.body.id,secret)
       console.log(req.body)
 
-      db.PostAll.create({Name:req.body.hashteg, massage:req.body.massage, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,voted:String(decode.userid)});
+      db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,idUser:decode.userid,private:0});
 
       res.send(200);
   },
@@ -150,7 +142,7 @@ module.exports = {
 
     db.reaction.create({idPerson:Number(decode.userid),idPost:req.body.post.id,reaction:req.body.reaction});
     if (req.body.reaction==1) {
-        db.PostAll.findById(req.body.post.id)
+        db.post.findById(req.body.post.id)
             .then(post => {
 
 
@@ -158,13 +150,13 @@ module.exports = {
 
             })
     } else  {
-        db.PostAll.findById(req.body.post.id)
+        db.post.findById(req.body.post.id)
             .then(post => {
                 return post.increment('no', {by:1})
 
             })
     }
-    let post= await db.PostAll.findById(req.body.post.id)
+    let post= await db.post.findById(req.body.post.id)
       let percent = (post.dataValues.yes)/((post.dataValues.no+post.dataValues.yes)/100)
 
     res.json({percent:percent });
@@ -187,35 +179,26 @@ module.exports = {
     res.send(data);
   },
   follows: async function (req, res){
-      let all_User_data = await db.User.findAll();
-      let all_Follow_data = await db.follows.findAll()
-      let error ='';
-      console.log(req.body)
-      let decode_follow = jwt.verify(req.body.id,secret)
-      console.log(decode_follow)
-      all_Follow_data.forEach(obj => {
-        console.log(error)
+        var Op = db.Sequelize.Op
+        let user = jwt.verify(req.body.id,secret).userid
 
-          if (obj.dataValues.idPerson == String(req.body.person.id) && String(decode_follow.userid)==obj.dataValues.idFollows) {
+        db.follow.findAll({
+            where:  { [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
+        }}).then(res=>{
+            console.log(res)
+            if(typeof res.dataValues !=="undefined"){
+                db.friends.create({idFriendOne:req.body.follows,idFriendTwo:user})
+                db.follow.destroy({where:{
+                        [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
 
-           error = "err";
-           console.log("err")
+                    }})
+            } else {
+                db.follow.create({idPerson:req.body.follows,idFollows:user})
+            }
+            for(let i=0;i<res.length;i++) console.log("zds",res[i].dataValues.id)
+        })
 
-          }
-        }
-      )
 
-
-    if(error=='') {
-      all_User_data.forEach(obj => {
-        if (decode_follow.userid == obj.dataValues.id) {
-          db.follows.create({idPerson: String(req.body.person.id), idFollows: String(decode_follow.userid)})
-
-          res.send("ok")
-
-        }
-      })
-    }
 
   },
   removeFace: async function(req, res){
@@ -269,12 +252,12 @@ module.exports = {
       let my_decoded = jwt.verify(req.body.id,secret);
       let data =[[],[],[]]
         console.log("Hello2")
-    let friend_data=await db.follows.findAll({
+    let friend_data=await db.follow.findAll({
       where: {
         idPerson: String(my_decoded.userid)
       }
     })
-    let myFollow=await db.follows.findAll({
+    let myFollow=await db.follow.findAll({
       where: {
         idFollows: String(my_decoded.userid)
       }
@@ -322,11 +305,35 @@ module.exports = {
   },
     deleteFollow: async function(req,res){
         var Op = db.Sequelize.Op
-
+        var user =req.headers.id;
         db.follows.destroy({where:{
             [Op.and]:[{idFollows:String(req.headers.id)},{idPerson:String(req.params.id)}]
 
             }})
+
+        db.follow.findAll({
+            where:  { [Op.and]:[{idFollows:user},{idPerson:req.params.id}]
+            }}).then(res=>{
+            if(typeof res.dataValues !=='undefined'){
+                db.follow.destroy({where:{
+                        [Op.and]:[{idFollows:user},{idPerson:req.params.id}]
+
+                    }})
+
+            } else {
+
+                db.follow.create({idPerson:user,idFollows:req.params.id});
+                db.friends.destroy({where:{ [Op.or]:[{[Op.and]:[{idFriendOne:user},{idFriendTwo:req.params.id}],[Op.and]:[{idFriendOne:req.params.id},{idFriendTwo:user}]}]
+
+                    }})
+
+                    // {where:{
+                    //     [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
+                    //
+                    // }})
+            }
+            for(let i=0;i<res.length;i++) console.log("zds",res[i].dataValues.id)
+        })
     }
 
 }

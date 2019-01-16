@@ -58,6 +58,7 @@
 
 
   <!--</div>-->
+  {{main.promise}}
 
   <div class='fig' ng-repeat='posts in main.promise.result | filter:searchText'> <h2>{{posts.massage+posts.Name+"------------------------"+posts.reactions[0].reaction}}</h2><br>
     <div> <p class='fig'><img src="{{posts.image}}" width="700" height="600" alt='Фотография'></p>

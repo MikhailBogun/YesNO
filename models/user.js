@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   User.associate = function(models) {
     // associations can be defined here
-      User.hasMany(models.PostAll,{foreignKey:"voted"})
+      User.hasMany(models.post,{foreignKey:"voted"})
+      User.hasMany(models.closedPost,{foreignKey:"idPerson"})
+      User.hasMany(models.follow,{foreignKey:"idPerson"})
+      User.hasMany(models.follow,{foreignKey:"idFollows"})
   };
   return User;
 };

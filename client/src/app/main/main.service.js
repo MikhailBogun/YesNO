@@ -47,6 +47,7 @@ export function MainService($http){
         return $http.post('api/follow',{
           person,
           post,
+          follows:post.voted,
           id: localStorage.getItem(("id"))})
           .then(res =>{
             return res.data;

@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   reaction.associate = function(models) {
     // associations can be defined here
-      reaction.belongsTo(models.PostAll, {foreignKey:"idPost"});//, {foreignKey: "idPost", targetKey: "id"});//, {foreignKey: '');//,{ foreignKey: "idPost", targetKey:"id"})
+      reaction.belongsTo(models.post, {foreignKey:"idPost"});//, {foreignKey: "idPost", targetKey: "id"});//, {foreignKey: '');//,{ foreignKey: "idPost", targetKey:"id"})
   };
   return reaction;
 };
