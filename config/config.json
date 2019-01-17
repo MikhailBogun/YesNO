@@ -3,7 +3,7 @@
   "development": {
     "username": "sooprit",
     "password": "1",
-    "database": "YesNO",
+    "database": "yesno",
     "host": "LocalHost",
     "dialect": "postgres",
     "operatorsAliases": false

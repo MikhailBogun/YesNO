@@ -74,7 +74,7 @@ app.post("/api/registration_user", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost)
 app.post('/api/addPrivatePost',upload.array('image'), controller.addPrivatePost)
 app.post('/api/authorization', controller.Authorization);
-app.post('/api/follow', controller.follows)
+app.post('/api/follow',checkToken, controller.follows)
 app.post('/api/friends', controller.getFriends)
 app.post('/api/removeFace',upload_face.array('image'), controller.removeFace)
 app.post('/api/removePassword', controller.removePassword)

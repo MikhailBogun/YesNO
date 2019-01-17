@@ -48,7 +48,7 @@ export class MainController {
 
 
 addFace(person,post){
-    if (String(person.id)=== post.voted) {
+    if (String(person.id)=== post.idUser) {
         return person.face;
     }
 }
@@ -96,7 +96,7 @@ addFace(person,post){
       }
     }
 
-     this.Mydata.getReaction(reaction, posts).then(res=>{
+     this.Mydata.getReaction(reaction, posts,0).then(res=>{
        that.scope.percent = res;
      });
   }
@@ -131,7 +131,7 @@ addFace(person,post){
     return false;
   }
   addName(person,post){
-    if (String(person.id) === post.voted) {
+    if (String(person.id) === post.idUser) {
         return person.login;
     }
 }
@@ -149,7 +149,7 @@ addFace(person,post){
       }
     }
     this.c
-    this.UserAction.DeleteFollow(post.voted).then(res=>{
+    this.UserAction.DeleteFollow(post.idUser).then(res=>{
       this.res = res;
     })
   }

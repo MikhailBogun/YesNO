@@ -30,10 +30,11 @@ export function MainService($http){
             }
           );
       },
-      getReaction: function(reaction,posts){
+      getReaction: function(reaction,posts,pr){
         return $http.post('api/getReaction',{
             reaction:reaction,
             post: posts,
+            private:pr,
             id: localStorage.getItem(("id"))
         })
           .then(
@@ -47,8 +48,12 @@ export function MainService($http){
         return $http.post('api/follow',{
           person,
           post,
-          follows:post.voted,
-          id: localStorage.getItem(("id"))})
+          follows:post.idUser,
+          id: localStorage.getItem(("id"))},{
+          headers: {
+            token: localStorage.getItem("id")
+          }
+        })
           .then(res =>{
             return res.data;
           })

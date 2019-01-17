@@ -20,6 +20,7 @@ export class addPostController {
       formData.append("id", localStorage.getItem("id"));
       that.ll = formData;
     if (this.checkbox == false) {
+      formData.append("private", 0);
       this.addPost.addPublicPost(formData).then(res=>{
         that.res = res;
         that.dataUsers = {}
@@ -28,6 +29,7 @@ export class addPostController {
 
     }
     else {
+      formData.append("private", 1);
       this.addPost.addPrivatePost(formData).then(res=>{
         that.res = res;
         that.dataUsers = {}

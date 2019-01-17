@@ -9,10 +9,22 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       idFriendOne: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+          references:{
+              model: "Users",
+              key: "id"
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
       },
       idFriendTwo: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+          references:{
+              model: "Users",
+              key: "id"
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
       },
       createdAt: {
         allowNull: false,

@@ -9,13 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       message: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       yes: {
         type: Sequelize.INTEGER
@@ -23,8 +23,17 @@ module.exports = {
       no: {
         type: Sequelize.INTEGER
       },
+        percent: {
+            type: Sequelize.INTEGER
+        },
       idUser: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+          references:{
+              model: "Users",
+              key: "id"
+          },
+          onUpdate: 'CASCADE',
+          onDelete: 'SET NULL',
       },
       private: {
         type: Sequelize.INTEGER

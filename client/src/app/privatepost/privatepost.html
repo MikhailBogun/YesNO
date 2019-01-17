@@ -5,14 +5,23 @@
   <!--{{privatePost.dataPosts}}-->
   <!--{{privatePost.Hello}}-->
   {{privatePost.dataPosts}}
-  {{privatePost.dataPosts.post[0].closedPosts[0]}}
+  <!--{{privatePost.dataPosts.post[0].closedPosts[0]}}-->
   <div class="mySearch">
   <form class="form-inline my-2 my-lg-0">
     <input class="form-control" type="search" placeholder="Search" aria-label="Search" ng-model="searchText">
 
   </form>
   </div>
-  <div class="fig" ng-repeat='post in privatePost.dataPosts.post'><h2 >{{post.massage+post.Name}}</h2></div>
+  <div class="fig" ng-repeat='post in privatePost.dataPosts.post'><h2 >{{post.message+post.name}}</h2><br>
+
+    <div> <p class='fig'><img src="{{post.image}}" width="700" height="600" alt='Фотография'></p>
+      <div ng-show="!post.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br><button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)"  >Yes</button><button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
+      <div class="progressB" ng-show="posts.reactions[0].reaction" ><!-- ng-if = 'posts.reactions[0].reaction'--><br><prbar></prbar></div>
+
+    </div>
+
+
+  </div>
 
 
 
