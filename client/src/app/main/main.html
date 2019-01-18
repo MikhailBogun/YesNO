@@ -59,12 +59,14 @@
 
   <!--</div>-->
   {{main.promise}}
+  <div ng-repeat="m in main.promise.result">{{m.User}}</div>
+  {{main.promise.test}}
 
   <div class='fig' ng-repeat='posts in main.promise.result | filter:searchText'> <h2>{{posts.message+posts.name+"------------------------"+posts.reactions[0].reaction}}</h2><br>
     <div> <p class='fig'><img src="{{posts.image}}" width="700" height="600" alt='Фотография'></p>
       <div ng-show="!posts.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br><button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)"  >Yes</button><button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
       <div class="progressB" ng-show="posts.reactions[0].reaction" ><!-- ng-if = 'posts.reactions[0].reaction'--><br><prbar></prbar></div><div><h4 >{{posts.User.login}}  <img  ng-src="{{posts.User.face}}" width="35" height="35" alt='Фотография'>
-        <button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="main.showFollows(Person,posts)" ng-show="!posts.follows" >Подписаться</button> <button  type="button"  ng-show="posts.follows" class="btn btn-warning" ng-click="main.deleteFollows(posts)">Отписаться</button></h4>
+        <button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="main.showFollows(Person,posts)" ng-show="!posts.User.follows[0] && !posts.User.check[0]" >Подписаться</button> <button  type="button"  ng-show="posts.User.follows[0] || posts.User.check[0] " class="btn btn-warning" ng-click="main.deleteFollows(posts)">Отписаться</button></h4>
 
         </div>
       </div></div>

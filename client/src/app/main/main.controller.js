@@ -44,6 +44,19 @@ export class MainController {
     }
 
     this.activate($timeout, webDevTec);
+    this.scope.testFol = function (user){
+      console.log(user)
+      if(!user.follows[0]){
+        console.log("1")
+        return true;
+      } else if(!user.check[0]){
+        console.log("2")
+        return true;
+      } else {
+        console.log("3")
+        return false;
+      }
+    }
   }
 
 

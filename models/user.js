@@ -9,8 +9,9 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     // associations can be defined here
       User.hasMany(models.post,{foreignKey:"idUser"})
+      User.hasMany(models.follow,{as:"check",foreignKey:"idFollows"})
       User.hasMany(models.follow,{foreignKey:"idPerson"})
-      User.hasMany(models.follow,{foreignKey:"idFollows"})
+
       User.hasMany(models.friends,{foreignKey:"idFriendTwo"})
       User.hasMany(models.friends,{foreignKey:"idFriendOne"})
 

@@ -5,6 +5,7 @@ var jwt = require('jsonwebtoken');
 const config = require(__dirname + '/../config/config.json')
 
 var now = new Date()
+var Op = db.Sequelize.Op
 var random= Math.random().toString(36).substring(2, 15)
 const secret = config.secret
 
@@ -16,20 +17,9 @@ module.exports = {
     db:db,
     PostAll: async function(req, res){
        var decode = req.headers.idPerson
-        var bufer_one = [];
-      let data = await db.post.findAll({
-          order: [
-              ['id','DESC'],
-          ]
-      });
-        let follow = await db.follow.findAll({
-            attributes:["idPerson"],
-            where:{idFollows:decode}
-        })
-        for(let i =0;i<follow.length;i++){
-            bufer_one.push(follow[i].idPerson)
-        }
+
           let result = await db.post.findAll({
+              attributes:["id","name","message","image","yes","no","percent"],
               where:{private:0},
               order: [
                   ['id','DESC'],
@@ -42,20 +32,34 @@ module.exports = {
              },
                  {
                      model:db.User,
+                     include:[
+                         {
+                             model: db.follow,
+                             attributes:["relationship"],
+                             where:{idFollows:decode},
+                             required: false
+                         },
+                         {
+            model: db.follow,
+            as:'check',
+            attributes:["relationship"],
+            where:{
+                [Op.and]:[
+                    {relationship:2},
+                    {idPerson:decode}
+                ],
+            },
+            required: false
+        }
+                     ],
+
                      attributes:["login","face"],
+
                  }]
 
           });
 
-         for(let j = 0;j<result.length;j++){
-             console.log(result[j].voted)
-             if(bufer_one.includes(result[j].idUser)){
-                 result[j].dataValues.follows = true
-             } else{
-                 result[j].dataValues.follows = false
-             }
 
-         }
         res.json({result:result});
     },
     PrivateData: async function(req, res){
@@ -199,28 +203,17 @@ module.exports = {
         var Op = db.Sequelize.Op
         let user = req.headers.idPerson
       console.log("cyda")
-        db.follow.findAll({
+            //subscriber--relationship:1;friend--relationship:2
+        db.follow.findOne({
             where:  { [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
-        }}).then(res=>{
-
-            if(!res[0] ){
-                console.log("siski111111")
-                db.follow.create({idPerson:req.body.follows,idFollows:user})
-            } else  {
-                db.follow.destroy(
-                    {
-                        where: {
-                            [Op.and]:[{
-                                    idPerson:req.body.follows,
-                                    idFollows:user
-                            }]
-                        }
-                    });
-                db.friends.bulkCreate([{idFriendOne:req.body.follows,idFriendTwo:user},{idFriendOne:user,idFriendTwo:req.body.follows}])
-
-            }
-            for(let i=0;i<res.length;i++) console.log("zds",res[i].dataValues.id)
-        })
+        }}).then(followers=>{
+            console.log(followers)
+                if (followers !== null) {
+                    return followers.increment('relationship', {by: 1});
+                } else {
+                    db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:1})
+                }
+         })
 
 
 
@@ -330,27 +323,33 @@ module.exports = {
     deleteFollow: async function(req,res){
         var Op = db.Sequelize.Op
         var user =req.headers.idPerson;
-        db.friends.destroy(
+        db.follow.findOne(
             {where:
                     {[Op.or]:
                             [
                                 {[Op.and]:
                                         [
-                                            {idFriendOne:user},
-                                            {idFriendTwo:req.params.id}
+                                            {idFollows:user},
+                                            {idPerson:req.params.id}
                                             ]},
                                 {[Op.and]:
                                         [
-                                            {idFriendOne:req.params.id},
-                                            {idFriendTwo:user}
+                                            {idFollows:req.params.id},
+                                            {idPerson:user}
                                             ]
                                 }
                                 ]
                     }
             }
             )
-            .then(res=>{
-                db.follow.create({idFollows:req.params.id,idPerson:user})
+            .then(followers=>{
+                console.log(followers)
+                if (followers.relationship == 2){
+                    return followers.decrement('relationship', {by: 1});
+                } else {
+                    return followers.destroy()
+                }
+                //db.follow.create({idFollows:req.params.id,idPerson:user})
 
 
                 })
