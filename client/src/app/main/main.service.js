@@ -44,11 +44,9 @@ export function MainService($http){
 
     },
     UsersAction: {
-      Follow: function (person,post){
+      Follow: function (idUser){
         return $http.post('api/follow',{
-          person,
-          post,
-          follows:post.idUser,
+          follows:idUser,
           id: localStorage.getItem(("id"))},{
           headers: {
             token: localStorage.getItem("id")
@@ -70,8 +68,10 @@ export function MainService($http){
           })
       },
       getFriend: function(){
-        return $http.post('api/friends',{
-          id:localStorage.getItem('id')
+        return $http.get('api/friends',{
+          headers: {
+            token: localStorage.getItem("id")
+          }
         })
           .then(res => {
             return res.data;

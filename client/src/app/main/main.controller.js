@@ -155,33 +155,20 @@ addFace(person,post){
   }
   deleteFollows(post){
 
-    for(let j=0;j<this.promise.result.length;j++){
-      if(this.promise.result[j]==post){
-        this.promise.result[j].follows = false;
-        this.c=post
-      }
-    }
-    this.c
+
     this.UserAction.DeleteFollow(post.idUser).then(res=>{
       this.res = res;
     })
+    post.User.follows[0]=null
   }
-  showFollows(person,post){
-    let that = this;
-
-    //this.toastr.info('Follow ' +person.login);
-    this.p = person;
-    this.post=post;
-    for(let j=0;j<this.promise.result.length;j++){
-      if(this.promise.result[j]==post){
-        this.promise.result[j].follows = true;
-      }
-    }
-    this.UserAction.Follow(person,post).then(res =>{
+  showFollows(post){
+    let that = this;;
+    post.User.follows[0]=1
+    this.UserAction.Follow(post.idUser).then(res =>{
       that.res = res;
       this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       if(res == "ok"){
-        this.toastr.info('Follow',+ person.login)
+        this.toastr.info('Follow')
         this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       }
     })

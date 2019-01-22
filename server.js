@@ -7,7 +7,7 @@ var storage = multer.diskStorage( {
 
   },
   filename: function(req,file, cb){
-  cb(null, file.fieldname +'-'+Date.now()+'.jpg');
+  cb(null, Date.now()+file.originalname);
 
 }
 });
@@ -70,12 +70,14 @@ app.get("/api/PrivateData",checkToken, controller.PrivateData);
 app.get("/api/users", controller.allUsers)
 app.post("/api/myReactions", controller.myReactions)
 
+app.get('/api/friends',checkToken, controller.getFriends)
+
 app.post("/api/registration_user", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost)
 app.post('/api/addPrivatePost',upload.array('image'), controller.addPrivatePost)
 app.post('/api/authorization', controller.Authorization);
 app.post('/api/follow',checkToken, controller.follows)
-app.post('/api/friends', controller.getFriends)
+app.get('/api/friends',checkToken, controller.getFriends)
 app.post('/api/removeFace',upload_face.array('image'), controller.removeFace)
 app.post('/api/removePassword', controller.removePassword)
 app.post('/api/getReaction', controller.getReaction)

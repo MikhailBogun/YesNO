@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
       post.hasMany(models.reaction, {foreignKey:"idPost"})// {foreignKey:"idPost"});//, {foreignKey: "id"});//, {foreignKey: 'idPost'});//, {foreignKey: 'id', targetKey:'idPost'})
       post.belongsTo(models.User, {foreignKey:"idUser"})
+      post.belongsTo(models.User, {as:"test",foreignKey:"idUser"})
   };
   return post;
 };

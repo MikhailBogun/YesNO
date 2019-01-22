@@ -25,7 +25,7 @@ import { fileModel } from '../app//Registration/fileModel.directive';
 
 
 
-angular.module('yesno', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ngResource', 'ui.router', 'toastr'])
+angular.module('yesno', ['ngAnimate', 'ngCookies', 'ngTouch', 'ngSanitize', 'ngMessages', 'ngAria', 'ngResource', 'ui.router', 'toastr','ngMaterial'])
   .constant('malarkey', malarkey)
   .constant('moment', moment)
   .config(config)

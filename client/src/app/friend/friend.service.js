@@ -2,7 +2,10 @@ export class FriendsService{
   constructor ($http){
     'ngInject';
     let that = this;
-    $http.get('api/follow')
+    this.http = $http;
+    $http.get('api/follow',{headers:{
+        token: localStorage.getItem("id")
+    }})
       .then(function(promise) {
           //this.data=success.data;
           that.promise = promise.data;
@@ -23,6 +26,16 @@ export class FriendsService{
   }
    getFriends() {
     return this.data;
+  }
+  returnFriend(){
+    return this.http.get('api/friends',{
+      headers:{
+        token: localStorage.getItem("id")
+      }
+    })
+      .then(res => {
+        return res.data;
+      })
   }
 
 }

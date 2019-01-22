@@ -7,3 +7,4 @@ client/.tmp/
 client/dist/
 config/
 client/node_modules/
+public/

@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   follow.associate = function(models) {
     // associations can be defined here
-      follow.belongsTo(models.User, {as:'TestOne',foreignKey:'idPerson'})
-      follow.belongsTo(models.User, {as:'Test',foreignKey:'idFollows'})
+      follow.belongsTo(models.User, {foreignKey:'idPerson'})
+      follow.belongsTo(models.User, {foreignKey:'idFollows'})
   };
   return follow;
 };
