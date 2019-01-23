@@ -68,6 +68,9 @@ app.use('/',express.static(__dirname+'/public/images'))
 app.get("/api/PostAll",checkToken,controller.PostAll);
 app.get("/api/PrivateData",checkToken, controller.PrivateData);
 app.get("/api/users", controller.allUsers)
+app.get("/api/OnePersonPosts:id",checkToken, controller.onePersonPosts)
+
+app.get("/api/test",checkToken, controller.test)
 app.post("/api/myReactions", controller.myReactions)
 
 app.get('/api/friends',checkToken, controller.getFriends)
@@ -81,6 +84,7 @@ app.get('/api/friends',checkToken, controller.getFriends)
 app.post('/api/removeFace',upload_face.array('image'), controller.removeFace)
 app.post('/api/removePassword', controller.removePassword)
 app.post('/api/getReaction', controller.getReaction)
+
 
 app.delete('/api/follow/delete:id',checkToken,controller.deleteFollow)
 

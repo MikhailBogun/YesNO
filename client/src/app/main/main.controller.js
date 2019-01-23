@@ -34,7 +34,9 @@ export class MainController {
     this.Mydata = mainService.Mydata;
     this.votersYes = "";
     this.count = "Hello"
-
+    this.scope.getPercent = function (post) {
+      return post.percent
+    }
     this.test = "123";
     this.Mydata.getUsers().then(res=>{
       that.info = res;
@@ -110,8 +112,9 @@ addFace(person,post){
     }
 
      this.Mydata.getReaction(reaction, posts,0).then(res=>{
-       that.scope.percent = res;
+       posts.percent = res.percent
      });
+
   }
   checkReaction(id){
     for(let i = 0; i<this.myReaction.length;i++){

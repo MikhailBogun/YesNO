@@ -58,9 +58,6 @@
 
 
   <!--</div>-->
-  <!--{{main.promise}}-->
-  <!--<div ng-repeat="m in main.promise.result">{{m.User}}</div>-->
-  <!--{{main.promise.test}}-->
 
   <div class='fig' ng-repeat='posts in main.promise.result | filter:searchText'> <h2>{{posts.message+posts.name+"------------------------"+posts.reactions[0].reaction}}</h2><br>
     <div> <p class='fig'><img src="{{posts.image}}" width="600" height="500" alt='Фотография'></p>

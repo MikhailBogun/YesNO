@@ -37,7 +37,27 @@ export class FriendsService{
         return res.data;
       })
   }
-
+  getPersonPosts(id){
+    return this.http.get('api/OnePersonPosts'+id,{
+      headers:{
+        token: localStorage.getItem("id")
+      }
+    }).then(res=>{
+      return res.data;
+    })
+  }
+  Test(offset){
+    return this.http.get('api/test',{
+      params:{
+        offset:offset
+      },
+      headers:{
+        token: localStorage.getItem("id")
+      }
+    }).then(res=>{
+      return res.data;
+    })
+  }
 }
 // (function () {
 //   'use strict';
