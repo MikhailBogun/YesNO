@@ -1,36 +1,59 @@
+
+
 <div class="container">
   <div>
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
-  <!--{{privatePost.dataPosts}}-->
-  <!--{{privatePost.Hello}}-->
-  {{privatePost.dataPosts}}
-  <!--{{privatePost.dataPosts.post[0].closedPosts[0]}}-->
   <div class="mySearch">
   <form class="form-inline my-2 my-lg-0">
     <input class="form-control" type="search" placeholder="Search" aria-label="Search" ng-model="searchText">
 
   </form>
   </div>
-  <div class="fig" ng-repeat='post in privatePost.dataPosts.post'><h2 >{{post.message+post.name}}</h2><br>
+  <div layout="row" >
+    <div flex-gt-sm="20" flex="33">
+      <div class="virtualRepeatdemoDeferredLoading">
+        <md-content layout="column">
+          <md-virtual-repeat-container id="vertical-friend-container">
+            <div md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
+                 class="repeated-item fig">
+              <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+              <div> <p class='fig'><img src="{{posts.image}}" width="100%" height="100%" alt='Фотография'></p>
+                <div ng-show="!posts.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br>
+                  <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)"  >Yes</button>
+                  <button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)" >No</button></div>
+                <div class="progressB" ng-show="posts.reactions[0].reaction" ><br><prbar></prbar></div>
 
-    <div> <p class='fig'><img src="{{post.image}}" width="700" height="600" alt='Фотография'></p>
-      <div ng-show="!post.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br><button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)"  >Yes</button><button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
-      <div class="progressB" ng-show="posts.reactions[0].reaction" ><!-- ng-if = 'posts.reactions[0].reaction'--><br><prbar></prbar></div>
+              </div>
+
+            </div>
+          </md-virtual-repeat-container>
+        </md-content>
+      </div>
+    </div>
+    <div flex-gt-sm="80" flex="66" >
+      <div class="virtualRepeatdemoDeferredLoading">
+        <md-content layout="column">
+          <md-virtual-repeat-container id="vertical-container">
+            <div md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
+                 class="repeated-item fig">
+              <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+              <div> <p class='fig'><img src="{{posts.image}}" width="600" height="500" alt='Фотография'></p>
+                <div ng-show="!posts.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br>
+                  <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)"  >Yes</button>
+                  <button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)" >No</button></div>
+                <div class="progressB" ng-show="posts.reactions[0].reaction" ><br><prbar></prbar></div>
+
+              </div>
+
+            </div>
+          </md-virtual-repeat-container>
+        </md-content>
+      </div>
 
     </div>
-
-
   </div>
 
 
 
-  <!--<div class='fig' ng-repeat='posts in    privatePost.data.result | filter:searchText'> <h2>{{posts.massage+posts.Name+"&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;"+posts.reactions[0].reaction}}</h2><br>-->
-    <!--<div> <p class='fig'><img src="{{posts.image}}" width="700" height="600" alt='Фотография'></p>-->
-      <!--<div ng-show="!posts.reactions[0].reaction">&lt;!&ndash;ng-if='!posts.reactions[0].reaction'&ndash;&gt;<br><button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)"  >Yes</button><button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)" >No</button></div>-->
-      <!--<div class="progressB" ng-show="posts.reactions[0].reaction" >&lt;!&ndash; ng-if = 'posts.reactions[0].reaction'&ndash;&gt;<br><prbar></prbar></div><div ng-repeat='Person in privatePost.info'><h4 ng-if = 'Person.id == posts.voted' >{{privatePost.addName(Person,posts )}}  <img  ng-src="{{privatePost.addFace(Person,posts)}}" width="35" height="35" alt='Фотография'>-->
-        <!--<button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="privatePost.showFollows(Person,posts)" ng-show="!posts.follows" >Подписаться</button> <button  type="button"  ng-show="posts.follows" class="btn btn-warning" ng-click="privatePost.deleteFollows(posts)">Отписаться</button></h4>-->
-
-      <!--</div>-->
-    <!--</div></div>-->
 </div>

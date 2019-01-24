@@ -68,7 +68,12 @@ app.use('/',express.static(__dirname+'/public/images'))
 app.get("/api/PostAll",checkToken,controller.PostAll);
 app.get("/api/PrivateData",checkToken, controller.PrivateData);
 app.get("/api/users", controller.allUsers)
-app.get("/api/OnePersonPosts:id",checkToken, controller.onePersonPosts)
+app.get("/api/OnePersonPosts",checkToken, controller.onePersonPosts)
+app.get("/api/getLengthRows",checkToken, controller.getLengthRows)
+showFriends
+app.get("/api/showFriends",checkToken, controller.showFriends)
+app.get("/api/onlyFriends",checkToken, controller.onlyFriends)
+
 
 app.get("/api/test",checkToken, controller.test)
 app.post("/api/myReactions", controller.myReactions)

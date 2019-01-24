@@ -2,8 +2,6 @@
 <div >
   <acme-navbar creation-date="main.creationDate"></acme-navbar>
 </div>
-  {{addPost.ll}}
-{{addPost.checkbox}}
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <div>
@@ -23,10 +21,12 @@
       <input type="text" class="form-control" ng-model="addPost.dataUsers.message">
     </div>
     <div class="form-group">
-      <label class="btn btn-default" >Add Image<input id="fileUpload" file-model="addPost.dataUsers.image" type="file" hidden> </label>
+      <label class="btn btn-default" >Add Image<input id="fileup" file-model="addPost.dataUsers.image" type="file" hidden> </label>
       <md-icon>add_a_photo</md-icon>
       <p></p>
+
     </div>
+
     <button>Submit</button>
   </form>
 {{addPost.dataUsers.image}}

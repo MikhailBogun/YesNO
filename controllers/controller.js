@@ -80,11 +80,12 @@ module.exports = {
         res.json({post:privateDateFriend});
     },
     onePersonPosts:  async function(req, res){
-        console.log(req.params.id)
+        console.log("hello")
+       let {id,offset} = req.query
         let result = await db.post.findAll({
             attributes:["id","name","message","image","yes","no","percent"],
             where:{
-                [Op.and]:[{private:0},{idUser:req.params.id}]
+                [Op.and]:[{private:0},{idUser:id}]
                 },
             order: [
                 ['id','DESC'],
@@ -94,9 +95,151 @@ module.exports = {
                 attributes:["reaction"],
                 where: {idPerson:req.headers.idPerson},
                 required: false
-            }]
+            }],
+            offset:offset,
+            limit:5,
+            subQuery:false
 
         });
+
+
+        res.json({result:result});
+    },
+    getLengthRows:async function(req, res){
+
+        console.log("Все сюда!")
+        let user = req.headers.idPerson
+        let data = null
+        let {id, private}=req.query
+        if(private==0) {
+            if (req.query.id == "all") {
+                data = await db.post.findAll({
+                    attributes: ["id"],
+                    where: {private: 0}
+                })
+            } else {
+                data = await db.post.findAll({
+                    attributes: ["id"],
+                    where: {
+                        [Op.and]: [{private: 0}, {idUser: req.query.id}]
+                    },
+
+                })
+            }
+        } else if(private==1) {
+            if (req.query.id == "all") {
+                data = await db.post.findAll({
+                    attributes: ["id", "name", "message", "image", "yes", "no", "percent", "idUser"],
+                    where: {private: 1},
+                    order: [
+                        ['id', 'DESC'],
+                    ],
+                    include: [{
+                        model: db.User, include: [
+                            {
+                                model: db.follow,
+                                attributes: [],
+                                where: {
+                                    [Op.and]: [
+                                        {relationship: 2},
+                                        {idFollows: user}
+                                    ]
+                                },
+                                required: true
+                            },
+                        ],
+                        attributes: ["login", "face"],
+                        required: true
+                    }]
+                })
+            } else{
+                data = await db.post.findAll({
+                    attributes: ["id"],
+                    where: {
+                        [Op.and]: [{private: 1}, {idUser: req.query.id}]
+                    },
+
+                })
+            }
+        }
+        res.json({length:data.length})
+    },
+    showFriends: async function(req,res){
+        console.log("showFrends")
+        let user = req.headers.idPerson
+        let friends = await db.User.findAll({
+            attributes:["login","face","id"],
+
+            include:[{
+                model: db.follow,
+                attributes:[],
+                where:{
+                    [Op.and]: [
+                        {idFollows:user},
+                        {relationship:2}
+
+                    ]
+                },
+            }]
+        })
+        req.json({friends:friends})
+    },
+    onlyFriends:async function(req, res){
+        console.log("onlyFriends")
+        let {id,offset} = req.query
+        console.log(id,offset)
+        let result=null
+        let user = req.headers.idPerson
+        if(id=="all") {
+
+            result =  await db.post.findAll({
+                attributes:["id","name","message","image","yes","no","percent","idUser"],
+                where:{private:1},
+                order: [
+                    ['id','DESC'],
+                ],
+                include:[{
+                    model:db.User, include: [
+                        {
+                            model:db.follow,
+                            attributes:[],
+                            where:{
+                                [Op.and]: [
+                                    {relationship:2},
+                                    {idFollows:user}
+                                ]
+                            },
+                            required: true
+                        },
+                    ],
+                    attributes:["login","face"],
+                    required: true
+                }],
+                offset: offset,
+                limit: 5,
+                subQuery: false
+            })
+        } else {
+            result = await db.post.findAll({
+                attributes: ["id", "name", "message", "image", "yes", "no", "percent"],
+                where: {
+                    [Op.and]: [{private: 0}, {idUser: id}]
+                },
+                order: [
+                    ['id', 'DESC'],
+                ],
+                include: [{
+                    model: db.reaction,
+                    attributes: ["reaction"],
+                    where: {idPerson: req.headers.idPerson},
+                    required: false
+                }],
+                offset: offset,
+                limit: 5,
+                subQuery: false
+
+            });
+        }
 
 
         res.json({result:result});
@@ -109,7 +252,7 @@ module.exports = {
   addPost: async function(req, res){
       console.log(req.files)
       const decode = jwt.verify(req.body.id,secret)
-      db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,idUser:decode.userid,private:0});
+      db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename,percent:0, yes:0,no:0,idUser:decode.userid,private:0});
       res.send(200);
   },
   Authorization: async function(req, res){
@@ -143,33 +286,28 @@ module.exports = {
   },
   getReaction: async function(req, res){
     const decode = jwt.verify(req.body.id,secret)
+      var that = this;
 
     db.reaction.create({idPerson:Number(decode.userid),idPost:req.body.post.id,reaction:req.body.reaction,private:req.body.private});
     if (req.body.reaction==1) {
         db.post.findById(req.body.post.id)
             .then(post => {
+                that.percent=  (post.yes+1)/((post.no+post.yes+1)/100)
 
-
-                return post.increment('yes', {by:1})
+                return post.increment('yes', {by:1}), post.update({percent:that.percent});
 
             })
     } else  {
         db.post.findById(req.body.post.id)
             .then(post => {
-
-                return post.increment('no', {by:1})
+                that.percent = 0
+                if(post.yes!=0){
+                     that.percent=  (post.yes+1)/((post.no+1+post.yes)/100)
+                }
+                return post.increment('no', {by:1}),post.update({percent:that.percent});
 
             })
     }
-    console.log("zdes")
-      var that = this;
-      db.post.findById(req.body.post.id)
-          .then(post=>{
-              console.log("ne")
-              that.percent = (post.yes)/((post.no+post.yes)/100)
-              console.log(percent)
-              return post.update({percent:that.percent})
-          })
     // let post= await db.post.findById(req.body.post.id)
     //   let percent = (post.dataValues.yes)/((post.dataValues.no+post.dataValues.yes)/100)
 
@@ -352,6 +490,7 @@ module.exports = {
 
 
         });
+        res.json({result:result})
 
     },
     deleteFollow: async function(req,res){

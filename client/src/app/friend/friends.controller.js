@@ -40,24 +40,22 @@ export class FriendController {
     this.counter =3
     this.activate($timeout, friendsService, webDevTec, $http);
 
-    var DynamicItems = function(friendServ) {
-      /**
-       * @type {!Object<?Array>} Data pages, keyed by page number (0-index).
-       */
-      this.loadedPages = {};
-      this.friendServ =friendServ
+    this.DynamicItems = function(friendServ,id,dataFollows) {
 
-      /** @type {number} Total number of items. */
+      this.loadedPages = {};
+      this.dataFollows=dataFollows
+      this.id=id
+      this.friendServ =friendServ
       this.numItems = 0;
 
-      /** @const {number} Number of items to fetch per request. */
-      this.PAGE_SIZE = 50;
+      this.PAGE_SIZE = 5;
 
       this.fetchNumItems_();
+      this.check = []
     };
 
     // Required.
-    DynamicItems.prototype.getItemAtIndex = function(index) {
+    this.DynamicItems.prototype.getItemAtIndex = function(index) {
       var pageNumber = Math.floor(index / this.PAGE_SIZE);
       var page = this.loadedPages[pageNumber];
 
@@ -69,39 +67,33 @@ export class FriendController {
     };
 
     // Required.
-    DynamicItems.prototype.getLength = function() {
+    this.DynamicItems.prototype.getLength = function() {
       return this.numItems;
     };
 
-    DynamicItems.prototype.fetchPage_ = function(pageNumber) {
-      // Set the page to null so we know it is already being fetched.
+    this.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
+
       this.loadedPages[pageNumber] = null;
 
-      // For demo purposes, we simulate loading more items with a timed
-      // promise. In real code, this function would likely contain an
-      // $http request.
       $timeout(angular.noop, 300).then(angular.bind(this, function() {
-        this.loadedPages[pageNumber] = [];
         var pageOffset = pageNumber * this.PAGE_SIZE;
-        this.friendServ.Test(pageOffset)
+        this.friendServ(pageOffset,this.id)
           .then(response=>{
-            console.log(response)
+            this.loadedPages[pageNumber] =response.result
           })
-        for (var i = pageOffset; i < pageOffset + this.PAGE_SIZE; i++) {
-          this.loadedPages[pageNumber].push(i);
-        }
       }));
     };
 
-    DynamicItems.prototype.fetchNumItems_ = function() {
-      // For demo purposes, we simulate loading the item count with a timed
-      // promise. In real code, this function would likely contain an
-      // $http request.
-      $timeout(angular.noop, 300).then(angular.bind(this, function() {
+    this.DynamicItems.prototype.fetchNumItems_ = function() {
+      this.dataFollows.getLength(this.id,0)
+        .then(numPosts=>{
+          this.numItems = numPosts.length
+        })
         this.numItems = 50000;
-      }));
+
     };
-    this.dynamicItems = new DynamicItems(friendsService);
+    // this.dynamicItems = new this.DynamicItems(friendsService.dataFollow.friend,0);
+    // this.postsOnePerson = new this.DynamicItems(friendsService.dataFollow.getPersonPosts);
 
   }
   activate($timeout, friendsService, webDevTec, $http) {
@@ -170,11 +162,13 @@ export class FriendController {
   }
   showPost(id){
     console.log("Hello")
+    console.log(id)
     var that = this
-    this.friendsService.getPersonPosts(id)
-      .then(posts=>{
-        that.posts = posts;
-      })
+    this.testOneDataPerson=new this.DynamicItems(this.friendsService.dataFollow.getPersonPosts,id,this.friendsService.dataFollow)
+    // this.friendsService.getPersonPosts(id)
+    //   .then(posts=>{
+    //     that.posts = posts;
+    //   })
   }
   getReaction(reaction,posts){
     var that = this;

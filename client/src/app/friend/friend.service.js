@@ -17,6 +17,73 @@ export class FriendsService{
       return "hello";
     };
 
+    this.dataFollow={
+      getOnlyFriend: function (offset,id){
+        return $http.get('api/onlyFriends',{
+          params:{
+            offset:offset,
+            id:id
+          },
+          headers:{
+            token: localStorage.getItem("id")
+          }
+        }).then(res=>{
+          return res.data;
+        })
+      },
+      showFriends: function (offset){
+        return $http.get('api/showFriends',{
+          params:{
+            offset:offset
+          },
+          headers:{
+            token: localStorage.getItem("id")
+          }
+        }).then(res=>{
+          return res.data;
+        })
+      },
+      friend: function (offset,relationship){
+      return $http.get('api/test',{
+        params:{
+          offset:offset,
+          relationship:relationship
+        },
+        headers:{
+          token: localStorage.getItem("id")
+        }
+      }).then(res=>{
+        return res.data;
+      })
+    },
+      getPersonPosts: function(offset,id){
+        return $http.get('api/OnePersonPosts',{
+          params:{
+            id:id,
+            offset:offset
+          },
+          headers:{
+            token: localStorage.getItem("id")
+          }
+        }).then(res=>{
+          return res.data;
+        })
+      },
+      getLength: function(id,privatePost){
+        return $http.get('api/getLengthRows',{
+          params:{
+            id:id,
+            private:privatePost
+          },
+          headers:{
+            token: localStorage.getItem("id")
+          }
+        }).then(res=>{
+          return res.data;
+        })
+      }
+    }
+
     this.data = [
       {
         'id':'1000',

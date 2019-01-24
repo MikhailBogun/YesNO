@@ -1,54 +1,13 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-{{friend.tes}}
-{{friend.dynamicItems}}
-<div class="virtualRepeatdemoDeferredLoading">
-<md-content layout="column">
-  <md-virtual-repeat-container id="vertical-container">
-    <div md-virtual-repeat="item in friend.dynamicItems" md-on-demand
-         class="repeated-item">
-      {{item}}
-    </div>
-  </md-virtual-repeat-container>
-</md-content>
-</div>
-
-
-<div class="container" >
+<div flex="100" class="container" >
   <div>
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  <!--<div>-->
-    <!--<table style="text-align=right;" class="table table-hover table-striped table-bordered" ng-if ="friend.friends[0]">-->
-      <!--<caption><h3>Друзья</h3></caption>-->
-      <!--<tr ng-repeat='awesome in friend.friends'  ng-show="awesome.id" >-->
-        <!--<th  scope="col"><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></th>-->
-        <!--<th ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows(awesome)">Отписаться</md-button></th>-->
-
-      <!--</tr>-->
-    <!--</table>-->
-    <!--<table class="table table-hover table-striped table-bordered" ng-if="friend.subscriber[0]">-->
-      <!--<caption><h3>Мои подписчики</h3></caption>-->
-      <!--<tr ng-repeat='awesome in friend.subscriber' ng-show="awesome.id">-->
-        <!--<th  scope="col" ><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></th>-->
-        <!--<th><md-button class="md-primary" type="button" ng-click="friend.follow(awesome)" ng-show="awesome.id">Подписаться</md-button></th>-->
-
-      <!--</tr>-->
-    <!--</table>-->
-    <!--<table class="table table-hover table-striped table-bordered" ng-if ="friend.followed[0]">-->
-      <!--<caption><h3>Мои подписки</h3></caption>-->
-      <!--<tr ng-repeat='awesome in friend.followed'>-->
-        <!--<th scope="col"><p><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></th>-->
-        <!--<th><md-button class="md-primary" type="button">Отписаться</md-button></th>-->
-
-      <!--</tr>-->
-    <!--</table>-->
 
 
-  <!--</div>-->
-  <div layout="row">
-    <div flex="20">
+  <div layout="row" >
+    <div flex-gt-sm="20" flex="33" >
   <md-input-container>
 
   <md-select ng-model="weapon" placeholder="Выберите тип оношения">
@@ -76,26 +35,33 @@
   </table>
   <table ng-show="friend.tableKey[2]"  ng-if="friend.subscriber[0]">
     <tr ng-repeat='awesome in friend.subscriber' ng-show="awesome.id">
-      <td  style="text-align: center; vertical-align: middle;" ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
+      <td  style="text-align: center; vertical-align: middle;" ><p ng-click="friend.showPost(awesome.id)" style="outline: none;"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
       <td style="text-align: center; vertical-align: middle;"><md-button class="md-primary" type="button" ng-click="friend.follow(awesome)" ng-show="awesome.id">Подписаться</md-button></td>
 
     </tr>
   </table>
     </div>
-    <div flex="70">
-      {{friend.posts}}
 
-      <div class='fig' ng-repeat='posts in friend.posts.result'>
-          <h2>{{posts.message+posts.name+"------------------------"+posts.reactions[0].reaction}}</h2><br>
-          <div> <p class='fig'><img src="{{posts.image}}" width="600" height="500" alt='Фотография'></p>
-          <div ng-show="!posts.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br>
-            <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)"  >Yes</button>
-            <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)" >No</button></div>
-            <div class="progressB" ng-show="posts.reactions[0].reaction" ><!-- ng-if = 'posts.reactions[0].reaction'--><br><prbar></prbar></div>
+    <div flex-gt-sm="80" flex="66" >
+      <div class="virtualRepeatdemoDeferredLoading">
+        <md-content layout="column">
+          <md-virtual-repeat-container id="vertical-container">
+            <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
+                 class="repeated-item fig">
+              <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+              <div> <p class='fig'><img src="{{posts.image}}" width="600" height="500" alt='Фотография'></p>
+                <div ng-show="!posts.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br>
+                  <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)"  >Yes</button>
+                  <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)" >No</button></div>
+                <div class="progressB" ng-show="posts.reactions[0].reaction" ><br><prbar></prbar></div>
 
-          </div>
-          </div>
+              </div>
+
+            </div>
+          </md-virtual-repeat-container>
+        </md-content>
       </div>
+    </div>
     </div>
 
 

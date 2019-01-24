@@ -1,6 +1,8 @@
 export class PrivatePostCtrl {
-  constructor($scope,privatePostService, mainService) {
+  constructor($scope,privatePostService, mainService,friendsService) {
     'ngInject';
+    this.onlyFriend = friendsService.dataFollow.getOnlyFriend
+    this.length  = friendsService
     this.Hello = "hello1";
     this.scope = $scope;
      this.posts = privatePostService.PrivateData;
@@ -12,6 +14,62 @@ export class PrivatePostCtrl {
        .then(res=>{
          that.dataPosts = res;
        })
+    this.DynamicItems = function(onlyFriends,id,dataFollows) {
+
+      this.loadedPages = {};
+      this.dataFollows=dataFollows
+      this.id=id
+      this.onlyFriends =onlyFriends
+      this.numItems = 0;
+
+      this.PAGE_SIZE = 5;
+
+      this.fetchNumItems_();
+      this.check = []
+    };
+
+    // Required.
+    this.DynamicItems.prototype.getItemAtIndex = function(index) {
+      var pageNumber = Math.floor(index / this.PAGE_SIZE);
+      var page = this.loadedPages[pageNumber];
+
+      if (page) {
+        return page[index % this.PAGE_SIZE];
+      } else if (page !== null) {
+        this.fetchPage_(pageNumber);
+      }
+    };
+
+    // Required.
+    this.DynamicItems.prototype.getLength = function() {
+      return this.numItems;
+    };
+
+    this.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
+
+      this.loadedPages[pageNumber] = null;
+
+
+        var pageOffset = pageNumber * this.PAGE_SIZE;
+        this.onlyFriends(pageOffset,this.id)
+          .then(response=>{
+            this.loadedPages[pageNumber] =response.result
+          })
+
+    };
+
+    this.DynamicItems.prototype.fetchNumItems_ = function() {
+
+      this.dataFollows.getLength(this.id,1)
+        .then(numPosts=>{
+          this.numItems = numPosts.length
+        })
+      this.numItems = 50000;
+
+    };
+    this.allprivatePosts = new this.DynamicItems(this.onlyFriend,"all",friendsService.dataFollow)
+
+
   }
   getReaction(reaction,posts){
     var that = this;

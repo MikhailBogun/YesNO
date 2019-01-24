@@ -63,25 +63,29 @@
   vertical-align: middle;
 }
 
-
-
-
-.virtualRepeatdemoDeferredLoading #vertical-container {
-  height: 292px;
+.virtualRepeatdemoDeferredLoading #vertical-friend-container
+{
+  height:20vh;
   width: 100%;
-  max-width: 400px; }
+
+}
+.virtualRepeatdemoDeferredLoading #vertical-container {
+  height:80vh;
+  width: 100%;
+
+  }
 
 .virtualRepeatdemoDeferredLoading .repeated-item {
   border-bottom: 1px solid #ddd;
   box-sizing: border-box;
-  height: 40px;
+  height: 70%;
   padding-top: 10px; }
 
 .virtualRepeatdemoDeferredLoading md-content {
   margin: 16px; }
 
 .virtualRepeatdemoDeferredLoading md-virtual-repeat-container {
-  border: solid 1px grey; }
+  border: solid 0px grey; }
 
 .virtualRepeatdemoDeferredLoading .md-virtual-repeat-container .md-virtual-repeat-offsetter div {
   padding-left: 16px; }
