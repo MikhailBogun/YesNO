@@ -20,22 +20,16 @@ export class addPostController {
       that.ll = formData;
     if (this.checkbox == false) {
       formData.append("private", 0);
-      this.addPost.addPublicPost(formData).then(res=>{
-        that.res = res;
-        that.dataUsers = {}
-
-        document.getElementById("fileup").value = null
-      })
-
     }
     else {
       formData.append("private", 1);
-      this.addPost.addPrivatePost(formData).then(res=>{
-        that.res = res;
-        that.dataUsers = {}
-      })
-
 
     }
+    this.addPost.addPublicPost(formData).then(res=>{
+      that.res = res;
+      that.dataUsers = {}
+
+      document.getElementById("fileup").value = null
+    })
   }
 }

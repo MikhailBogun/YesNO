@@ -14,8 +14,8 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
       controller:'FriendController',
       controllerAs:'friend'
     })
-    .state('registration',{
-    url:'/registration',
+    .state('registr',{
+    url:'/hhhhh',
     templateUrl: 'app/Registration/registration.html',
     controller:'RegistrationController',
     controllerAs:'reg'

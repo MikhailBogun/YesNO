@@ -2,7 +2,7 @@ export class PrivatePostCtrl {
   constructor($scope,privatePostService, mainService,friendsService) {
     'ngInject';
     this.onlyFriend = friendsService.dataFollow.getOnlyFriend
-    this.length  = friendsService
+    this.friendsService  = friendsService
     this.Hello = "hello1";
     this.scope = $scope;
      this.posts = privatePostService.PrivateData;
@@ -14,6 +14,58 @@ export class PrivatePostCtrl {
        .then(res=>{
          that.dataPosts = res;
        })
+    this.DynamicItemsFriends = function(onlyFriends) {
+
+      this.loadedPages = {};
+
+      this.onlyFriends =onlyFriends
+      this.numItems = 0;
+
+      this.PAGE_SIZE = 5;
+
+      this.fetchNumItems_();
+      this.check = []
+    };
+    this.DynamicItemsFriends.prototype.getItemAtIndex = function(index) {
+      var pageNumber = Math.floor(index / this.PAGE_SIZE);
+      var page = this.loadedPages[pageNumber];
+
+      if (page) {
+        return page[index % this.PAGE_SIZE];
+      } else if (page !== null) {
+        this.fetchPage_(pageNumber);
+      }
+    };
+
+    // Required.
+    this.DynamicItemsFriends.prototype.getLength = function() {
+      return this.numItems;
+    };
+
+    this.DynamicItemsFriends.prototype.fetchPage_ = function(pageNumber) {
+
+      this.loadedPages[pageNumber] = null;
+
+
+      var pageOffset = pageNumber * this.PAGE_SIZE;
+      this.onlyFriends(pageOffset)
+        .then(response=>{
+          this.loadedPages[pageNumber] =response.friends
+        })
+
+    };
+
+    this.DynamicItemsFriends.prototype.fetchNumItems_ = function() {
+
+      this.onlyFriends("length")
+        .then(numPosts=>{
+          this.numItems = numPosts.length
+        })
+      this.numItems = 50000;
+
+    };
+    this.onlyFriendsData = new this.DynamicItemsFriends(friendsService.dataFollow.getmyFriends)
+
     this.DynamicItems = function(onlyFriends,id,dataFollows) {
 
       this.loadedPages = {};
@@ -96,4 +148,8 @@ export class PrivatePostCtrl {
     }
     return false;
   }
+  showPost(id){
+    this.allprivatePosts = new this.DynamicItems(this.onlyFriend,id,this.friendsService.dataFollow)
+  }
+
 }

@@ -1,6 +1,7 @@
 var db = require("../models/index");
 var path = require("path");
 var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt');
 
 const config = require(__dirname + '/../config/config.json')
 
@@ -12,9 +13,6 @@ const secret = config.secret
 
 
 module.exports = {
-    jwt: jwt,
-    secret:secret,
-    db:db,
     PostAll: async function(req, res){
        var decode = req.headers.idPerson
 
@@ -105,6 +103,12 @@ module.exports = {
 
         res.json({result:result});
     },
+    getLengthMyFriends:async function(req, res){
+
+        console.log("getLengthMyFriends")
+        let user = req.headers.idPerson
+
+    },
     getLengthRows:async function(req, res){
 
         console.log("Все сюда!")
@@ -167,22 +171,44 @@ module.exports = {
     showFriends: async function(req,res){
         console.log("showFrends")
         let user = req.headers.idPerson
-        let friends = await db.User.findAll({
-            attributes:["login","face","id"],
+        if(req.query.offset=="length") {
+            let friends = await db.User.findAll({
+                attributes: [ "id"],
 
-            include:[{
-                model: db.follow,
-                attributes:[],
-                where:{
-                    [Op.and]: [
-                        {idFollows:user},
-                        {relationship:2}
+                include: [{
+                    model: db.follow,
+                    attributes: [],
+                    where: {
+                        [Op.and]: [
+                            {idFollows: user},
+                            {relationship: 2}
 
-                    ]
-                },
-            }]
-        })
-        req.json({friends:friends})
+                        ]
+                    },
+                }]
+            })
+            res.json({length:friends.length})
+        } else {
+            let friends = await db.User.findAll({
+                attributes: ["login", "face", "id"],
+
+                include: [{
+                    model: db.follow,
+                    attributes: [],
+                    where: {
+                        [Op.and]: [
+                            {idFollows: user},
+                            {relationship: 2}
+
+                        ]
+                    },
+                }],
+                offset: req.query.offset,
+                limit: 5,
+                subQuery: false
+            })
+            res.json({friends: friends})
+        }
     },
     onlyFriends:async function(req, res){
         console.log("onlyFriends")
@@ -223,7 +249,7 @@ module.exports = {
             result = await db.post.findAll({
                 attributes: ["id", "name", "message", "image", "yes", "no", "percent"],
                 where: {
-                    [Op.and]: [{private: 0}, {idUser: id}]
+                    [Op.and]: [{private: 1}, {idUser: id}]
                 },
                 order: [
                     ['id', 'DESC'],
@@ -252,28 +278,29 @@ module.exports = {
   addPost: async function(req, res){
       console.log(req.files)
       const decode = jwt.verify(req.body.id,secret)
-      db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename,percent:0, yes:0,no:0,idUser:decode.userid,private:0});
+      db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename,percent:0, yes:0,no:0,idUser:decode.userid,private:req.body.private});
       res.send(200);
   },
   Authorization: async function(req, res){
-      let {login, password} = req.body
-      let all_users_data = await db.User.findAll();
-      all_users_data.forEach(obj => {
-        if (obj.dataValues.login == login) {
-          let hash_password = require("crypto").createHash("sha256").update(password + obj.dataValues.salt).digest("base64");
-          if (obj.dataValues.password == hash_password){
-            const token_authorization = jwt.sign({userid: obj.dataValues.id},secret)
-            res.json({token: token_authorization});
+      let {login, password,email} = req.body
+      db.User.findOne({
+          where:{email:email}
+      }).then(user=>{
+          var hash_password = bcrypt.hashSync(password, user.salt)
+          if(user.password==hash_password){
+              const token_authorization = jwt.sign({userid: user.id},secret)
+              res.json({token: token_authorization});
           }
-        }
-      });
+      })
+
   },
   register_user: async function(req, res){
-        let {login, password} = req.body
-    let salt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    let hash_password = require("crypto").createHash("sha256").update(password + salt).digest("base64");
+      var salt = bcrypt.genSaltSync(10);
+        let {login, password,email} = req.body
+      console.log(email)
+      var hash_password = bcrypt.hashSync(password, salt)
 
-    db.User.create({login:login, password: hash_password, salt:salt, face:"assets/images/persons/inkognito.jpg"})
+    db.User.create({login:login, password: hash_password, salt:salt, face:"assets/images/persons/inkognito.jpg",email:email})
       .then(data => {
         const token_register = jwt.sign({userid: data.dataValues.id}, secret);
         res.json({token: token_register})
@@ -496,37 +523,6 @@ module.exports = {
     deleteFollow: async function(req,res){
         var Op = db.Sequelize.Op
         var user =req.headers.idPerson;
-        // db.follow.findOne(
-        //     {where:
-        //             {[Op.or]:
-        //                     [
-        //                         {[Op.and]:
-        //                                 [
-        //                                     {relationship:1},
-        //                                     {idFollows:user},
-        //                                     {idPerson:req.params.id}
-        //                                     ]},
-        //                         {[Op.and]:
-        //                                 [
-        //                                     {relationship:1},
-        //                                     {idFollows:req.params.id},
-        //                                     {idPerson:user}
-        //                                     ]}
-        //                         ]
-        //             }
-        //     }
-        //     )
-        //     .then(followers=>{
-        //         console.log(followers)
-        //         if (followers.relationship == 2){
-        //             return followers.decrement('relationship', {by: 1});
-        //         } else {
-        //             return followers.destroy()
-        //         }
-        //         //db.follow.create({idFollows:req.params.id,idPerson:user})
-        //
-        //
-        //         })
 
         db.follow.findOne({
             where: {

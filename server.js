@@ -1,4 +1,7 @@
 var express = require("express");
+var db = require("./models/index");
+var jwt = require('jsonwebtoken');
+const config = require( './config/config.json')
 var app = express();
 var multer  = require('multer')
 var storage = multer.diskStorage( {
@@ -33,8 +36,8 @@ var checkToken = function(req, res, next) {
         res.sendStatus(401);
     } else {
         try {
-           var id =  controller.jwt.verify(req.headers.token, controller.secret).userid
-            controller.db.User.findById(id)
+           var id = jwt.verify(req.headers.token, config.secret).userid
+            db.User.findById(id)
                 .then(user => {
                   if(typeof user.id !== 'undefined'){
                     req.headers.idPerson = user.id;
@@ -51,6 +54,7 @@ var checkToken = function(req, res, next) {
         }
     }
 }
+
 //var cors = require("cors");
 //var path = requeire("path");
 var server = require("http").createServer(app);
@@ -63,35 +67,35 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended:true }));
 app.use("/", express.static(__dirname + "/"));
 app.use('/',express.static(__dirname+'/public/images'))
+app.use('/api', checkToken)
 //app.use(cors());
 
-app.get("/api/PostAll",checkToken,controller.PostAll);
-app.get("/api/PrivateData",checkToken, controller.PrivateData);
+app.get("/api/PostAll",controller.PostAll);
+app.get("/api/PrivateData", controller.PrivateData);
 app.get("/api/users", controller.allUsers)
-app.get("/api/OnePersonPosts",checkToken, controller.onePersonPosts)
-app.get("/api/getLengthRows",checkToken, controller.getLengthRows)
-showFriends
-app.get("/api/showFriends",checkToken, controller.showFriends)
-app.get("/api/onlyFriends",checkToken, controller.onlyFriends)
+app.get("/api/OnePersonPosts", controller.onePersonPosts)
+app.get("/api/getLengthRows", controller.getLengthRows)
+app.get("/api/showFriends", controller.showFriends)
+app.get("/api/onlyFriends", controller.onlyFriends)
 
 
-app.get("/api/test",checkToken, controller.test)
+app.get("/api/test", controller.test)
 app.post("/api/myReactions", controller.myReactions)
 
-app.get('/api/friends',checkToken, controller.getFriends)
+app.get('/api/friends', controller.getFriends)
 
-app.post("/api/registration_user", controller.register_user);
+app.post("/registration/", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost)
 app.post('/api/addPrivatePost',upload.array('image'), controller.addPrivatePost)
-app.post('/api/authorization', controller.Authorization);
-app.post('/api/follow',checkToken, controller.follows)
-app.get('/api/friends',checkToken, controller.getFriends)
+app.post('/authorization/', controller.Authorization);
+app.post('/api/follow', controller.follows)
+app.get('/api/friends', controller.getFriends)
 app.post('/api/removeFace',upload_face.array('image'), controller.removeFace)
 app.post('/api/removePassword', controller.removePassword)
 app.post('/api/getReaction', controller.getReaction)
 
 
-app.delete('/api/follow/delete:id',checkToken,controller.deleteFollow)
+app.delete('/api/follow/delete:id',controller.deleteFollow)
 
 
 

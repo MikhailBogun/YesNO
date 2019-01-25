@@ -7,6 +7,7 @@ export function addPostService($http){
         return $http.post('api/addPost',formData, {
           transformRequest: angular.identity,
           headers: {
+            token: localStorage.getItem("id"),
             'Content-Type': undefined
           }
         })

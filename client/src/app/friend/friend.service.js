@@ -43,6 +43,18 @@ export class FriendsService{
           return res.data;
         })
       },
+      getmyFriends: function (offset){
+        return $http.get('api/showFriends',{
+          params:{
+            offset:offset
+          },
+          headers:{
+            token: localStorage.getItem("id")
+          }
+        }).then(res=>{
+          return res.data;
+        })
+      },
       friend: function (offset,relationship){
       return $http.get('api/test',{
         params:{
@@ -82,7 +94,8 @@ export class FriendsService{
           return res.data;
         })
       }
-    }
+      }
+
 
     this.data = [
       {

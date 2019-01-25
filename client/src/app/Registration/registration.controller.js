@@ -1,16 +1,12 @@
 export class RegistrationController {
-  constructor(registration, $scope, $http){
+  constructor(registration){
     'ngInject'
     var that =this;
-    this.Hello = "Hello";
-    this.scope=$scope;
-    this.MyData=["siski"];
     this.dataUsers={}
-    this.http = $http;
      this.Mydata = registration.Mydata;
-     this.Mydata.getData().then(res=>{
-       that.info = res;
-     });
+     // this.Mydata.getData().then(res=>{
+     //   that.info = res;
+     // });
 
 
   }
