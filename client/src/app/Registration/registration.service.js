@@ -14,6 +14,10 @@ export function RegistrationService($http, $location) {
             $location.path('/home');
 
           })
+          .catch(err=>{
+            return err;
+          })
+
       }
     }
   }

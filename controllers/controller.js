@@ -14,6 +14,8 @@ const secret = config.secret
 
 module.exports = {
     PostAll: async function(req, res){
+
+        console.log(req.query.text)
        var decode = req.headers.idPerson
 
           let result = await db.post.findAll({
@@ -40,7 +42,10 @@ module.exports = {
                      ],
                      attributes:["login","face"],
 
-                 }]
+                 }],
+              offset: req.query.offset,
+              limit: 5,
+              subQuery: false
 
           });
 
@@ -110,6 +115,7 @@ module.exports = {
 
     },
     getLengthRows:async function(req, res){
+        console.log(req.query.text)
 
         console.log("Все сюда!")
         let user = req.headers.idPerson
@@ -270,41 +276,57 @@ module.exports = {
 
         res.json({result:result});
     },
-    addPrivatePost: async function(req, res){
-        const decode = jwt.verify(req.body.id,secret)
-        db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename, yes:0,no:0,percent:0,idUser:decode.userid,private:1});
-        res.send(200);
-    },
   addPost: async function(req, res){
       console.log(req.files)
       const decode = jwt.verify(req.body.id,secret)
       db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename,percent:0, yes:0,no:0,idUser:decode.userid,private:req.body.private});
       res.send(200);
   },
-  Authorization: async function(req, res){
-      let {login, password,email} = req.body
-      db.User.findOne({
-          where:{email:email}
-      }).then(user=>{
-          var hash_password = bcrypt.hashSync(password, user.salt)
-          if(user.password==hash_password){
-              const token_authorization = jwt.sign({userid: user.id},secret)
-              res.json({token: token_authorization});
-          }
-      })
+  Authorization: async function(req, res,next){
+        try {
+            let {password, email} = req.body
+            db.User.findOne({
+                where: {email: email}
+            }).then(user => {
+                if (user==null){
+                    next("Пользователя несуществует!")
+                }
+                else {
+                    var hash_password = bcrypt.hashSync(password, user.salt)
+                    console.log("tyt2/0")
+                    if (user.password == hash_password) {
+                        const token_authorization = jwt.sign({userid: user.id}, secret)
+                        res.json({token: token_authorization});
+                    } else {
+                        next("Вели неправильный пароль!")
+                    }
+                }
+            })
+
+        } catch(ex){
+            console.log("!!!!!!")
+            next(ex)
+        }
 
   },
-  register_user: async function(req, res){
+  register_user: async function(req, res,next){
       var salt = bcrypt.genSaltSync(10);
         let {login, password,email} = req.body
       console.log(email)
       var hash_password = bcrypt.hashSync(password, salt)
+    db.User.findOne({where:{email:email}})
+        .then(data=>{
+            if(data !==null){
+                next(1)
+            } else{
+                db.User.create({login:login, password: hash_password, salt:salt, face:"assets/images/persons/inkognito.jpg",email:email})
+                    .then(data => {
+                        const token_register = jwt.sign({userid: data.dataValues.id}, secret);
+                        res.json({token: token_register})
+                    })
+            }
+        })
 
-    db.User.create({login:login, password: hash_password, salt:salt, face:"assets/images/persons/inkognito.jpg",email:email})
-      .then(data => {
-        const token_register = jwt.sign({userid: data.dataValues.id}, secret);
-        res.json({token: token_register})
-      })
   },
   allUsers: async function(req, res){
     let all_post_data = await db.User.findAll();
@@ -374,7 +396,7 @@ module.exports = {
                     db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:1})
                 }
          })
-
+      res.statusCode(200)
 
 
   },
@@ -394,7 +416,7 @@ module.exports = {
 
 
   },
-  removePassword: async function(req, res){
+  removePassword: async function(req, res,next){
     let decode_follow = jwt.verify(req.body.id,secret)
     console.log(decode_follow.userid)
     let data = await db.User.findAll({
@@ -419,6 +441,7 @@ module.exports = {
         });
       } else  {
         console.log("ERRorr Update")
+
       }
 
 

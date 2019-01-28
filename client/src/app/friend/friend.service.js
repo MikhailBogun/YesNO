@@ -81,11 +81,12 @@ export class FriendsService{
           return res.data;
         })
       },
-      getLength: function(id,privatePost){
+      getLength: function(id,privatePost,text=null){
         return $http.get('api/getLengthRows',{
           params:{
             id:id,
-            private:privatePost
+            private:privatePost,
+            text:text
           },
           headers:{
             token: localStorage.getItem("id")

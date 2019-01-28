@@ -4,10 +4,8 @@ export class addPostController {
     'ngInject'
     this.addPost = addPostService.addData;
     this.http = $http;
-    this.hello ="hello World!";
     this.dataUsers={};
     this.checkbox = false
-    ///localStorage.setItem('mykey','myvalue');
   }
   submit() {
       let that = this;

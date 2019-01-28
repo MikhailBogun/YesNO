@@ -1,10 +1,12 @@
 export class RegistrationController {
-  constructor(registration){
+  constructor(registration,$mdDialog){
     'ngInject'
     var that =this;
     this.dataUsers={}
      this.Mydata = registration.Mydata;
-     // this.Mydata.getData().then(res=>{
+    this.dialog= $mdDialog
+
+    // this.Mydata.getData().then(res=>{
      //   that.info = res;
      // });
 
@@ -16,6 +18,20 @@ export class RegistrationController {
 
     this.Mydata.getUser(this.dataUsers).then(res => {
         that.ret = res;
+      if(typeof res !=='undefined') {
+        that.dialog.show(
+          that.dialog.alert()
+            .clickOutsideToClose(true)
+            .title('Ошибка')
+            .textContent("Этот мыло уже лежит у нас на складе!")
+            .ariaLabel('Left to right demo')
+            .ok('Понял!')
+            // You can specify either sting with query selector
+            .openFrom('#left')
+            // or an element
+            .closeTo(angular.element(document.querySelector('#right')))
+        )
+      }
       }
     )
 

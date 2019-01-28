@@ -1,23 +1,24 @@
 export class MainController {
-  constructor ($log,$timeout,$scope, webDevTec,mainService, toastr, $http) {
+  constructor ($log,$timeout,$scope, webDevTec,mainService, toastr, $http,friendsService) {
     'ngInject';
     let that = this;
+    this.friendsService =friendsService
     this.log = $log;
     this.scope = $scope;
-    this.scope.Go = "huilo"
-    $http.get('api/PostAll', {
-      headers: {
-        token: localStorage.getItem("id")
-      }
-    })
-      .then(function(promise) {
-          //this.data=success.data;
-          that.promise = promise.data;
-
-        },
-        function(error) {
-          this.promise = error;
-        });
+    // this.scope.Go = "huilo"
+    // $http.get('api/PostAll', {
+    //   headers: {
+    //     token: localStorage.getItem("id")
+    //   }
+    // })
+    //   .then(function(promise) {
+    //       //this.data=success.data;
+    //       that.promise = promise.data;
+    //
+    //     },
+    //     function(error) {
+    //       this.promise = error;
+    //     });
     this.c = "DDDDD"
     this.testC=false
     this.testC1 = true
@@ -38,9 +39,80 @@ export class MainController {
       return post.percent
     }
     this.test = "123";
-    this.Mydata.getUsers().then(res=>{
-      that.info = res;
-    });
+
+    this.DynamicItems = function(id,dataFollows,text=null) {
+      this.text = text
+      this.loadedPages = {};
+      this.dataFollows=dataFollows
+      this.id=id
+      this.numItems = 0;
+
+      this.PAGE_SIZE = 5;
+
+      this.fetchNumItems_();
+      this.check = []
+    };
+
+    // Required.
+    this.DynamicItems.prototype.getItemAtIndex = function(index) {
+      var pageNumber = Math.floor(index / this.PAGE_SIZE);
+      var page = this.loadedPages[pageNumber];
+
+      if (page) {
+        return page[index % this.PAGE_SIZE];
+      } else if (page !== null) {
+        this.fetchPage_(pageNumber);
+      }
+    };
+
+    // Required.
+    this.DynamicItems.prototype.getLength = function() {
+      return this.numItems;
+    };
+
+    this.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
+
+      this.loadedPages[pageNumber] = null;
+
+      var that = this
+      var pageOffset = pageNumber * this.PAGE_SIZE;
+      $http.get('api/PostAll', {
+        params:{
+          offset:pageOffset,
+          text: this.text
+        },
+        headers: {
+          token: localStorage.getItem("id")
+        }
+      })
+        .then(function(promise) {
+         // console.log(promise)
+            //this.data=success.data;
+          that.loadedPages[pageNumber] = promise.data.result;
+
+
+          });
+      // this.onlyFriends(pageOffset,this.id)
+      //   .then(response=>{
+      //     this.loadedPages[pageNumber] =response.result
+      //   })
+
+    };
+
+    this.DynamicItems.prototype.fetchNumItems_ = function() {
+      var that = this;
+      this.dataFollows.getLength(this.id,0,this.text)
+        .then(numPosts=>{
+          that.numItems = numPosts.length
+        })
+      //this.numItems = 50000;
+
+    };
+    this.allPublicPosts = new this.DynamicItems("all",friendsService.dataFollow)
+
+
+
+
     this.scope.procent = function(post){
       return parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
     }
@@ -99,17 +171,10 @@ addFace(person,post){
   }
   getReaction(reaction,posts){
     var that = this;
-    that.cheack = reaction;
-    this.cheack1 =posts;
-
-    for(let j=0;j<this.promise.result.length;j++){
-      if(this.promise.result[j]==posts){
-       this.promise.result[j].reactions.push({reaction:"true"})
-        if(reaction==0){
-          this.promise.result[j].no++;
-        } else this.promise.result[j].yes++;
-      }
-    }
+    posts.reactions.push({reaction:"true"})
+    if(reaction==0){
+      posts.no++;
+    } else posts.yes++;
 
      this.Mydata.getReaction(reaction, posts,0).then(res=>{
        posts.percent = res.percent
@@ -175,6 +240,9 @@ addFace(person,post){
         this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       }
     })
+  }
+  search(text){
+    this.allPublicPosts = new this.DynamicItems("all",this.friendsService.dataFollow,text)
   }
 
 }

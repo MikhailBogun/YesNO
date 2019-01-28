@@ -61,13 +61,24 @@ var server = require("http").createServer(app);
 var bodyparser = require("body-parser");
 
 
-//app.use(multer({dest: './uploads/'}).single("photo"));
-//router.use(multer({dest:'./uploads/'}));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended:true }));
 app.use("/", express.static(__dirname + "/"));
 app.use('/',express.static(__dirname+'/public/images'))
 app.use('/api', checkToken)
+app.use('/authorization/',function(err, req, res, next) {
+    cosnole.log("alllogvsd")
+    //console.error(err.stack);
+    if(err.stack=='Пользователя несуществует!') {
+        res.status(404).send('Пользователя не существуют!');
+    } else if(err.stack=="Вели неправильный пароль!") {
+        res.status(401).send('Вели неправильный пароль!');
+    } else {
+        res.status(500).send('Ошибка сервера!');
+    }
+
+
+})
 //app.use(cors());
 
 app.get("/api/PostAll",controller.PostAll);
@@ -86,7 +97,6 @@ app.get('/api/friends', controller.getFriends)
 
 app.post("/registration/", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost)
-app.post('/api/addPrivatePost',upload.array('image'), controller.addPrivatePost)
 app.post('/authorization/', controller.Authorization);
 app.post('/api/follow', controller.follows)
 app.get('/api/friends', controller.getFriends)
@@ -98,6 +108,21 @@ app.post('/api/getReaction', controller.getReaction)
 app.delete('/api/follow/delete:id',controller.deleteFollow)
 
 
+app.use('/',function(err, req, res, next) {
+    console.log("alllogvsd")
+    //console.error(err.stack);
+    if(err=='Пользователя несуществует!') {
+        res.status(404).send('Пользователя не существуют!');
+    } else if(err=="Вели неправильный пароль!") {
+        res.status(401).send('Вели неправильный пароль!');
 
+    } else if(err==1){
+        res.status(401).send("Пользователь с таким email уже зарегистрирован!")
+    } else {
+        res.status(500).send('Ошибка сервера!');
+    }
+
+
+})
 server.listen(8000);
 console.log("Запуск сервера..");

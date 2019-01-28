@@ -1,18 +1,16 @@
-<div class="my">
-  <form ng-submit="authorization.submit()">
+<div layout="row">
+  <form flex = "20" flex-offset="40" class="dialog-demo-content" ng-submit="authorization.submit()">
     <div class="form-group">
-      <label for=""><h2>Login</h2></label>
-      <input type="text" class="form-control" ng-model="authorization.Users.login" >
-    </div>
-    <div class="form-group">
-      <label for=""><h2>Password</h2></label>
+      <label for=""><h4>Password</h4></label>
       <input type="password" class="form-control" ng-model="authorization.Users.password">
     </div>
     <div class="form-group">
-      <label for=""><h2>Email</h2></label>
+      <label for=""><h4>Email</h4></label>
       <input type="text" class="form-control" ng-model="authorization.Users.email">
     </div>
-    <button><h5>Submit</h5></button>
+    <a ui-sref="registr"><h4>Registration</h4></a>
+    <button><h5>Авторизация</h5></button>
   </form>
-  <a ui-sref="registr"><h4>Registration</h4></a>
+
 </div>
+

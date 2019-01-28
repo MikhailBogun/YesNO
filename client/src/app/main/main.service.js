@@ -36,6 +36,10 @@ export function MainService($http){
             post: posts,
             private:pr,
             id: localStorage.getItem(("id"))
+        },{
+          headers:{
+            token: localStorage.getItem(("id"))
+          }
         })
           .then(
             res =>{return res.data}
