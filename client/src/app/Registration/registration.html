@@ -1,18 +1,20 @@
-<div class="my">
-  <form class="dialog-demo-content" ng-submit="reg.submit()">
+<div layout="row">
+  <form flex = "20" flex-offset="40" class="dialog-demo-content" ng-submit="reg.submit()" >
     <div class="form-group">
-      <label for=""><h2>Enter your future Login</h2></label>
-    <input class="form-control" type="text" ng-model="reg.dataUsers.login">
+      <label for=""><h4>Enter your future Login</h4></label>
+    <input class="form-control" required type="name" ng-model="reg.dataUsers.login">
     </div>
     <div class="form-group">
-      <label for=""><h2>Enter your Password</h2></label>
-    <input class="form-control" type="password" ng-model="reg.dataUsers.password">
+      <label for=""><h4>Enter your Password</h4></label>
+    <input class="form-control" required type="password" ng-model="reg.dataUsers.password">
   </div>
     <div class="form-group">
-      <label for=""><h2>Enter your Email</h2></label>
-      <input class="form-control" type="text" ng-model="reg.dataUsers.email">
+      <label for=""><h4>Enter your Email</h4></label>
+      <input class="form-control" required type="email" ng-model="reg.dataUsers.email "  minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
     </div>
-    <button>Post</button>
+
+    <button class="btn btn-primary">Регистрация</button>
   </form>
+
 <!--{{reg.info}}-->
 </div>

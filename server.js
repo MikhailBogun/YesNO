@@ -32,6 +32,7 @@ var upload_face = multer({ storage: storage_face });
 var checkToken = function(req, res, next) {
     console.log("Zdes token")
     console.log(req.headers.token)
+    console.log("Neprishol")
     if (typeof req.headers.token === 'undefined') {
         res.sendStatus(401);
     } else {
@@ -86,18 +87,23 @@ app.get("/api/PrivateData", controller.PrivateData);
 app.get("/api/users", controller.allUsers)
 app.get("/api/OnePersonPosts", controller.onePersonPosts)
 app.get("/api/getLengthRows", controller.getLengthRows)
+app.get('/api/lengthRowsMyPosts', controller.lengthRowsMyPosts)
 app.get("/api/showFriends", controller.showFriends)
-app.get("/api/onlyFriends", controller.onlyFriends)
+app.get("/api/onlyFriends", controller.onlyFriends);
 
 
-app.get("/api/test", controller.test)
-app.post("/api/myReactions", controller.myReactions)
+app.get('/api/myPosts', controller.myPosts);
 
 app.get('/api/friends', controller.getFriends)
 
 app.post("/registration/", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost)
+
+
 app.post('/authorization/', controller.Authorization);
+app.post("/forget/", controller.forgetPass);
+app.post("/forget/newPass", controller.newPassword);
+
 app.post('/api/follow', controller.follows)
 app.get('/api/friends', controller.getFriends)
 app.post('/api/removeFace',upload_face.array('image'), controller.removeFace)
@@ -107,8 +113,9 @@ app.post('/api/getReaction', controller.getReaction)
 
 app.delete('/api/follow/delete:id',controller.deleteFollow)
 
+app.delete('/api/deletePost:id',controller.deletePost)
 
-app.use('/',function(err, req, res, next) {
+ app.use('/',function(err, req, res, next) {
     console.log("alllogvsd")
     //console.error(err.stack);
     if(err=='Пользователя несуществует!') {
@@ -118,6 +125,9 @@ app.use('/',function(err, req, res, next) {
 
     } else if(err==1){
         res.status(401).send("Пользователь с таким email уже зарегистрирован!")
+    } else if(err=="Неправильный Код"){
+        res.status(401).send("Неверный код")
+
     } else {
         res.status(500).send('Ошибка сервера!');
     }

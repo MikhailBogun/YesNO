@@ -20,23 +20,23 @@
 
 
     <tr ng-repeat='awesome in friend.friends'  ng-show="awesome.id" >
-      <td style="text-align: center; vertical-align: middle;"><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
-      <td style="text-align: center; vertical-align: middle;"><md-button class="md-primary" type="button" ng-click="friend.deleteFollows(awesome)">Отписаться</md-button></td>
+      <td ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
+      <td ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows(awesome)">Отписаться</md-button></td>
 
     </tr>
   </table>
 
   <table  ng-show="friend.tableKey[1]" ng-if ="friend.followed[0]">
     <tr ng-repeat='awesome in friend.followed' ng-show="awesome.id">
-      <td  style="text-align: center; vertical-align: middle;"><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
-      <td  style="text-align: center; vertical-align: middle;"><md-button class="md-primary" type="button" ng-click="friend.deleteFollows1(awesome)">Отписаться</md-button></td>
+      <td  ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
+      <td  ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows1(awesome)">Отписаться</md-button></td>
 
     </tr>
   </table>
   <table ng-show="friend.tableKey[2]"  ng-if="friend.subscriber[0]">
     <tr ng-repeat='awesome in friend.subscriber' ng-show="awesome.id">
-      <td  style="text-align: center; vertical-align: middle;" ><p ng-click="friend.showPost(awesome.id)" style="outline: none;"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
-      <td style="text-align: center; vertical-align: middle;"><md-button class="md-primary" type="button" ng-click="friend.follow(awesome)" ng-show="awesome.id">Подписаться</md-button></td>
+      <td  ><p ng-click="friend.showPost(awesome.id)" style="outline: none;"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
+      <td ><md-button class="md-primary" type="button" ng-click="friend.follow(awesome)" ng-show="awesome.id">Подписаться</md-button></td>
 
     </tr>
   </table>
@@ -49,11 +49,11 @@
             <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
                  class="repeated-item fig">
               <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
-              <div> <p class='fig'><img src="{{posts.image}}" width="600" height="500" alt='Фотография'></p>
-                <div ng-show="!posts.reactions[0].reaction"><!--ng-if='!posts.reactions[0].reaction'--><br>
+              <div> <p class='fig'><img src="{{posts.image}}" width="80%" height="400vh" alt='Фотография'></p>
+                <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)"  >Yes</button>
                   <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)" >No</button></div>
-                <div class="progressB" ng-show="posts.reactions[0].reaction" ><br><prbar></prbar></div>
+                <div class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
 
               </div>
 

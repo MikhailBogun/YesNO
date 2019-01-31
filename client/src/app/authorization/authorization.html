@@ -1,16 +1,45 @@
 <div layout="row">
-  <form flex = "20" flex-offset="40" class="dialog-demo-content" ng-submit="authorization.submit()">
-    <div class="form-group">
-      <label for=""><h4>Password</h4></label>
-      <input type="password" class="form-control" ng-model="authorization.Users.password">
-    </div>
+  <form flex = "20" flex-offset="40" class="dialog-demo-content" ng-submit="authorization.submit()" ng-if="authorization.show==1">
     <div class="form-group">
       <label for=""><h4>Email</h4></label>
       <input type="text" class="form-control" ng-model="authorization.Users.email">
     </div>
-    <a ui-sref="registr"><h4>Registration</h4></a>
+    <div class="form-group">
+      <label for=""><h4>Password</h4></label>
+      <input type="password" class="form-control" ng-model="authorization.Users.password">
+    </div>
+
+    <p><a ui-sref="registr">Registration    </a>
+    <a ng-click="authorization.forgotPass()">Забыли пароль?</a>
+    </p><br>
+
     <button><h5>Авторизация</h5></button>
   </form>
+  <div flex = "20" flex-offset="40" class="dialog-demo-content" ng-if="authorization.show==0">
+    <p>Введите свой email  и на него будет выслан код подтверждения после чего вы сможет изменить пароль</p>
+    <form  ng-submit="authorization.getCode(authorization.emailGetCode)" >
+      <div class="form-group">
+        <label for=""><h4>Email</h4></label>
+        <input input class="form-control" required type="email" ng-model="authorization.emailGetCode.email "  minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
+        <br>
+        <button class="btn btn-primary" ng-hide="authorization.showNewPass==2" >Получить код</button>
+      </div>
+    </form>
+    <form  ng-submit="authorization.refreshPass()" ng-if="authorization.showNewPass==2">
+      <div class="form-group">
+        <label for=""><h4>Пароль</h4></label>
+        <input input class="form-control" required type="name" ng-model="authorization.newPass.pass " >
+        <br>
+      </div>
+
+      <div class="form-group">
+        <label for=""><h4>Код с вашей почты</h4></label>
+        <input input class="form-control" required type="name" ng-model="authorization.newPass.code " >
+        <br>
+      </div>
+      <button class="btn btn-primary" >Изменить пароль</button>
+    </form>
+  </div>
 
 </div>
 

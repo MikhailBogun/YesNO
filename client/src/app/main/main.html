@@ -18,8 +18,8 @@
       <!--</md-virtual-repeat-container>-->
     <!--</md-content>-->
   <!--</div>-->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="container">
 
 
@@ -40,21 +40,24 @@
 
 </div>
   <div >
+
     <div class="virtualRepeatdemoDeferredLoading ng-cloak" >
       <md-content layout="column">
         <md-virtual-repeat-container id="vertical-container" ng-cloak>
           <div md-virtual-repeat="posts in main.allPublicPosts" md-on-demand
-               class="repeated-item fig">
-            <h2>{{posts.message+posts.name}}</h2><br>
-            <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500vm"  alt='Фотография'></p>
-              <div ng-show="!posts.reactions[0].reaction" ng-cloak><!--ng-if='!posts.reactions[0].reaction'--><br>
+               class="repeated-item fig" >
+
+            <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+            <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500"  alt='Фотография'></p>
+              <div ng-if="!posts.reactions[0]" ng-cloak><!--ng-if='!posts.reactions[0].reaction'--><br>
                 <button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)" >Yes</button>
                 <button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
-              <div class="progressB" ng-show="posts.reactions[0].reaction" ><br><prbar></prbar></div>
+              <div class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
 
               <br><p>{{posts.User.login}}
               <img  ng-src="{{posts.User.face}}" width="35" height="35" alt='Фотография'>
-              <button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]" >Подписаться</button> <button  type="button"  ng-show="posts.User.follows[0] " class="btn btn-warning" ng-click="main.deleteFollows(posts)">Отписаться</button></h4>
+              <button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]" >Подписаться</button>
+                <button  type="button"  ng-show="posts.User.follows[0] " class="btn btn-warning" ng-click="main.deleteFollows(posts)">Отписаться</button></h4>
               </p>
 
             </div>

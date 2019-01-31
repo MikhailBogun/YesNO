@@ -35,9 +35,9 @@ export class MainController {
     this.Mydata = mainService.Mydata;
     this.votersYes = "";
     this.count = "Hello"
-    this.scope.getPercent = function (post) {
-      return post.percent
-    }
+    // this.scope.getPercent = function (post) {
+    //   return post.percent
+    // }
     this.test = "123";
 
     this.DynamicItems = function(id,dataFollows,text=null) {
@@ -178,6 +178,7 @@ addFace(person,post){
 
      this.Mydata.getReaction(reaction, posts,0).then(res=>{
        posts.percent = res.percent
+       console.log(res.percent)
      });
 
   }
@@ -234,14 +235,15 @@ addFace(person,post){
     post.User.follows[0]=1
     this.UserAction.Follow(post.idUser).then(res =>{
       that.res = res;
-      this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
+      //this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       if(res == "ok"){
         this.toastr.info('Follow')
-        this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
+        that.toastr.info('Forkbdf <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       }
     })
   }
   search(text){
+    this.allPublicPosts=null
     this.allPublicPosts = new this.DynamicItems("all",this.friendsService.dataFollow,text)
   }
 

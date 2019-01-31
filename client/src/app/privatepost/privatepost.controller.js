@@ -127,8 +127,12 @@ export class PrivatePostCtrl {
     var that = this;
     that.cheack = reaction;
     this.cheack1 =posts;
+    posts.reactions.push({reaction:"true"})
+    if(reaction==0){
+      posts.no++;
+    } else posts.yes++;
     this.Mydata.getReaction(reaction, posts).then(res=>{
-      that.myReaction = res;
+      posts.percent = res.percent;
     });
   }
   checkReaction(id){
@@ -150,6 +154,9 @@ export class PrivatePostCtrl {
   }
   showPost(id){
     this.allprivatePosts = new this.DynamicItems(this.onlyFriend,id,this.friendsService.dataFollow)
+  }
+  allPrivatePost(){
+    this.allprivatePosts = new this.DynamicItems(this.onlyFriend,"all",this.friendsService.dataFollow)
   }
 
 }

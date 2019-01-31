@@ -3,6 +3,43 @@ export function MainService($http){
   'ngInject';
   return {
     Mydata: {
+      deletePosts: function(post){
+        return $http.delete('api/deletePost'+post.id, {
+          headers:{
+            token:localStorage.getItem(("id"))
+          }
+        })
+          .then(res=>{
+            return res.data;
+          })
+      },
+      myPosts: function(priv,offset){
+        return $http.get('api/myPosts',{
+          params:{
+            offset:offset,
+            private:priv
+          },
+          headers: {
+            token: localStorage.getItem("id")
+          }
+        })
+          .then(
+            res =>{return res.data}
+          );
+      },
+      lengthmyPosts: function(priv){
+        return $http.get('api/lengthRowsMyPosts',{
+          params:{
+            private:priv
+          },
+          headers: {
+            token: localStorage.getItem("id")
+          }
+        })
+          .then(
+            res =>{return res.data}
+          );
+      },
 
       getData: function () {
         return $http.get('api/PostAll',{
@@ -48,6 +85,12 @@ export function MainService($http){
 
     },
     UsersAction: {
+      rewritePass: function(newPass){
+        return $http.post('forget/newPass',newPass)
+          .then(res =>{
+            return res.data;
+          })
+      },
       Follow: function (idUser){
         return $http.post('api/follow',{
           follows:idUser,

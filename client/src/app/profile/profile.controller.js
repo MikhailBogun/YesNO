@@ -1,11 +1,67 @@
 export class ProfileCtrl {
-  constructor($http){
+  constructor($http,mainService){
     'ngInject'
     this.http = $http;
     this.hello ="hello World!";
     this.info={};
     this.face={};
+    this.mainService=mainService;
     ///localStorage.setItem('mykey','myvalue');
+    this.DynamicItems = function(data,privPosts) {
+      this.loadedPages = {};
+      this.private=privPosts
+      this.myPosts=data.myPosts
+      this.data=data
+      this.numItems = 0;
+
+
+      this.PAGE_SIZE = 5;
+
+      this.fetchNumItems_();
+      this.check = []
+    };
+
+    // Required.
+    this.DynamicItems.prototype.getItemAtIndex = function(index) {
+      console.log(123213421441243)
+
+      var pageNumber = Math.floor(index / this.PAGE_SIZE);
+      var page = this.loadedPages[pageNumber];
+      if (page) {
+        return page[index % this.PAGE_SIZE];
+      } else if (page !== null) {
+        this.fetchPage_(pageNumber);
+      }
+    };
+
+    // Required.
+    this.DynamicItems.prototype.getLength = function() {
+      return this.numItems;
+    };
+
+    this.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
+
+      this.loadedPages[pageNumber] = null;
+
+      var that = this
+      var pageOffset = pageNumber * this.PAGE_SIZE;
+
+      this.myPosts(this.private,pageOffset).then(posts=>{
+        that.loadedPages[pageNumber] = posts.result;
+      })
+
+    };
+
+    this.DynamicItems.prototype.fetchNumItems_ = function() {
+      var that = this;
+      this.data.lengthmyPosts(this.private)
+        .then(numPosts=>{
+          that.numItems = numPosts.length
+        })
+      //this.numItems = 50000;
+
+    };
+    this.allPublicPosts = new this.DynamicItems(mainService.Mydata,0)
   }
   submit(){
 
@@ -42,5 +98,11 @@ export class ProfileCtrl {
           this.error =error;
         });
     }
+  }
+  DeletePost(post){
+    this.mainService.Mydata.deletePosts(post).then(res=>{
+      console.log(res)
+      post = []
+    })
   }
 }

@@ -31,7 +31,7 @@
 }
 .progressB {
   margin: auto;
-  width: 200px;
+  width: 20%;
 }
 .animate-show-hide.ng-hide {
   opacity: 0;
@@ -95,3 +95,7 @@
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+.navBardemoBasicUsage md-content .ext-content {
+  padding: 50px;
+  margin: 20px;
+  background-color: #FFF2E0; }

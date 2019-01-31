@@ -11,9 +11,9 @@ module.exports = {
     */
       return queryInterface.addColumn(
           'Users',
-          'email',
+          'codeEmail',
           {
-              type: Sequelize.INTEGER
+              type: Sequelize.TEXT
           }
       );
   },
@@ -26,10 +26,9 @@ module.exports = {
       Example:
       return queryInterface.dropTable('users');
     */
-
       return queryInterface.removeColumn(
           'Users',
-          'email'
+          'codeEmail'
       );
   }
 };

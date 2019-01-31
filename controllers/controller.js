@@ -2,9 +2,10 @@ var db = require("../models/index");
 var path = require("path");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcrypt');
-
+var nodemailer = require("nodemailer");
 const config = require(__dirname + '/../config/config.json')
-
+var fs = require('fs');
+var filePath = "/Users/sooprit/project/yesno"
 var now = new Date()
 var Op = db.Sequelize.Op
 var random= Math.random().toString(36).substring(2, 15)
@@ -14,43 +15,115 @@ const secret = config.secret
 
 module.exports = {
     PostAll: async function(req, res){
-
-        console.log(req.query.text)
-       var decode = req.headers.idPerson
-
-          let result = await db.post.findAll({
-              attributes:["id","name","message","image","yes","no","percent","idUser"],
-              where:{private:0},
-              order: [
-                  ['id','DESC'],
-              ],
-             include: [{
-                 model: db.reaction,
-                 attributes:["reaction"],
-                 where: {idPerson:decode},
-                 required: false
-             },
-                 {
-                     model:db.User,
-                     include:[
-                         {
-                             model: db.follow,
-                             attributes:["relationship"],
-                             where:{idFollows:decode},
-                             required: false
-                         }
-                     ],
-                     attributes:["login","face"],
-
-                 }],
-              offset: req.query.offset,
-              limit: 5,
-              subQuery: false
-
-          });
+        var decode = req.headers.idPerson
+        var allDataPosts = null;
 
 
-        res.json({result:result});
+        if(typeof req.query.text ==="undefined")
+        {
+
+
+            allDataPosts = await db.post.findAll({
+                attributes:["id","name","message","image","yes","no","percent","idUser"],
+                where:{private:0},
+                order: [
+                    ['id','DESC'],
+                ],
+                include: [{
+                    model: db.reaction,
+                    attributes:["reaction"],
+                    where: {idPerson:decode},
+                    required: false
+                },
+                    {
+                        model:db.User,
+                        include:[
+                            {
+                                model: db.follow,
+                                attributes:["relationship"],
+                                where:{idFollows:decode},
+                                required: false
+                            }
+                        ],
+                        attributes:["login","face"],
+
+                    }],
+                offset: req.query.offset,
+                limit: 5,
+                subQuery: false
+
+            });
+        } else {
+
+            allDataPosts= await db.sequelize.query( `SELECT "post"."id",
+                                                    "post"."name",
+                                                     "post"."message", 
+                                                     "post"."image", 
+                                                     "post"."yes", 
+                                                     "post"."no", 
+                                                     "post"."percent", 
+                                                     "post"."idUser",
+                                                      "reactions"."id" AS "reactions.id", 
+                                                      "reactions"."reaction" AS "reactions.reaction", 
+                                                      "User"."id" AS "User.id", 
+                                                      "User"."login" AS "User.login", 
+                                                      "User"."face" AS "User.face",
+                                                      "User->follows"."id" AS "User.follows.id",
+                                                       "User->follows"."relationship" AS "User.follows.relationship" 
+                                            FROM "posts" AS "post"
+                                                LEFT OUTER JOIN "reactions" AS "reactions" ON "post"."id" = "reactions"."idPost" AND "reactions"."idPerson"=:user 
+                                                LEFT OUTER JOIN "Users" AS "User" ON "post"."idUser" = "User"."id" 
+                                                LEFT OUTER JOIN "follows" AS "User->follows" ON "User"."id" = "User->follows"."idPerson" AND "User->follows"."idFollows"=:user 
+                                                WHERE ("post"."private" = 0 AND "post"."name" ILIKE :search_name) 
+                                            ORDER BY "post"."id" DESC 
+                                            LIMIT :limit
+                                            OFFSET :offset;`,
+
+
+
+                { replacements: { search_name: '%'+req.query.text+"%" ,limit:5,offset:req.query.offset ,user:decode}, type: db.sequelize.QueryTypes.SELECT }
+            )
+            console.log("tyt")
+            allDataPostss = await db.post.findAll({
+                attributes:["id","name","message","image","yes","no","percent","idUser"],
+                where:{
+                    [Op.and]:[
+                        {private:0},
+                         {name:{[Op.iLike]:"%"+req.query.text}}
+                    ]},
+                order: [
+                    ['id','DESC'],
+                ],
+                include: [{
+                    model: db.reaction,
+                    attributes:["reaction"],
+                    where: {idPerson:decode},
+                    required: false
+                },
+                    {
+                        model:db.User,
+                        include:[
+                            {
+                                model: db.follow,
+                                attributes:["relationship"],
+                                where:{idFollows:decode},
+                                required: false
+                            }
+                        ],
+                        attributes:["login","face"],
+
+                    }],
+                offset: req.query.offset,
+                limit: 5,
+                subQuery: false
+
+            });
+        }
+
+
+
+        console.log("y nas norm")
+        res.json({result:allDataPosts});
     },
     PrivateData: async function(req, res){
         let user = req.headers.idPerson
@@ -81,6 +154,48 @@ module.exports = {
         })
 
         res.json({post:privateDateFriend});
+    },
+    lengthRowsMyPosts: async function(req, res,next){
+        let user = req.headers.idPerson
+        try {
+            let dataPosts = await db.post.findAll({
+                attributes:["id"],
+                where:{
+                    [Op.and]:[{
+                        private:req.query.private
+                    },{
+                        idUser: user
+                    }]
+                }
+
+            })
+            res.json({length:dataPosts.length})
+        } catch (e) {
+            console.log("neeeeee")
+            next(e)
+        }
+    },
+    myPosts: async function(req, res,next){
+        console.log("hello")
+        try{
+            let user = req.headers.idPerson
+
+            let dataPosts = await db.post.findAll({
+                attributes:["id","name","message","image","yes","no","percent"],
+                where:{
+                    [Op.and]:[{
+                        private:req.query.private
+                    },{
+                        idUser: user
+                    }]
+                }
+
+            })
+            console.log("juv")
+            res.json({result:dataPosts})
+        } catch (e) {
+            next(e)
+        }
     },
     onePersonPosts:  async function(req, res){
         console.log("hello")
@@ -115,18 +230,26 @@ module.exports = {
 
     },
     getLengthRows:async function(req, res){
-        console.log(req.query.text)
-
-        console.log("Все сюда!")
+        var searchText = req.query.text
         let user = req.headers.idPerson
         let data = null
         let {id, private}=req.query
+
         if(private==0) {
             if (req.query.id == "all") {
-                data = await db.post.findAll({
-                    attributes: ["id"],
-                    where: {private: 0}
-                })
+                if(typeof searchText==="undefined") {
+                    data = await db.post.findAll({
+                        attributes: ["id"],
+                        where: {private: 0}
+                    })
+                } else{
+
+                    data = await db.sequelize.query( `SELECT "post"."id"
+                                         FROM "posts" AS "post"
+                                         WHERE ("post"."private" = 0 AND "post"."name" ILIKE :search_name);`
+                        ,{ replacements: { search_name: '%'+searchText+"%"  }, type: db.sequelize.QueryTypes.SELECT }
+                    )
+                }
             } else {
                 data = await db.post.findAll({
                     attributes: ["id"],
@@ -172,6 +295,7 @@ module.exports = {
                 })
             }
         }
+        //console.log(data)
         res.json({length:data.length})
     },
     showFriends: async function(req,res){
@@ -231,6 +355,12 @@ module.exports = {
                     ['id','DESC'],
                 ],
                 include:[{
+                    model: db.reaction,
+                    attributes: ["reaction"],
+                    where: {idPerson: req.headers.idPerson},
+                    required: false
+                        },
+                        {
                     model:db.User, include: [
                         {
                             model:db.follow,
@@ -279,7 +409,7 @@ module.exports = {
   addPost: async function(req, res){
       console.log(req.files)
       const decode = jwt.verify(req.body.id,secret)
-      db.post.create({name:req.body.hashteg, message:req.body.message, image:"http://localhost:8000/public/images/PostAll/"+req.files[0].filename,percent:0, yes:0,no:0,idUser:decode.userid,private:req.body.private});
+      db.post.create({name:req.body.hashteg, message:req.body.message, image:"/public/images/PostAll/"+req.files[0].filename,percent:0, yes:0,no:0,idUser:decode.userid,private:req.body.private});
       res.send(200);
   },
   Authorization: async function(req, res,next){
@@ -342,7 +472,7 @@ module.exports = {
         db.post.findById(req.body.post.id)
             .then(post => {
                 that.percent=  (post.yes+1)/((post.no+post.yes+1)/100)
-
+                res.json({percent:that.percent});
                 return post.increment('yes', {by:1}), post.update({percent:that.percent});
 
             })
@@ -351,8 +481,9 @@ module.exports = {
             .then(post => {
                 that.percent = 0
                 if(post.yes!=0){
-                     that.percent=  (post.yes+1)/((post.no+1+post.yes)/100)
+                     that.percent=  (post.yes)/((post.no+1+post.yes)/100)
                 }
+                res.json({percent:that.percent });
                 return post.increment('no', {by:1}),post.update({percent:that.percent});
 
             })
@@ -360,34 +491,16 @@ module.exports = {
     // let post= await db.post.findById(req.body.post.id)
     //   let percent = (post.dataValues.yes)/((post.dataValues.no+post.dataValues.yes)/100)
 
-    res.json({percent:that.percent });
   },
-  myReactions: async function(req, res){
 
-
-    let decode_follow = jwt.verify(req.body.id,secret)
-    console.log(decode_follow.userid)
-      console.log("________________________________________________")
-    let data = await db.reaction.findAll({
-      where : {
-        idPerson: decode_follow.userid
-      }
-    });
-    for( let i = 0; i<data.length; i++) {
-        console.log("212122121221122")
-      console.log(data[i].dataValues)
-    }
-    res.send(data);
-  },
   follows: async function (req, res){
         var Op = db.Sequelize.Op
         let user = req.headers.idPerson
-      console.log("cyda")
+
             //subscriber--relationship:1;friend--relationship:2
         db.follow.findOne({
             where:  { [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
         }}).then(followers=>{
-            console.log(followers)
                 if (followers !== null) {
                     db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:2})
                     return followers.increment('relationship', {by: 1});
@@ -396,7 +509,7 @@ module.exports = {
                     db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:1})
                 }
          })
-      res.statusCode(200)
+      res.send(200)
 
 
   },
@@ -450,6 +563,76 @@ module.exports = {
 
 
   },
+    forgetPass: async function(req ,res,next){
+
+        try {
+            var email = req.body.emailGetCode
+            db.User.findOne({
+                where:{
+                email:req.body.email
+                }}).then(user=>{
+                    if(user===null){
+                        next('Пользователя несуществует!')
+                    } else{
+                        var transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: 'YesNoApp1@gmail.com',
+                                pass: 'sendemail1'
+                            }
+                        });
+                        let code = String(Math.random().toString(9).substring(2, 8));
+                        let html = '<h3>'+ code +'</h3>'
+                        const mailOptions = {
+                            from: 'YesNoApp1@gmail.com', //
+                            to: req.body.email,
+                            subject: 'Подтверждение входа в YesNo',
+                            html: html//
+                        };
+                        transporter.sendMail(mailOptions, function (err, info) {
+                            if(err)
+                                console.log(err)
+                            else
+                                console.log(info);
+                        });
+                        res.send(200)
+                        return user.update({codeEmail:Number(code)})
+                    }
+            })
+        } catch (e) {
+            next(e)
+        }
+
+    },
+    newPassword: async function (req ,res,next){
+        try{
+            console.log("Pobeda")
+            console.log(req.body)
+            let {email, pass,code}=req.body
+            db.User.findOne({
+                where:{
+                    [Op.and]:[
+                        {email:email},
+                        {codeEmail:code}
+                    ]
+                }
+            }).then(user=>{
+                if(user===null){
+                        console.log("Неправильный код")
+                        next("Неправильный Код")
+
+                } else {
+                    console.log("Все хуйня меняем")
+                    var salt = bcrypt.genSaltSync(10);
+                    var password = bcrypt.hashSync(pass, salt)
+
+                    user.update({password:password,salt:salt,codeEmail:null})
+                }
+            })
+        } catch (e) {
+            next(e)
+        }
+    },
   getFriends: async function (req ,res){
       console.log("Hello1")
       let user = req.headers.idPerson
@@ -505,43 +688,15 @@ module.exports = {
     res.json({followed:followed,subscriber:subscriber,friends:friends})
 
   },
-    test:async function(req,res){
-        console.log(req.query)
-        let result = await db.post.findAll({
-
-            attributes:["id","name","message","image","yes","no","percent","idUser"],
-            where:{private:0},
-            order: [
-                ['id','DESC'],
-            ],
-
-            include: [{
-                model: db.reaction,
-                attributes:["reaction"],
-                where: {idPerson:1},
-                required: false
-            },
-                {
-                    model:db.User,
-                    include:[
-                        {
-                            model: db.follow,
-                            attributes:["relationship"],
-                            where:{idFollows:1},
-                            required: false
-                        }
-                    ],
-                    attributes:["login","face"],
-
-                }],
-            offset:2,
-            limit:2,
-            subQuery:false
-
-
-        });
-        res.json({result:result})
-
+    deletePost:async function(req,res,next){
+        try {
+            console.log(req.params.id)
+            db.post.findById(req.params.id).then(post=>{
+                fs.unlinkSync(filePath+post.image);
+            })
+        } catch (e) {
+            next(e)
+        }
     },
     deleteFollow: async function(req,res){
         var Op = db.Sequelize.Op

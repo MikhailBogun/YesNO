@@ -5,6 +5,7 @@ export class RegistrationController {
     this.dataUsers={}
      this.Mydata = registration.Mydata;
     this.dialog= $mdDialog
+    this.show=1;
 
     // this.Mydata.getData().then(res=>{
      //   that.info = res;
@@ -44,5 +45,8 @@ export class RegistrationController {
     //       this.error =error;
     //     });
 
+  }
+  forgotPass(){
+    this.show=0
   }
 }
