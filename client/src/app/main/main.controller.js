@@ -19,6 +19,7 @@ export class MainController {
     //     function(error) {
     //       this.promise = error;
     //     });
+    this.showPost = 0
     this.c = "DDDDD"
     this.testC=false
     this.testC1 = true
@@ -245,6 +246,7 @@ addFace(person,post){
   search(text){
     this.allPublicPosts=null
     this.allPublicPosts = new this.DynamicItems("all",this.friendsService.dataFollow,text)
+    this.showPost=1;
   }
 
 }

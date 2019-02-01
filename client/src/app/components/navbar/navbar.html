@@ -1,4 +1,6 @@
-<nav class="navbar navbar-static-top navbar-inverse">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<nav class="navbar navbar-static-top navbar-inverse" hide-xs flex>
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" >
@@ -6,7 +8,7 @@
       </a>
     </div>
 
-    <div layout="row" class="collapse navbar-collapse" id="bs-example-navbar-collapse-10">
+    <div  layout="row" class="collapse navbar-collapse" id="bs-example-navbar-collapse-10">
       <ul class="nav navbar-nav">
         <li flex-gt-sm="20" flex="20" class="active"><a ui-sref="home">Home</a></li>
         <li flex-gt-sm="20" flex="20" class="active"><a ui-sref="follows">Folllows</a></li>
@@ -15,9 +17,25 @@
         <li flex-gt-sm="20" flex="20" class="active"><a ui-sref="profile">Profile</a></li>
       </ul>
 
+
       <!--<ul class="nav navbar-nav navbar-right acme-navbar-text">-->
       <!--</ul>-->
 
     </div>
   </div>
 </nav>
+
+<md-menu hide-gt-xs	show-xs flex>
+  <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
+    <md-icon >list</md-icon>
+  </md-button>
+  <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+    <md-menu-item >
+      <md-button ui-sref="home">Home</md-button></md-menu-item>
+    <md-menu-item ><md-button ui-sref="follows">Folllows</md-button></md-menu-item>
+    <md-menu-item ><md-button ui-sref="addPost">AddPost</md-button></md-menu-item>
+    <md-menu-item ><md-button ui-sref="privatePost">Private</md-button></md-menu-item>
+    <md-menu-item ><md-button ui-sref="profile">Profile</md-button></md-menu-item>
+    </md-menu-item>
+  </md-menu-content>
+</md-menu>

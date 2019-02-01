@@ -1,5 +1,5 @@
 export class FriendController {
-  constructor ($timeout, friendsService,mainService, webDevTec, $http, $scope) {
+  constructor ($timeout, friendsService,mainService, webDevTec, $http, $scope,toastr) {
     'ngInject'
     this.test=true;
     let that = this;
@@ -16,22 +16,16 @@ export class FriendController {
       that.subscriber = info.subscriber;
       that.followed = info.followed
     })
+    this.toastr = toastr
     this.friendsService= friendsService;
-    this.tableKey=[0,0,0]
+    this.tableKey=[1,0,0]
     this.http = $http;
     this.scope = $scope;
     this.promise = $scope.pr;
     this.TablePerson = [];
     this.UserAction = mainService.UsersAction;
     this.MyData = mainService.Mydata;
-    this.foods =["Пирожки","Олади"]
     this.scope.items=[]
-    let tes = Math.floor(47.6)
-    console.log("tyt",tes)
-    for(let i=0;i<1000;i++)
-    {
-      this.scope.items.push(i)
-    }
     // this.UserAction.getFriend().then(res=>{
     //   that.follows = res;
     // });
@@ -105,8 +99,6 @@ export class FriendController {
 
   }
   deleteFollows(followers){
-
-    console.log(followers)
     this.UserAction.DeleteFollow(followers.id).then(res=>{
       this.res = res;
     })
@@ -129,14 +121,11 @@ export class FriendController {
   }
   follow(subs){
     //post.User.follows[0]=1
+    var that = this;
     this.UserAction.Follow(subs.id).then(res =>{
       that.res = res;
-      this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-      if(res == "ok"){
-        this.toastr.info('Follow',+ person.login)
-        this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
-      }
     })
+    that.toastr.info('Подписались на  <a  target="_blank"><b>'+subs.login+'</b></a>');
     let bufer ={}
     for(let key in subs){
       bufer[key] = subs[key]
@@ -156,19 +145,13 @@ export class FriendController {
     this.tableKey[key]=1
   }
   addRow(){
-    console.log("hello")
     this.rows.push("Row"+this.counter)
     this.counter++;
   }
   showPost(id){
-    console.log("Hello")
-    console.log(id)
-    var that = this
+
     this.testOneDataPerson=new this.DynamicItems(this.friendsService.dataFollow.getPersonPosts,id,this.friendsService.dataFollow)
-    // this.friendsService.getPersonPosts(id)
-    //   .then(posts=>{
-    //     that.posts = posts;
-    //   })
+
   }
   getReaction(reaction,posts){
     var that = this;

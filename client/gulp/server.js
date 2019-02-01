@@ -38,7 +38,8 @@ function browserSyncInit(baseDir, browser) {
     proxyMiddleware('/registration', {target: 'http://localhost:8000'}),
     proxyMiddleware('/authorization', {target: 'http://localhost:8000'}),
     proxyMiddleware('/api', {target: 'http://localhost:8000'}),
-    proxyMiddleware('/forget', {target: 'http://localhost:8000'})
+    proxyMiddleware('/forget', {target: 'http://localhost:8000'}),
+    proxyMiddleware('/public', {target: 'http://localhost:8000'})
     ]
 
 

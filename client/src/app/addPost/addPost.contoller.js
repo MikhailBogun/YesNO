@@ -2,6 +2,7 @@ export class addPostController {
   //localStorage.setItem('mykey','myvalue');
   constructor($document,$http,addPostService){
     'ngInject'
+    this.document = $document
     this.addPost = addPostService.addData;
     this.http = $http;
     this.dataUsers={};
@@ -27,7 +28,7 @@ export class addPostController {
       that.res = res;
       that.dataUsers = {}
 
-      document.getElementById("fileup").value = null
+      that.document[0].getElementById("fileup").value = null
     })
   }
 }

@@ -63,13 +63,13 @@ module.exports = {
                                                      "post"."no", 
                                                      "post"."percent", 
                                                      "post"."idUser",
-                                                      "reactions"."id" AS "reactions.id", 
-                                                      "reactions"."reaction" AS "reactions.reaction", 
-                                                      "User"."id" AS "User.id", 
-                                                      "User"."login" AS "User.login", 
-                                                      "User"."face" AS "User.face",
-                                                      "User->follows"."id" AS "User.follows.id",
-                                                       "User->follows"."relationship" AS "User.follows.relationship" 
+                                                      "reactions"."id" AS "reactions_id", 
+                                                      "reactions"."reaction" AS "reactions_reaction", 
+                                                      "User"."id" AS "User_id", 
+                                                      "User"."login" AS "User_login", 
+                                                      "User"."face" AS "User_face",
+                                                      "User->follows"."id" AS "User_follows_id",
+                                                       "User->follows"."relationship" AS "User_follows_relationship" 
                                             FROM "posts" AS "post"
                                                 LEFT OUTER JOIN "reactions" AS "reactions" ON "post"."id" = "reactions"."idPost" AND "reactions"."idPerson"=:user 
                                                 LEFT OUTER JOIN "Users" AS "User" ON "post"."idUser" = "User"."id" 
@@ -120,9 +120,6 @@ module.exports = {
             });
         }
 
-
-
-        console.log("y nas norm")
         res.json({result:allDataPosts});
     },
     PrivateData: async function(req, res){
@@ -177,6 +174,7 @@ module.exports = {
     },
     myPosts: async function(req, res,next){
         console.log("hello")
+        console.log(req.query.offset)
         try{
             let user = req.headers.idPerson
 
@@ -188,7 +186,10 @@ module.exports = {
                     },{
                         idUser: user
                     }]
-                }
+                },
+                offset: req.query.offset,
+                limit: 5,
+                subQuery: false
 
             })
             console.log("juv")
@@ -223,12 +224,7 @@ module.exports = {
 
         res.json({result:result});
     },
-    getLengthMyFriends:async function(req, res){
 
-        console.log("getLengthMyFriends")
-        let user = req.headers.idPerson
-
-    },
     getLengthRows:async function(req, res){
         var searchText = req.query.text
         let user = req.headers.idPerson
@@ -692,7 +688,9 @@ module.exports = {
         try {
             console.log(req.params.id)
             db.post.findById(req.params.id).then(post=>{
+                console.log(filePath+post.image)
                 fs.unlinkSync(filePath+post.image);
+                return post.destroy()
             })
         } catch (e) {
             next(e)

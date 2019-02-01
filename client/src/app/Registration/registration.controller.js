@@ -1,7 +1,7 @@
 export class RegistrationController {
-  constructor(registration,$mdDialog){
+  constructor(registration,$mdDialog,$document){
     'ngInject'
-    var that =this;
+    this.document = $document
     this.dataUsers={}
      this.Mydata = registration.Mydata;
     this.dialog= $mdDialog
@@ -30,7 +30,7 @@ export class RegistrationController {
             // You can specify either sting with query selector
             .openFrom('#left')
             // or an element
-            .closeTo(angular.element(document.querySelector('#right')))
+            .closeTo(angular.element(that.document[0].querySelector('#right')))
         )
       }
       }

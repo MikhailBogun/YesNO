@@ -7,15 +7,17 @@
 
 
   <div layout="row" >
-    <div flex-gt-sm="20" flex="33" >
-  <md-input-container>
+    <div flex-gt-sm="20" flex="33" layout-align="start center">
+      <div layout-gt-sm="column">
+  <md-input-container layout-gt-sm="60" flayout-gt-sm-offset="20">
 
-  <md-select ng-model="weapon" placeholder="Выберите тип оношения">
+  <md-select ng-model="friendss" placeholder="Выберите тип оношения">
     <md-option value="friend" ng-click="friend.show(0)">Друзья</md-option>
     <md-option value="follows" ng-click="friend.show(1)">Я подписан</md-option>
     <md-option value="subscriber" ng-click="friend.show(2)">На меня подисаны</md-option>
   </md-select>
   </md-input-container>
+      </div>
   <table ng-show="friend.tableKey[0]" ng-if ="friend.friends[0]">
 
 
@@ -48,7 +50,7 @@
           <md-virtual-repeat-container id="vertical-container">
             <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
                  class="repeated-item fig">
-              <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+              <h2 flex="noshrink">{{posts.message}}  {{posts.name}}</h2><br>
               <div> <p class='fig'><img src="{{posts.image}}" width="80%" height="400vh" alt='Фотография'></p>
                 <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)"  >Yes</button>

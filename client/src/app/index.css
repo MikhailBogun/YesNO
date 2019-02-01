@@ -17,6 +17,7 @@
 }
 .my {
   position: fixed;
+  border: 4px double black;;
   top: 30%;
   left: 55%;
   margin-top: -200px;
@@ -99,3 +100,13 @@
   padding: 50px;
   margin: 20px;
   background-color: #FFF2E0; }
+.login-text {
+  text-align: center;
+  color: #000000;
+  font-family: 'Lobster', cursive;
+}
+.login-text-a {
+  text-align: center;
+  color: #c12e2a;
+  font-family: 'Lobster', cursive;
+}

@@ -1,24 +1,5 @@
 
 
-<div class="virtualRepeatdemoDeferredLoading ng-cloak" >
-  <md-content layout="column">
-    <md-virtual-repeat-container id="vertical-container" ng-cloak>
-      <div md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
-           class="repeated-item fig" >
-
-        <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
-        <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500"  alt='Фотография'></p>
-          <div class="progressB" ><br><prbar></prbar></div>
-          <br>
-
-          <button type="button" class=" check-element animate-show-hide btn btn-danger" ng-click="profile.DeletePost(posts)" >Удалить</button>
-
-        </div>
-
-      </div>
-    </md-virtual-repeat-container>
-  </md-content>
-</div>
 
 
 <div class="container">
@@ -26,35 +7,68 @@
   <div>
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
-   {{profile.allPublicPosts}}
 
 </div>
-  <md-content class="md-padding">
+  <md-content class="md-padding" >
     <md-nav-bar
       md-no-ink-bar="disableInkBar"
       md-selected-nav-item="currentNavItem"
       nav-bar-aria-label="navigation links">
-      <md-nav-item md-nav-click="goto('page1')" name="page1">
+      <md-nav-item md-nav-click="profile.PageContect(1)" name="page1" >
         My public posts
       </md-nav-item>
-      <md-nav-item md-nav-click="goto('page2')" name="page2" ng-disabled="secondTabDisabled">
+      <md-nav-item md-nav-click="profile.PageContect(2)" name="page2" ng-disabled="secondTabDisabled" >
         My private posts
       </md-nav-item>
-      <md-nav-item md-nav-click="goto('page3')" name="page3">
+      <md-nav-item md-nav-click="profile.PageContect(0)" name="page3" >
         Change Info for me
       </md-nav-item>
-
-      <!-- these require actual routing with ui-router or ng-route, so they
-      won't work in the demo
-      <md-nav-item md-nav-href="#page4" name="page5">Page Four</md-nav-item>
-      <md-nav-item md-nav-sref="app.page5" name="page4">Page Five</md-nav-item>
-      You can also add options for the <code>ui-sref-opts</code> attribute.
-      <md-nav-item md-nav-sref="page6" sref-opts="{reload:true, notify:true}">
-        Page Six
-      </md-nav-item>
-      -->
     </md-nav-bar>
-<div class="center-block">
+
+
+
+    <div class="virtualRepeatdemoDeferredLoading ng-cloak" ng-if = "profile.checkMenu==1" >
+      <md-content layout="column">
+        <md-virtual-repeat-container id="vertical-container" ng-cloak>
+          <div md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
+               class="repeated-item fig" >
+
+            <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+            <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500"  alt='Фотография'></p>
+              <div class="progressB" ><br><prbar></prbar></div>
+              <br>
+
+              <button type="button" class=" check-element animate-show-hide btn btn-danger" ng-click="profile.DeletePost(posts)" >Удалить</button>
+
+            </div>
+
+          </div>
+        </md-virtual-repeat-container>
+      </md-content>
+    </div>
+
+    <div class="virtualRepeatdemoDeferredLoading ng-cloak" ng-if = "profile.checkMenu==2" >
+      <md-content layout="column">
+        <md-virtual-repeat-container id="vertical-container" ng-cloak>
+          <div md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
+               class="repeated-item fig" >
+
+            <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+            <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500"  alt='Фотография'></p>
+              <div class="progressB" ><br><prbar></prbar></div>
+              <br>
+
+              <button type="button" class=" check-element animate-show-hide btn btn-danger" ng-click="profile.DeletePost(posts)" >Удалить</button>
+
+            </div>
+
+          </div>
+        </md-virtual-repeat-container>
+      </md-content>
+    </div>
+
+
+<div class="center-block" ng-if="profile.checkMenu==0">
 
   <form ng-submit="profile.submit()">
     <div class="form-group">

@@ -7,6 +7,7 @@ export class ProfileCtrl {
     this.face={};
     this.mainService=mainService;
     ///localStorage.setItem('mykey','myvalue');
+    this.checkMenu = 0;
     this.DynamicItems = function(data,privPosts) {
       this.loadedPages = {};
       this.private=privPosts
@@ -23,7 +24,6 @@ export class ProfileCtrl {
 
     // Required.
     this.DynamicItems.prototype.getItemAtIndex = function(index) {
-      console.log(123213421441243)
 
       var pageNumber = Math.floor(index / this.PAGE_SIZE);
       var page = this.loadedPages[pageNumber];
@@ -87,6 +87,7 @@ export class ProfileCtrl {
       this.http.post('api/removeFace', formData,{
         transformRequest: angular.identity,
         headers: {
+          token: localStorage.getItem("id"),
           'Content-Type':undefined
         }
       })
@@ -101,8 +102,16 @@ export class ProfileCtrl {
   }
   DeletePost(post){
     this.mainService.Mydata.deletePosts(post).then(res=>{
-      console.log(res)
-      post = []
+      if(res.status==200)
+          post = null
     })
   }
+  PageContect(value){
+    this.checkMenu=value;
+    if(value==2){
+      this.allPublicPosts = new this.DynamicItems(this.mainService.Mydata,1)
+    } else if(value==1){
+      this.allPublicPosts = new this.DynamicItems(this.mainService.Mydata,0)
+    }
+}
 }

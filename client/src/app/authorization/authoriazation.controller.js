@@ -1,7 +1,8 @@
 export class authorization {
   //localStorage.setItem('mykey','myvalue');
-  constructor($http,$location,$mdDialog,mainService) {
+  constructor($http,$location,$mdDialog,mainService,$document) {
     'ngInject'
+    this.document = $document
     this.service = mainService.UsersAction
     this.http = $http;
     this.location = $location;
@@ -27,7 +28,6 @@ export class authorization {
       })
       .catch(function(error){
         that.error =error;
-        console.log(error)
         that.textContent = "";
         if(error.status==500){
 
@@ -49,7 +49,7 @@ export class authorization {
             // You can specify either sting with query selector
             .openFrom('#left')
             // or an element
-            .closeTo(angular.element(document.querySelector('#right')))
+            .closeTo(angular.element(that.document[0].querySelector('#right')))
         )
 
       });
@@ -59,17 +59,14 @@ export class authorization {
   }
   getCode(email){
     var that = this;
-    console.log(email)
     this.http.post('forget/', email)
       .then(function(res){
         that.resStatus = res.status;
-        console.log(res)
         that.newPass["email"]=email.email
         that.showNewPass=2
       })
       .catch(function(error){
         that.error =error;
-        console.log(error)
         that.textContent = "";
         if(error.status==500){
 
@@ -89,13 +86,12 @@ export class authorization {
             // You can specify either sting with query selector
             .openFrom('#left')
             // or an element
-            .closeTo(angular.element(document.querySelector('#right')))
+            .closeTo(angular.element(that.document[0].querySelector('#right')))
         )
   })
   }
   refreshPass(){
     var that = this;
-    console.log(this.newPass)
     this.service.rewritePass(this.newPass).then(statusNewPass=>{
       that.statusNewPass = statusNewPass
     }).catch(error=>{
@@ -116,7 +112,7 @@ export class authorization {
           // You can specify either sting with query selector
           .openFrom('#left')
           // or an element
-          .closeTo(angular.element(document.querySelector('#right')))
+          .closeTo(angular.element(that.document[0].querySelector('#right')))
       )
     })
   }
