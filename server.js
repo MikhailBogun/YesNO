@@ -1,20 +1,22 @@
-var express = require("express");
-var db = require("./models/index");
-var jwt = require('jsonwebtoken');
+const express = require("express");
+const db = require("./models/index");
+const jwt = require('jsonwebtoken');
 const config = require( './config/config.json')
-var app = express();
-var multer  = require('multer')
-var storage = multer.diskStorage( {
+const app = express();
+const multer  = require('multer')
+let server = require("http").createServer(app);
+let bodyparser = require("body-parser");
+
+let storage = multer.diskStorage( {
   destination: function (req, file, cb) {
     cb(null, '/Users/sooprit/project/yesno/public/images/PostAll')
-
   },
   filename: function(req,file, cb){
   cb(null, Date.now()+file.originalname);
-
-}
+  }
 });
-var storage_face = multer.diskStorage( {
+
+let storage_face = multer.diskStorage( {
   destination: function (req, file, cb) {
     cb(null, '/Users/sooprit/project/yesno/client/src/assets/images/persons')
 
@@ -24,20 +26,17 @@ var storage_face = multer.diskStorage( {
 
   }
 });
-var controller = require(__dirname + "/controllers/controller");
-var upload = multer({ storage: storage });
-var upload_face = multer({ storage: storage_face });
 
-//var router = express.Router();
-var checkToken = function(req, res, next) {
-    console.log("Zdes token")
-    console.log(req.headers.token)
-    console.log("Neprishol")
+let controller = require(__dirname + "/controllers/controller");
+let upload = multer({ storage: storage });
+let upload_face = multer({ storage: storage_face });
+
+let checkToken = function(req, res, next) {
+    try{
     if (typeof req.headers.token === 'undefined') {
         res.sendStatus(401);
     } else {
-        try {
-           var id = jwt.verify(req.headers.token, config.secret).userid
+           let id = jwt.verify(req.headers.token, config.secret).userid;
             db.User.findById(id)
                 .then(user => {
                   if(typeof user.id !== 'undefined'){
@@ -46,20 +45,14 @@ var checkToken = function(req, res, next) {
                   } else{
                     res.sendStatus(404)
                   }
-
-
-                })
-
-        } catch{
-          res.sendStatus(403)
-        }
+                });
+    }
+    } catch{
+    res.sendStatus(403)
     }
 }
 
-//var cors = require("cors");
-//var path = requeire("path");
-var server = require("http").createServer(app);
-var bodyparser = require("body-parser");
+
 
 
 app.use(bodyparser.json());
@@ -68,56 +61,53 @@ app.use("/", express.static(__dirname + "/"));
 app.use('/',express.static(__dirname+'/public/images'))
 app.use('/api', checkToken)
 app.use('/authorization/',function(err, req, res, next) {
-    cosnole.log("alllogvsd")
-    //console.error(err.stack);
+
     if(err.stack=='Пользователя несуществует!') {
         res.status(404).send('Пользователя не существуют!');
+
     } else if(err.stack=="Вели неправильный пароль!") {
         res.status(401).send('Вели неправильный пароль!');
+
     } else {
         res.status(500).send('Ошибка сервера!');
+
     }
-
-
 })
-//app.use(cors());
+
 
 app.get("/api/PostAll",controller.PostAll);
 app.get("/api/PrivateData", controller.PrivateData);
-app.get("/api/users", controller.allUsers)
-app.get("/api/OnePersonPosts", controller.onePersonPosts)
-app.get("/api/getLengthRows", controller.getLengthRows)
-app.get('/api/lengthRowsMyPosts', controller.lengthRowsMyPosts)
-app.get("/api/showFriends", controller.showFriends)
+app.get("/api/OnePersonPosts", controller.onePersonPosts);
+app.get("/api/getLengthRows", controller.getLengthRows);
+app.get('/api/lengthRowsMyPosts', controller.lengthRowsMyPosts);
+app.get("/api/showFriends", controller.showFriends);
 app.get("/api/onlyFriends", controller.onlyFriends);
 
 
 app.get('/api/myPosts', controller.myPosts);
 
-app.get('/api/friends', controller.getFriends)
+app.get('/api/friends', controller.getFriends);
 
 app.post("/registration/", controller.register_user);
-app.post('/api/addPost',upload.array('image'), controller.addPost)
+app.post('/api/addPost',upload.array('image'), controller.addPost);
 
 
 app.post('/authorization/', controller.Authorization);
 app.post("/forget/", controller.forgetPass);
 app.post("/forget/newPass", controller.newPassword);
 
-app.post('/api/follow', controller.follows)
-app.get('/api/friends', controller.getFriends)
-app.post('/api/removeFace',upload_face.array('image'), controller.removeFace)
-app.post('/api/removePassword', controller.removePassword)
-app.post('/api/getReaction', controller.getReaction)
+app.post('/api/follow', controller.follows);
+app.get('/api/friends', controller.getFriends);
+app.post('/api/removeFace',upload_face.array('image'), controller.removeFace);
+app.post('/api/removePassword', controller.removePassword);
+app.post('/api/getReaction', controller.getReaction);
 
 
-app.delete('/api/follow/delete:id',controller.deleteFollow)
+app.delete('/api/follow/delete:id',controller.deleteFollow);
 
-app.delete('/api/deletePost:id',controller.deletePost)
+app.delete('/api/deletePost:id',controller.deletePost);
 
  app.use('/',function(err, req, res, next) {
-    console.log("alllogvsd")
-    //console.error(err.stack);
     if(err=='Пользователя несуществует!') {
         res.status(404).send('Пользователя не существуют!');
     } else if(err=="Вели неправильный пароль!") {
@@ -133,6 +123,7 @@ app.delete('/api/deletePost:id',controller.deletePost)
     }
 
 
-})
+});
+
 server.listen(8000);
 console.log("Запуск сервера..");

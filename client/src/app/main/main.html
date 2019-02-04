@@ -70,7 +70,6 @@
         <md-virtual-repeat-container id="vertical-container" ng-cloak>
           <div md-virtual-repeat="posts in main.allPublicPosts" md-on-demand
                class="repeated-item fig" >
-            {{posts}}
             <h2>{{posts.message+posts.name+posts.reactions_reaction}}</h2><br>
             <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500"  alt='Фотография'></p>
               <div ng-if="!posts.reactions_id" ng-cloak><!--ng-if='!posts.reactions[0].reaction'--><br>
