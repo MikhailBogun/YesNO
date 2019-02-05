@@ -76,7 +76,7 @@ app.use('/authorization/',function(err, req, res, next) {
 
 
 app.get("/api/PostAll",controller.PostAll);
-app.get("/api/PrivateData", controller.PrivateData);
+// app.get("/api/PrivateData", controller.PrivateData);
 app.get("/api/OnePersonPosts", controller.onePersonPosts);
 app.get("/api/getLengthRows", controller.getLengthRows);
 app.get('/api/lengthRowsMyPosts', controller.lengthRowsMyPosts);

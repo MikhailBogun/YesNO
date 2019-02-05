@@ -9,10 +9,17 @@ console.log(__dirname+'/../config/config.json')
 const Op = db.Sequelize.Op;
 const secret = config.secret;
 
-
+//TODO: спросить как изменить елементы другого блока при нажатии на клавишу(Подписка)?Без использования фор
 
 module.exports = {
     PostAll: async function(req, res){
+
+        // let result  = await db.sequelize.query(`
+        // INSERT INTO "Users" (id, "createdAt", "updatedAt") VALUES (DEFAULT, :now, :now);
+        // `, { replacements: { now: new Date() }, type: db.sequelize.QueryTypes.INSERT });
+        //
+        // console.log(result);
+
         let decode = req.headers.idPerson;
         let allDataPosts = null;
         if(typeof req.query.text ==="undefined") {
@@ -24,34 +31,38 @@ module.exports = {
         }
         res.json({result:allDataPosts});
     },
-    PrivateData: async function(req, res){
-        let user = req.headers.idPerson
-        let privateDateFriend =  await db.post.findAll({
-            attributes:["id","name","message","image","yes","no","percent","idUser"],
-            where:{private:1},
-            order: [
-                ['id','DESC'],
-            ],
-            include:[{
-                model:db.User, include: [
-                    {
-                        model:db.follow,
-                        attributes:[],
-                        where:{
-                            [Op.and]: [
-                                {relationship:2},
-                                {idFollows:user}
-                            ]
-                            },
-                        required: true
-                    },
+    PrivateData: async function(req, res, next){
+        try {
+            let user = req.headers.idPerson
+            let privateDateFriend = await db.post.findAll({
+                attributes: ["id", "name", "message", "image", "yes", "no", "percent", "idUser"],
+                where: {private: 1},
+                order: [
+                    ['id', 'DESC'],
                 ],
-                attributes:["login","face"],
-                required: true
-            }]
-        });
+                include: [{
+                    model: db.User, include: [
+                        {
+                            model: db.follow,
+                            attributes: [],
+                            where: {
+                                [Op.and]: [
+                                    {relationship: 2},
+                                    {idFollows: user}
+                                ]
+                            },
+                            required: true
+                        },
+                    ],
+                    attributes: ["login", "face"],
+                    required: true
+                }]
+            });
 
-        res.json({post:privateDateFriend});
+            res.json({post: privateDateFriend});
+        } catch (e) {
+            next(e)
+        }
     },
     lengthRowsMyPosts: async function(req, res,next){
         let user = req.headers.idPerson;
@@ -74,49 +85,21 @@ module.exports = {
     },
     myPosts: async function(req, res,next){
         try{
-            let user = req.headers.idPerson;
-            let dataPosts = await db.post.findAll({
-                attributes:["id","name","message","image","yes","no","percent"],
-                where:{
-                    [Op.and]:[{
-                        private:req.query.private
-                    },{
-                        idUser: user
-                    }]
-                },
-                offset: req.query.offset,
-                limit: 5,
-                subQuery: false
-
-            });
+            let dataPosts = await db.post.prototype.onePersonPosts(req.headers.idPerson,req.query.private,req.query.offset)
             res.json({result:dataPosts});
+            //Todo:Избавиться от этого контролера все перенести в котроллер ниже
         } catch (e) {
             next(e)
         }
     },
-    onePersonPosts:  async function(req, res){
-       let {id,offset} = req.query;
-        let result = await db.post.findAll({
-            attributes:["id","name","message","image","yes","no","percent"],
-            where:{
-                [Op.and]:[{private:0},{idUser:id}]
-                },
-            order: [
-                ['id','DESC'],
-            ],
-            include: [{
-                model: db.reaction,
-                attributes:["reaction"],
-                where: {idPerson:req.headers.idPerson},
-                required: false
-            }],
-            offset:offset,
-            limit:5,
-            subQuery:false
-
-        });
-
-        res.json({result:result});
+    onePersonPosts:  async function(req, res,next){
+        try {
+            let {id, offset} = req.query;
+            let result = await db.post.prototype.onePersonPosts(id,0,offset,req.headers.idPerson)
+            res.json({result: result});
+        } catch (e) {
+            next(e)
+        }
     },
 
     getLengthRows:async function(req, res){
@@ -232,159 +215,111 @@ module.exports = {
         let user = req.headers.idPerson
 
         if(id=="all") {
-            result =  await db.post.findAll({
-                attributes:["id","name","message","image","yes","no","percent","idUser"],
-                where:{private:1},
-                order: [
-                    ['id','DESC'],
-                ],
-                include:[{
-                    model: db.reaction,
-                    attributes: ["reaction"],
-                    where: {idPerson: req.headers.idPerson},
-                    required: false
-                        },
-                        {
-                    model:db.User, include: [
-                        {
-                            model:db.follow,
-                            attributes:[],
-                            where:{
-                                [Op.and]: [
-                                    {relationship:2},
-                                    {idFollows:user}
-                                ]
-                            },
-                            required: true
-                        },
-                    ],
-                    attributes:["login","face"],
-                    required: true
-                }],
-                offset: offset,
-                limit: 5,
-                subQuery: false
-            })
-        } else {
-            result = await db.post.findAll({
-                attributes: ["id", "name", "message", "image", "yes", "no", "percent"],
-                where: {
-                    [Op.and]: [{private: 1}, {idUser: id}]
-                },
-                order: [
-                    ['id', 'DESC'],
-                ],
-                include: [{
-                    model: db.reaction,
-                    attributes: ["reaction"],
-                    where: {idPerson: req.headers.idPerson},
-                    required: false
-                }],
-                offset: offset,
-                limit: 5,
-                subQuery: false
+            result =await db.post.prototype.allDataPosts(user,req.query.offset,1);
 
-            });
+        } else {
+            result = await db.post.prototype.onePersonPosts(id,0,offset,req.headers.idPerson)
         }
 
 
         res.json({result:result});
     },
-  addPost: async function(req, res){
-      const decode = jwt.verify(req.body.id,secret)
-      db.post.create({name:req.body.hashteg, message:req.body.message, image:"/public/images/PostAll/"+req.files[0].filename,percent:0, yes:0,no:0,idUser:decode.userid,private:req.body.private});
-      res.send(200);
+  addPost: async function(req, res, next){
+        try {
+            const decode = jwt.verify(req.body.id, secret)
+            await db.post.create({
+                name: req.body.hashteg,
+                message: req.body.message,
+                image: "/public/images/PostAll/" + req.files[0].filename,
+                percent: 0,
+                yes: 0,
+                no: 0,
+                idUser: decode.userid,
+                private: req.body.private
+            });
+            res.send(200);
+        } catch (e) {
+            next(e)
+        }
   },
   Authorization: async function(req, res,next){
         try {
             let {password, email} = req.body;
-
-            db.User.findOne({
-                where: {email: email}
-            }).then(user => {
-                if (user==null){
-                    next("Пользователя несуществует!")
-                }
-                else {
-                    var hash_password = bcrypt.hashSync(password, user.salt)
-                    if (user.password !== hash_password) {
-                        next("Вели неправильный пароль!")
-                    }
+            console.log("helldca")
+            let user = await db.User.prototype.oneUser(email)
+            console.log(user)
+            if(user){
+              let hashPassword=bcrypt.hashSync(password,user.salt)
+                if (user.password !== hashPassword) {
+                    next("Вели неправильный пароль!")
+                } else{
                     const token_authorization = jwt.sign({userid: user.id}, secret)
                     res.json({token: token_authorization});
                 }
-            });
-
+            } else{
+                next("Пользователя несуществует!")
+            }
         } catch(ex){
             next(ex)
         }
 
   },
   register_user: async function(req, res,next){
-      let salt = bcrypt.genSaltSync(10);
-      let {login, password,email} = req.body;
-      let hash_password = bcrypt.hashSync(password, salt);
-    db.User.findOne({
-        where:{
-            email:email
-                }
-            })
-        .then(data=>{
-            if(data !==null){
+        try {
+
+            let {login, password, email} = req.body;
+            let user = await db.User.prototype.oneUser(email)
+            if(!user){
+                let salt = bcrypt.genSaltSync(10);
+                let hash_password = bcrypt.hashSync(password, salt);
+                let data = await db.User.prototype.createNewUser({
+                    login: login,
+                    password: hash_password,
+                    salt: salt,
+                    face: "assets/images/persons/inkognito.jpg",
+                    email: email
+                });
+                const token_register = jwt.sign({userid: data.id}, secret);
+                res.json({token: token_register})
+            }else {
                 next(1)
-            } else{
-                db.User.create({login:login, password: hash_password, salt:salt, face:"assets/images/persons/inkognito.jpg",email:email})
-                    .then(data => {
-                        const token_register = jwt.sign({userid: data.dataValues.id}, secret);
-                        res.json({token: token_register})
-                    })
             }
-        })
+        } catch (e) {
+            next(e)
+        }
 
   },
-  getReaction: async function(req, res){
-    const decode = jwt.verify(req.body.id,secret)
-      let that = this;
-
-    db.reaction.create({idPerson:Number(decode.userid),idPost:req.body.post.id,reaction:req.body.reaction,private:req.body.private});
-    if (req.body.reaction==1) {
-        db.post.findById(req.body.post.id)
-            .then(post => {
-                that.percent=  (post.yes+1)/((post.no+post.yes+1)/100)
-                res.json({percent:that.percent});
-                return post.increment('yes', {by:1}), post.update({percent:that.percent});
-
-            })
-    } else  {
-        db.post.findById(req.body.post.id)
-            .then(post => {
-                that.percent = 0
-                if(post.yes!=0){
-                     that.percent=  (post.yes)/((post.no+1+post.yes)/100)
-                }
-                res.json({percent:that.percent });
-                return post.increment('no', {by:1}),post.update({percent:that.percent});
-
-            })
-    }
-
+  getReaction: async function(req, res,next){
+        try {
+            await db.reaction.prototype.createNewReaction({
+                idPerson: req.headers.idPerson,
+                idPost: req.body.post.id,
+                reaction: req.body.reaction,
+                private: req.body.private
+            });
+            let percent = await db.post.prototype.incrementYesOrNo(req.body.post.id,req.body.reaction);
+            res.json({percent: percent});
+        } catch (e) {
+            next(e)
+        }
   },
 
   follows: async function (req, res){
         let user = req.headers.idPerson
 
             //subscriber--relationship:1;friend--relationship:2
-        db.follow.findOne({
-            where:  { [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
-        }}).then(followers=>{
-                if (followers !== null) {
-                    db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:2})
-                    return followers.increment('relationship', {by: 1});
-
-                } else {
-                    db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:1})
-                }
-         })
+        await db.follow.prototype.subscribe(user,req.body.follows)
+        // db.follow.findOne({
+        //     where:  { [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
+        // }}).then(followers=>{
+        //         if (followers !== null) {
+        //             db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:2})
+        //             return followers.increment('relationship', {by: 1});
+        //
+        //         } else {
+        //             db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:1})
+        // }
+        //  })
       res.send(200)
 
 
@@ -487,11 +422,9 @@ module.exports = {
                 }
             }).then(user=>{
                 if(user===null){
-                        console.log("Неправильный код")
                         next("Неправильный Код")
 
                 } else {
-                    console.log("Все хуйня меняем")
                     var salt = bcrypt.genSaltSync(10);
                     var password = bcrypt.hashSync(pass, salt)
 

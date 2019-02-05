@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         private: DataTypes.INTEGER,
 
     });
+    const Op = sequelize.Sequelize.Op;
 
     post.associate = function (models) {
         // associations can be defined here
@@ -20,13 +21,14 @@ module.exports = (sequelize, DataTypes) => {
     };
 
     post.prototype.allDataPosts = async (user, offset, privatePost) => {
+
         const options = {
             attributes: ["id", "name", "message", "image", "yes", "no", "percent", "idUser"],
             where: {private: privatePost},
             order: [
                 ['id', 'DESC'],
             ],
-            include: [
+            include :[
                 {
                     model: sequelize.models.reaction,
                     attributes: ["reaction"],
@@ -38,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
                     include: [
                         {
                             model: sequelize.models.follow,
-                            attributes: ["relationship"],
+                            attributes: ["relationship","idFollows"],
                             where: {idFollows: user},
                             required: false
                         }
@@ -51,9 +53,37 @@ module.exports = (sequelize, DataTypes) => {
             limit: 5,
             subQuery: false
         }
+        if (privatePost===0){
+            console.log(privatePost)
+        } else{
+            options.include = [{
+                model: sequelize.models.reaction,
+                attributes: ["reaction"],
+                where: {idPerson: user},
+                required: false
+            },
+                {
+                    model: sequelize.models.User, include: [
+                        {
+                            model:sequelize.models.follow,
+                            attributes:[],
+                            where:{
+                                [Op.and]: [
+                                    {relationship:2},
+                                    {idFollows:user}
+                                ]
+                            },
+                            required: true
+                        },
+                    ],
+                    attributes:["login","face"],
+                    required: true
+                }]
+        }
 
         return await post.findAll(options);
     }
+
     post.prototype.searchPost = async (searchText,offset,user) =>{
         return await sequelize.query( `SELECT "post"."id",
                                                     "post"."name",
@@ -84,5 +114,56 @@ module.exports = (sequelize, DataTypes) => {
                 type: sequelize.QueryTypes.SELECT });
     }
 
+    post.prototype.onePersonPosts = async (idUser,privatePost, offset, idPersonReaction=null)=>{
+        const options = {
+            attributes:["id","name","message","image","yes","no","percent"],
+            order: [
+                ['id', 'DESC'],
+            ],
+            where:{
+                [Op.and]:[{
+                    private:privatePost
+                },{
+                    idUser: idUser
+                }]
+            },
+            offset: offset,
+            limit: 5,
+            subQuery: false
+        }
+        if (idPersonReaction){
+            options.include = [{
+                model: sequelize.models.reaction,
+                attributes: ["reaction"],
+                where: {idPerson: idPersonReaction},
+                required: false
+            }]
+        }
+        return await post.findAll(options);
+    }
+
+    post.prototype.incrementYesOrNo = async (idPost,reaction)=>{
+        console.log("hefd")
+        let onePost = await post.findById(idPost)
+        console.log(onePost)
+        if(reaction==0 && onePost.yes ==0){
+            let percent =0
+            onePost.increment('no', {by: 1});
+            onePost.update({percent: percent});
+            return await percent
+
+        }else if(reaction==1){
+            let percent = (onePost.yes + reaction) / ((onePost.no + onePost.yes + 1) / 100);
+            onePost.increment('yes', {by: 1});
+            onePost.update({percent: percent});
+            return await percent
+
+        }else if(reaction ==0){
+            let percent = (onePost.yes) / ((onePost.no + 1 + onePost.yes) / 100);
+            onePost.increment('no', {by: 1});
+            onePost.update({percent: percent});
+            return await percent
+        }
+    }
     return post;
 };

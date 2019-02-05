@@ -56,6 +56,7 @@ export class MainController {
 
     // Required.
     this.DynamicItems.prototype.getItemAtIndex = function(index) {
+      console.log(index)
       var pageNumber = Math.floor(index / this.PAGE_SIZE);
       var page = this.loadedPages[pageNumber];
 

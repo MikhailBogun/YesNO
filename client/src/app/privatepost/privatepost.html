@@ -18,7 +18,7 @@
           <md-virtual-repeat-container id="vertical-friend-container">
             <a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>
             <div md-virtual-repeat="friend in privatePost.onlyFriendsData" md-on-demand
-                 class="repeated-item">
+                 class="repeatedFriend-item">
               <p ng-click="privatePost.showPost(friend.id)" style="outline: none;"><img ng-src="{{friend.face}}" width="35" height="35" alt='Фотография'>  {{friend.login}}</p>
 
             </div>
