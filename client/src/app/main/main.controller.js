@@ -2,23 +2,10 @@ export class MainController {
   constructor ($log,$timeout,$scope, webDevTec,mainService, toastr, $http,friendsService) {
     'ngInject';
     let that = this;
+    this.http=$http;
     this.friendsService =friendsService
     this.log = $log;
     this.scope = $scope;
-    // this.scope.Go = "huilo"
-    // $http.get('api/PostAll', {
-    //   headers: {
-    //     token: localStorage.getItem("id")
-    //   }
-    // })
-    //   .then(function(promise) {
-    //       //this.data=success.data;
-    //       that.promise = promise.data;
-    //
-    //     },
-    //     function(error) {
-    //       this.promise = error;
-    //     });
     this.showPost = 0
     this.c = "DDDDD"
     this.testC=false
@@ -56,14 +43,13 @@ export class MainController {
 
     // Required.
     this.DynamicItems.prototype.getItemAtIndex = function(index) {
-      console.log(index)
-      var pageNumber = Math.floor(index / this.PAGE_SIZE);
-      var page = this.loadedPages[pageNumber];
+      this.pageNumber = Math.floor(index / this.PAGE_SIZE);
+      let page = this.loadedPages[this.pageNumber];
 
       if (page) {
         return page[index % this.PAGE_SIZE];
       } else if (page !== null) {
-        this.fetchPage_(pageNumber);
+        this.fetchPage_(this.pageNumber);
       }
     };
 
@@ -202,8 +188,6 @@ addFace(person,post){
   checkMyReaction(post){
     for(let i = 0; i<this.myReaction.length;i++){
       if(post.id == this.myReaction[i].idPost) {
-        // let count = dataNo.length+dataYes.length;
-        // let countOne = dataYes.length/((dataNo.length+dataYes.length)/100);
         this.scope.count = parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
         return true;
       }
@@ -222,14 +206,23 @@ addFace(person,post){
   }
   deleteFollows(post){
 
-
+    let that = this;
     this.UserAction.DeleteFollow(post.idUser).then(res=>{
       this.res = res;
+      that.allPublicPosts.loadedPages={};
     })
     post.User.follows[0]=null
   }
   showFollows(post){
-    let that = this;;
+    console.log(this.allPublicPosts)
+    let that = this;
+     that.allPublicPosts.loadedPages={}
+    for(let i=0;i<=this.allPublicPosts.pageNumber;i++) {
+
+      console.log(this.allPublicPosts.loadedPages[i])
+
+    }
+    // this.allPublicPosts = new this.DynamicItems("all",this.friendsService.dataFollow)
     post.User.follows[0]=1
     this.UserAction.Follow(post.idUser).then(res =>{
       that.res = res;

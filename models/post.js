@@ -143,9 +143,7 @@ module.exports = (sequelize, DataTypes) => {
     }
 
     post.prototype.incrementYesOrNo = async (idPost,reaction)=>{
-        console.log("hefd")
-        let onePost = await post.findById(idPost)
-        console.log(onePost)
+        let onePost = await post.findById(idPost);
         if(reaction==0 && onePost.yes ==0){
             let percent =0
             onePost.increment('no', {by: 1});
@@ -164,6 +162,15 @@ module.exports = (sequelize, DataTypes) => {
             onePost.update({percent: percent});
             return await percent
         }
+    }
+    post.prototype.deletePost =  async (idPost)=>{
+        let dataPost = await post.findById(idPost)
+        await post.destroy({
+            where:
+                {
+                    id:idPost
+                }})
+        return dataPost
     }
     return post;
 };

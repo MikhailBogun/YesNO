@@ -102,8 +102,13 @@ export class ProfileCtrl {
   }
   DeletePost(post){
     this.mainService.Mydata.deletePosts(post).then(res=>{
-      if(res.status==200)
-          post = null
+      console.log(res)
+      if(res=="OK") {
+        console.log(post)
+        post = null
+        console.log("hellsda")
+        console.log(post)
+      }
     })
   }
   PageContect(value){

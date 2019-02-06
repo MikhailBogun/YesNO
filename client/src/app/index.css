@@ -75,11 +75,16 @@
   width: 100%;
 
   }
-
+.mmm
+{
+  height: 10px;
+  width:50px;
+}
 .virtualRepeatdemoDeferredLoading .repeated-item {
   border-bottom: 0px solid #ddd;
   box-sizing: border-box;
-  height: 100vh;
+  height: 800px;
+  max-height: 80%;
   padding-top: 10px; }
 
 .virtualRepeatdemoDeferredLoading .repeatedFriend-item {

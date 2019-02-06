@@ -5,7 +5,6 @@ const nodemailer = require("nodemailer");
 const config = require(__dirname + '/../config/config.json')
 const fs = require('fs');
 const filePath = "/Users/sooprit/project/yesno"
-console.log(__dirname+'/../config/config.json')
 const Op = db.Sequelize.Op;
 const secret = config.secret;
 
@@ -19,7 +18,13 @@ module.exports = {
         // `, { replacements: { now: new Date() }, type: db.sequelize.QueryTypes.INSERT });
         //
         // console.log(result);
-
+        // let cc = await db.User.update({codeEmail:12},{
+        //     where:{
+        //         id:790
+        //
+        //     }
+        // })
+        // console.log(cc)
         let decode = req.headers.idPerson;
         let allDataPosts = null;
         if(typeof req.query.text ==="undefined") {
@@ -29,6 +34,7 @@ module.exports = {
             allDataPosts =await db.post.prototype.searchPost(req.query.text,req.query.offset,decode);
 
         }
+
         res.json({result:allDataPosts});
     },
     PrivateData: async function(req, res, next){
@@ -245,9 +251,9 @@ module.exports = {
   Authorization: async function(req, res,next){
         try {
             let {password, email} = req.body;
-            console.log("helldca")
+
             let user = await db.User.prototype.oneUser(email)
-            console.log(user)
+
             if(user){
               let hashPassword=bcrypt.hashSync(password,user.salt)
                 if (user.password !== hashPassword) {
@@ -306,20 +312,7 @@ module.exports = {
 
   follows: async function (req, res){
         let user = req.headers.idPerson
-
-            //subscriber--relationship:1;friend--relationship:2
         await db.follow.prototype.subscribe(user,req.body.follows)
-        // db.follow.findOne({
-        //     where:  { [Op.and]:[{idFollows:req.body.follows},{idPerson:user}]
-        // }}).then(followers=>{
-        //         if (followers !== null) {
-        //             db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:2})
-        //             return followers.increment('relationship', {by: 1});
-        //
-        //         } else {
-        //             db.follow.create({idPerson:req.body.follows,idFollows:user,relationship:1})
-        // }
-        //  })
       res.send(200)
 
 
@@ -327,7 +320,7 @@ module.exports = {
   removeFace: async function(req, res){
 
     let decode_follow = jwt.verify(req.body.id,secret);
-    db.User.update({face:"assets/images/persons/"+req.files[0].filename}, {
+    await db.User.update({face:"assets/images/persons/"+req.files[0].filename}, {
       where : {
         id: decode_follow.userid,
       }
@@ -371,39 +364,35 @@ module.exports = {
     forgetPass: async function(req ,res,next){
 
         try {
-            var email = req.body.emailGetCode
-            db.User.findOne({
-                where:{
-                email:req.body.email
-                }}).then(user=>{
-                    if(user===null){
-                        next('Пользователя несуществует!')
-                    } else{
-                        var transporter = nodemailer.createTransport({
-                            service: 'gmail',
-                            auth: {
-                                user: 'YesNoApp1@gmail.com',
-                                pass: 'sendemail1'
-                            }
-                        });
-                        let code = String(Math.random().toString(9).substring(2, 8));
-                        let html = '<h3>'+ code +'</h3>'
-                        const mailOptions = {
-                            from: 'YesNoApp1@gmail.com', //
-                            to: req.body.email,
-                            subject: 'Подтверждение изменения пароля в YesNo',
-                            html: html//
-                        };
-                        transporter.sendMail(mailOptions, function (err, info) {
-                            if(err)
-                                console.log(err)
-                            else
-                                console.log(info);
-                        });
-                        res.send(200)
-                        return user.update({codeEmail:Number(code)})
+            let email = req.body.email
+            let code = String(Math.random().toString(9).substring(2, 8));
+            let checkEmail = await db.User.prototype.updateCodeEmail(email,code)
+            if(checkEmail[0]===1){
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'YesNoApp1@gmail.com',
+                        pass: 'sendemail1'
                     }
-            })
+                });
+                let html = '<h3>'+ code +'</h3>'
+                const mailOptions = {
+                    from: 'YesNoApp1@gmail.com', //
+                    to: req.body.email,
+                    subject: 'Подтверждение изменения пароля в YesNo',
+                    html: html//
+                };
+                transporter.sendMail(mailOptions, function (err, info) {
+                    if(err)
+                        console.log(err)
+                    else
+                        console.log(info);
+                });
+                res.send(200)
+            } else{
+                next('Пользователя несуществует!')
+
+            }
         } catch (e) {
             next(e)
         }
@@ -411,26 +400,14 @@ module.exports = {
     },
     newPassword: async function (req ,res,next){
         try{
-            console.log(req.body)
-            let {email, pass,code}=req.body
-            db.User.findOne({
-                where:{
-                    [Op.and]:[
-                        {email:email},
-                        {codeEmail:code}
-                    ]
-                }
-            }).then(user=>{
-                if(user===null){
-                        next("Неправильный Код")
-
-                } else {
-                    var salt = bcrypt.genSaltSync(10);
-                    var password = bcrypt.hashSync(pass, salt)
-
-                    user.update({password:password,salt:salt,codeEmail:null})
-                }
-            })
+            let {email, pass,code}=req.body;
+            let salt = bcrypt.genSaltSync(10);
+            let password = bcrypt.hashSync(pass, salt)
+            let checkUpdatePass =await db.User.prototype.updatePassword(email,code,password,salt)
+            if(checkUpdatePass[0]!==1){
+                next("Неправильный Код")
+            }
+            res.sendStatus(200);
         } catch (e) {
             next(e)
         }
@@ -486,17 +463,24 @@ module.exports = {
             })
 
 
-            res.json({followed: followed, subscriber: subscriber, friends: friends})
+            res.json({followed: followed, subscriber: subscriber, friends: friends});
         } catch (e) {
            next(e)
         }
   },
     deletePost:async function(req,res,next){
         try {
-            db.post.findById(req.params.id).then(post=>{
-                fs.unlinkSync(filePath+post.image);
-                return post.destroy()
-            })
+            let post = await db.post.prototype.deletePost(req.params.id);
+
+            if(post) {
+
+                fs.unlinkSync(filePath + post.image);
+                res.sendStatus(200)
+            }
+            // db.post.findById(req.params.id).then(post=>{
+            //     fs.unlinkSync(filePath+post.image);
+            //     return post.destroy()
+            // })
         } catch (e) {
             next(e)
         }

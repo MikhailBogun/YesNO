@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.TEXT,
       codeEmail: DataTypes.INTEGER
   });
+    const Op = sequelize.Sequelize.Op;
   User.associate = function(models) {
     // associations can be defined here
       User.hasMany(models.post,{foreignKey:"idUser"})
@@ -29,7 +30,28 @@ module.exports = (sequelize, DataTypes) => {
             });
       return await person
   }
-
+    User.prototype.updateCodeEmail = async (email,code)=>{
+      return await User.update({
+          codeEmail:code
+      },
+          {where:{
+              email:email
+              }});
+    }
+    User.prototype.updatePassword = async (email,code,pass,salt)=>{
+        return await User.update({
+                password:pass,
+                salt:salt
+            },
+            {
+                where:{
+                    [Op.and]:[
+                        {email:email},
+                        {codeEmail:code}
+                    ]
+                }
+            });
+    }
   User.prototype.createNewUser = async(data)=>{
       return await User.create(data)
   }

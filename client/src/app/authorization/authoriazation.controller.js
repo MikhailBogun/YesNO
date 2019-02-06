@@ -61,9 +61,9 @@ export class authorization {
     var that = this;
     this.http.post('forget/', email)
       .then(function(res){
+        that.showNewPass=2
         that.resStatus = res.status;
         that.newPass["email"]=email.email
-        that.showNewPass=2
       })
       .catch(function(error){
         that.error =error;
@@ -88,12 +88,15 @@ export class authorization {
             // or an element
             .closeTo(angular.element(that.document[0].querySelector('#right')))
         )
-  })
+  });
   }
   refreshPass(){
     var that = this;
     this.service.rewritePass(this.newPass).then(statusNewPass=>{
+      that.showNewPass=0
+      that.show = 1
       that.statusNewPass = statusNewPass
+
     }).catch(error=>{
       if(error.status==500){
 

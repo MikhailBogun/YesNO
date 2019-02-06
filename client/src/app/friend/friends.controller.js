@@ -3,14 +3,6 @@ export class FriendController {
     'ngInject'
     this.test=true;
     let that = this;
-    // $http.get('api/PostAll')
-    //   .then(function(promise) {
-    //       //this.data=success.data;
-    //     that.promise = promise.data;
-    //     },
-    //     function(error) {
-    //       that.promise = error;
-    //     });
     friendsService.returnFriend().then(info=>{
       that.friends = info.friends;
       that.subscriber = info.subscriber;
@@ -26,11 +18,6 @@ export class FriendController {
     this.UserAction = mainService.UsersAction;
     this.MyData = mainService.Mydata;
     this.scope.items=[]
-    // this.UserAction.getFriend().then(res=>{
-    //   that.follows = res;
-    // });
-
-    this.rows =["1","2"]
     this.counter =3
     this.activate($timeout, friendsService, webDevTec, $http);
 
@@ -86,8 +73,6 @@ export class FriendController {
         this.numItems = 50000;
 
     };
-    // this.dynamicItems = new this.DynamicItems(friendsService.dataFollow.friend,0);
-    // this.postsOnePerson = new this.DynamicItems(friendsService.dataFollow.getPersonPosts);
 
   }
   activate($timeout, friendsService, webDevTec, $http) {

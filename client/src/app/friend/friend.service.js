@@ -140,41 +140,4 @@ export class FriendsService{
     })
   }
 }
-// (function () {
-//   'use strict';
-//
-//   angular
-//     .module('yesno')
-//     .service('FriendsService', FriendsService);
-//
-//   function FriendsService($http) {
-//     var _FriendsService = this;
-//     var data = [
-//       {
-//         'id':'1000',
-//         'myFriend': ["1001","1002"]
-//       }
-//     ];
-//
-//     function getFriends(){
-//       return data;
-//     }
-//     function getData(){
-//       return this.promise;
-//     }
-//
-//     function _list() {
-//       return $http.get('http://localhost:8000/follows')
-//         .then(function (res) {
-//           return res;
-//         })
-//         .catch(function (err) {
-//           return err;
-//         })
-//     }
-//
-//     _FriendsService.getFriends = getFriends;
-//     _FriendsService.getData = getData;
-//     _FriendsService.list = _list;
-//   }
-// })();
+
