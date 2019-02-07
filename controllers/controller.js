@@ -4,27 +4,14 @@ const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const config = require(__dirname + '/../config/config.json')
 const fs = require('fs');
-const filePath = "/Users/sooprit/project/yesno"
 const Op = db.Sequelize.Op;
 const secret = config.secret;
 
-//TODO: спросить как изменить елементы другого блока при нажатии на клавишу(Подписка)?Без использования фор
+
 
 module.exports = {
     PostAll: async function(req, res){
 
-        // let result  = await db.sequelize.query(`
-        // INSERT INTO "Users" (id, "createdAt", "updatedAt") VALUES (DEFAULT, :now, :now);
-        // `, { replacements: { now: new Date() }, type: db.sequelize.QueryTypes.INSERT });
-        //
-        // console.log(result);
-        // let cc = await db.User.update({codeEmail:12},{
-        //     where:{
-        //         id:790
-        //
-        //     }
-        // })
-        // console.log(cc)
         let decode = req.headers.idPerson;
         let allDataPosts = null;
         if(typeof req.query.text ==="undefined") {
@@ -36,39 +23,6 @@ module.exports = {
         }
 
         res.json({result:allDataPosts});
-    },
-    PrivateData: async function(req, res, next){
-        try {
-            let user = req.headers.idPerson
-            let privateDateFriend = await db.post.findAll({
-                attributes: ["id", "name", "message", "image", "yes", "no", "percent", "idUser"],
-                where: {private: 1},
-                order: [
-                    ['id', 'DESC'],
-                ],
-                include: [{
-                    model: db.User, include: [
-                        {
-                            model: db.follow,
-                            attributes: [],
-                            where: {
-                                [Op.and]: [
-                                    {relationship: 2},
-                                    {idFollows: user}
-                                ]
-                            },
-                            required: true
-                        },
-                    ],
-                    attributes: ["login", "face"],
-                    required: true
-                }]
-            });
-
-            res.json({post: privateDateFriend});
-        } catch (e) {
-            next(e)
-        }
     },
     lengthRowsMyPosts: async function(req, res,next){
         let user = req.headers.idPerson;
@@ -474,13 +428,9 @@ module.exports = {
 
             if(post) {
 
-                fs.unlinkSync(filePath + post.image);
+                fs.unlinkSync(__dirname+"/.." + post.image);
                 res.sendStatus(200)
             }
-            // db.post.findById(req.params.id).then(post=>{
-            //     fs.unlinkSync(filePath+post.image);
-            //     return post.destroy()
-            // })
         } catch (e) {
             next(e)
         }

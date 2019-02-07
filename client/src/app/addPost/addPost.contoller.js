@@ -1,5 +1,4 @@
 export class addPostController {
-  //localStorage.setItem('mykey','myvalue');
   constructor($document,$http,addPostService){
     'ngInject'
     this.document = $document

@@ -16,8 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.follow,{as:"check",foreignKey:"idFollows"})
       User.hasMany(models.follow,{foreignKey:"idPerson"})
 
-      User.hasMany(models.friends,{foreignKey:"idFriendTwo"})
-      User.hasMany(models.friends,{foreignKey:"idFriendOne"})
 
   }
 

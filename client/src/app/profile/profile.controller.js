@@ -101,15 +101,13 @@ export class ProfileCtrl {
     }
   }
   DeletePost(post){
+    let that = this;
     this.mainService.Mydata.deletePosts(post).then(res=>{
-      console.log(res)
       if(res=="OK") {
-        console.log(post)
-        post = null
-        console.log("hellsda")
-        console.log(post)
+        that.allPublicPosts.loadedPages = {}
+
       }
-    })
+    });
   }
   PageContect(value){
     this.checkMenu=value;

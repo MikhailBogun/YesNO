@@ -1,7 +1,6 @@
 export class MainController {
   constructor ($log,$timeout,$scope, webDevTec,mainService, toastr, $http,friendsService) {
     'ngInject';
-    let that = this;
     this.http=$http;
     this.friendsService =friendsService
     this.log = $log;
@@ -74,17 +73,8 @@ export class MainController {
         }
       })
         .then(function(promise) {
-         // console.log(promise)
-            //this.data=success.data;
           that.loadedPages[pageNumber] = promise.data.result;
-
-
           });
-      // this.onlyFriends(pageOffset,this.id)
-      //   .then(response=>{
-      //     this.loadedPages[pageNumber] =response.result
-      //   })
-
     };
 
     this.DynamicItems.prototype.fetchNumItems_ = function() {
@@ -155,7 +145,6 @@ addFace(person,post){
     })
   }
   getReaction(reaction,posts){
-    var that = this;
     posts.reactions.push({reaction:"true"})
     if(reaction==0){
       posts.no++;
@@ -214,19 +203,11 @@ addFace(person,post){
     post.User.follows[0]=null
   }
   showFollows(post){
-    console.log(this.allPublicPosts)
     let that = this;
      that.allPublicPosts.loadedPages={}
-    for(let i=0;i<=this.allPublicPosts.pageNumber;i++) {
-
-      console.log(this.allPublicPosts.loadedPages[i])
-
-    }
-    // this.allPublicPosts = new this.DynamicItems("all",this.friendsService.dataFollow)
     post.User.follows[0]=1
     this.UserAction.Follow(post.idUser).then(res =>{
       that.res = res;
-      //this.toastr.info('Fork <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');
       if(res == "ok"){
         this.toastr.info('Follow')
         that.toastr.info('Forkbdf <a href="https://github.com/Swiip/generator-gulp-angular" target="_blank"><b>generator-gulp-angular</b></a>');

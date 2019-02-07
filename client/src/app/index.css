@@ -75,6 +75,11 @@
   width: 100%;
 
   }
+.virtualRepeatdemoDeferredLoading #vertical-container-search {
+  height:80vh;
+  width: 100%;
+
+}
 .mmm
 {
   height: 10px;
@@ -84,6 +89,8 @@
   border-bottom: 0px solid #ddd;
   box-sizing: border-box;
   height: 800px;
+  width:100%;
+  max-width:100%;
   max-height: 80%;
   padding-top: 10px; }
 
@@ -113,7 +120,7 @@
   background-color: #FFF2E0; }
 .login-text {
   text-align: center;
-  color: #000000;
+  color: #761c19;
   font-family: 'Lobster', cursive;
 }
 .login-text-a {
@@ -121,3 +128,20 @@
   color: #c12e2a;
   font-family: 'Lobster', cursive;
 }
+
+.buttondemoBasicUsage section {
+  border-radius: 3px;
+  text-align: center;
+  margin: 1em;
+  position: relative !important; }
+
+.buttondemoBasicUsage section .md-button {
+  margin-top: 16px;
+  margin-bottom: 16px; }
+
+.buttondemoBasicUsage .label {
+  position: absolute;
+  bottom: 5px;
+  left: 7px;
+  font-size: 14px;
+  opacity: 0.54; }
