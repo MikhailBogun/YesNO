@@ -14,10 +14,10 @@ export class PrivatePostCtrl {
        .then(res=>{
          that.dataPosts = res;
        })
-    this.DynamicItemsFriends = function(onlyFriends) {
+    this.DynamicItemsFriends = function(onlyFriends,searchText=null) {
 
       this.loadedPages = {};
-
+      this.searchText=searchText;
       this.onlyFriends =onlyFriends
       this.numItems = 0;
 
@@ -61,7 +61,6 @@ export class PrivatePostCtrl {
         .then(numPosts=>{
           this.numItems = numPosts.length
         })
-      this.numItems = 50000;
 
     };
     this.onlyFriendsData = new this.DynamicItemsFriends(friendsService.dataFollow.getmyFriends)

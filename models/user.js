@@ -53,5 +53,23 @@ module.exports = (sequelize, DataTypes) => {
   User.prototype.createNewUser = async(data)=>{
       return await User.create(data)
   }
+  User.prototype.showFriends= async(query)=>{
+      const options = {
+          include: [{
+              model: db.follow,
+              attributes: [],
+              where: {
+                  [Op.and]: [
+                      {idFollows: user},
+                      {relationship: 2}
+                  ]
+              },
+          }]
+      }
+      if(query.offset == "length"){
+
+      }
+  }
+
   return User;
 };

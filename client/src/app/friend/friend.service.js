@@ -43,10 +43,11 @@ export class FriendsService{
           return res.data;
         })
       },
-      getmyFriends: function (offset){
+      getmyFriends: function (offset,searchText){
         return $http.get('api/showFriends',{
           params:{
-            offset:offset
+            offset:offset,
+            text:searchText
           },
           headers:{
             token: localStorage.getItem("id")

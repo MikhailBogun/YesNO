@@ -8,7 +8,7 @@ export class addPostController {
     this.checkbox = false
   }
   submit() {
-      let that = this;
+      var that = this;
       var formData = new FormData;
 
       for (var data in this.dataUsers) {

@@ -29,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
             follow.create({idPerson:subscriber,idFollows:user,relationship:1});
         }
     }
-    follow.prototype.deleteFollow()
+    follow.prototype.deleteFollow = async(user,)=>{
+
+    }
   return follow;
 };
