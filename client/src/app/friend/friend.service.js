@@ -1,23 +1,23 @@
 export class FriendsService{
   constructor ($http){
     'ngInject';
-    let that = this;
-    this.http = $http;
+    var vm = this;
+    vm.http = $http;
     $http.get('api/follow',{headers:{
         token: localStorage.getItem("id")
     }})
       .then(function(promise) {
-          //this.data=success.data;
-          that.promise = promise.data;
+          //vm.data=success.data;
+          vm.promise = promise.data;
         },
         function(error) {
-          that.promise = error;
+          vm.promise = error;
         });
-    this.senk = function(){
+    vm.senk = function(){
       return "hello";
     };
 
-    this.dataFollow={
+    vm.dataFollow={
       getOnlyFriend: function (offset,id){
         return $http.get('api/onlyFriends',{
           params:{
@@ -99,7 +99,7 @@ export class FriendsService{
       }
 
 
-    this.data = [
+    vm.data = [
       {
         'id':'1000',
         'myFriend': ["1001","1002"]

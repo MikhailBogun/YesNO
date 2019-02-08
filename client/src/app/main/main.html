@@ -20,26 +20,28 @@
 </div>
 </div>
   <div >
-    <div layout="row">
+    <div layout="column">
     <div class="virtualRepeatdemoDeferredLoading ng-cloak" flex="100" ng-if="main.showPost==0">
       <md-content layout="column" class="test">
         <md-virtual-repeat-container id="vertical-container" ng-cloak>
-          <div md-virtual-repeat="posts in main.allPublicPosts" md-on-demand
+          <div layout="column" layout-align="center center" md-virtual-repeat="posts in main.allPublicPosts" md-on-demand
                class="repeated-item fig" >
-            <h3 class="postText">{{posts.message+posts.name}}</h3><br>
-            <div> <p class='fig'><img ng-src="{{posts.image}}" class="imgMy"   alt='Фотография'></p>
-              <div class ="progressB" ng-if="!posts.reactions[0]" ng-cloak><!--ng-if='!posts.reactions[0].reaction'--><br>
+            <h3 flex="10"  class="postText">{{posts.message+posts.name}}</h3><br>
+            <div flex="68"> <p class=><img ng-src="{{posts.image}}" class="imgMy"   alt='Фотография'></p></div>
+              <div flex="10" class ="progressB" ng-if="!posts.reactions[0]" ng-cloak><!--ng-if='!posts.reactions[0].reaction'--><br>
                 <button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)" >Yes</button>
                 <button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
-              <div class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
+              <div flex="10" class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
 
-              <br><p>{{posts.User.login}}
+              <br>
+            <div flex="10"><p>{{posts.User.login}}
               <img  ng-src="{{posts.User.face}}" width="35" height="35" alt='Фотография'>
               <button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]" >Подписаться</button>
                 <button  type="button"  ng-show="posts.User.follows[0] " class="btn btn-warning" ng-click="main.deleteFollows(posts)">Отписаться</button></h4>
               </p>
-
             </div>
+
+
 
           </div>
         </md-virtual-repeat-container>

@@ -1,27 +1,25 @@
 export class FriendController {
   constructor ($timeout, friendsService,mainService, webDevTec, $http, $scope,toastr) {
     'ngInject'
-    this.test=true;
-    let that = this;
+    var vm = this;
     friendsService.returnFriend().then(info=>{
-      that.friends = info.friends;
-      that.subscriber = info.subscriber;
-      that.followed = info.followed
+      vm.friends = info.friends;
+      vm.subscriber = info.subscriber;
+      vm.followed = info.followed
     })
-    this.toastr = toastr
-    this.friendsService= friendsService;
-    this.tableKey=[1,0,0]
-    this.http = $http;
-    this.scope = $scope;
-    this.promise = $scope.pr;
-    this.TablePerson = [];
-    this.UserAction = mainService.UsersAction;
-    this.MyData = mainService.Mydata;
-    this.scope.items=[]
-    this.counter =3
-    this.activate($timeout, friendsService, webDevTec, $http);
+    vm.toastr = toastr
+    vm.friendsService= friendsService;
+    vm.tableKey=[1,0,0]
+    vm.http = $http;
+    vm.scope = $scope;
+    vm.promise = $scope.pr;
+    vm.TablePerson = [];
+    vm.UserAction = mainService.UsersAction;
+    vm.MyData = mainService.Mydata;
+    vm.scope.items=[]
+    vm.counter =3
 
-    this.DynamicItems = function(friendServ,id,dataFollows) {
+    vm.DynamicItems = function(friendServ,id,dataFollows) {
 
       this.loadedPages = {};
       this.dataFollows=dataFollows
@@ -36,7 +34,7 @@ export class FriendController {
     };
 
     // Required.
-    this.DynamicItems.prototype.getItemAtIndex = function(index) {
+    vm.DynamicItems.prototype.getItemAtIndex = function(index) {
       var pageNumber = Math.floor(index / this.PAGE_SIZE);
       var page = this.loadedPages[pageNumber];
 
@@ -48,7 +46,7 @@ export class FriendController {
     };
 
     // Required.
-    this.DynamicItems.prototype.getLength = function() {
+    vm.DynamicItems.prototype.getLength = function() {
       return this.numItems;
     };
 
@@ -56,99 +54,95 @@ export class FriendController {
 
       this.loadedPages[pageNumber] = null;
 
-      $timeout(angular.noop, 300).then(angular.bind(this, function() {
         var pageOffset = pageNumber * this.PAGE_SIZE;
         this.friendServ(pageOffset,this.id)
           .then(response=>{
             this.loadedPages[pageNumber] =response.result
           })
-      }));
+
     };
 
-    this.DynamicItems.prototype.fetchNumItems_ = function() {
+    vm.DynamicItems.prototype.fetchNumItems_ = function() {
       this.dataFollows.getLength(this.id,0)
         .then(numPosts=>{
           this.numItems = numPosts.length
         })
-        this.numItems = 50000;
+      this.numItems = 50000;
 
     };
+    vm.getDataFriends = function(friendsService, webDevTec){
+      this.friendsData = friendsService.getFriends();
+      this.TablePerson = webDevTec.getdata();
 
-  }
-  activate($timeout, friendsService, webDevTec, $http) {
-    this.getDataFriends(friendsService, webDevTec, $http);
-  }
-  getDataFriends(friendsService, webDevTec){
-    this.friendsData = friendsService.getFriends();
-    this.TablePerson = webDevTec.getdata();
-
-  }
-  deleteFollows(followers){
-    this.UserAction.DeleteFollow(followers.id).then(res=>{
-      this.res = res;
-    })
-    let bufer ={}
-    for(let key in followers){
-      bufer[key] = followers[key]
-      delete followers[key]
     }
-    this.subscriber.push(bufer)
-    //post.User.follows[0]=null
-  }
-  deleteFollows1(followers){
-
-    this.UserAction.DeleteFollow(followers.id).then(res=>{
-      this.res = res;
-    })
-    for(let key in followers){
-      delete followers[key]
+    vm.deleteFollows = function(followers){
+      vm.UserAction.DeleteFollow(followers.id).then(res=>{
+        vm.res = res;
+      })
+      let bufer ={}
+      for(let key in followers){
+        bufer[key] = followers[key]
+        delete followers[key]
+      }
+      vm.subscriber.push(bufer)
+      //post.User.follows[0]=null
     }
-  }
-  follow(subs){
-    //post.User.follows[0]=1
-    var that = this;
-    this.UserAction.Follow(subs.id).then(res =>{
-      that.res = res;
-    })
-    that.toastr.info('Подписались на  <a  target="_blank"><b>'+subs.login+'</b></a>');
-    let bufer ={}
-    for(let key in subs){
-      bufer[key] = subs[key]
-      delete subs[key]
+    vm.deleteFollows1 = function(followers) {
+
+      vm.UserAction.DeleteFollow(followers.id).then(res=>{
+        vm.res = res;
+      })
+      for(let key in followers){
+        delete followers[key]
+      }
     }
-    this.friends.push(bufer)
-  }
-  // Follow(person){
-  // }
-  testF(){
-    this.test=false;
-  }
-  show(key) {
-    for(let i in this.tableKey){
-      this.tableKey[i]=0
-  }
-    this.tableKey[key]=1
-  }
-  addRow(){
-    this.rows.push("Row"+this.counter)
-    this.counter++;
-  }
-  showPost(id){
+    vm.follow = function(subs){
+      //post.User.follows[0]=1
 
-    this.testOneDataPerson=new this.DynamicItems(this.friendsService.dataFollow.getPersonPosts,id,this.friendsService.dataFollow)
+      vm.UserAction.Follow(subs.id).then(res =>{
+        vm.res = res;
+      })
+      vm.toastr.info('Подписались на  <a  target="_blank"><b>'+subs.login+'</b></a>');
+      let bufer ={}
+      for(let key in subs){
+        bufer[key] = subs[key]
+        delete subs[key]
+      }
+      vm.friends.push(bufer)
+    }
+    // Follow(person){
+    // }
+    vm.testF = function(){
+      vm.test=false;
+    }
+    vm.show = function(key){
+      for(let i in vm.tableKey){
+        vm.tableKey[i]=0
+      }
+      vm.tableKey[key]=1
+    }
+    vm.addRow = function(){
+      vm.rows.push("Row"+vm.counter)
+      vm.counter++;
+    }
+    vm.showPost = function(id){
+      vm.testOneDataPerson=new vm.DynamicItems(vm.friendsService.dataFollow.getPersonPosts,id,vm.friendsService.dataFollow)
+
+    }
+    vm.getReaction = function(reaction,posts){
+
+      posts.reactions.push({reaction:"true"})
+      if(reaction==0){
+        posts.no++;
+      } else posts.yes++;
+
+      vm.MyData.getReaction(reaction, posts,0).then(res=>{
+        vm.scope.percent = res;
+      });
+    }
 
   }
-  getReaction(reaction,posts){
-    var that = this;
-    posts.reactions.push({reaction:"true"})
-    if(reaction==0){
-      posts.no++;
-    } else posts.yes++;
 
-    this.MyData.getReaction(reaction, posts,0).then(res=>{
-      that.scope.percent = res;
-    });
-  }
 
 
 }

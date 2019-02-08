@@ -3,6 +3,20 @@ export function MainService($http){
   'ngInject';
   return {
     Mydata: {
+      getPosts: function(offset, text){
+        return $http.get('api/PostAll', {
+          params:{
+            offset:offset,
+            text: text
+          },
+          headers: {
+            token: localStorage.getItem("id")
+          }
+        })
+          .then(function(promise) {
+            return promise.data
+          });
+      },
       deletePosts: function(post){
         return $http.delete('api/deletePost'+post.id, {
           headers:{

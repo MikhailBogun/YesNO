@@ -1,18 +1,18 @@
 export class PrivatePostCtrl {
   constructor($scope,privatePostService, mainService,friendsService) {
     'ngInject';
-    this.onlyFriend = friendsService.dataFollow.getOnlyFriend
-    this.friendsService  = friendsService
-    this.Hello = "hello1";
-    this.scope = $scope;
-     this.posts = privatePostService.PrivateData;
-     let that = this;
-     this.dataPosts = "";
-    this.myReaction ="";
-    this.Mydata = mainService.Mydata;
-     this.posts.getData()
+    var vm = this;
+    vm.onlyFriend = friendsService.dataFollow.getOnlyFriend
+    vm.friendsService  = friendsService
+    vm.Hello = "hello1";
+    vm.scope = $scope;
+     vm.posts = privatePostService.PrivateData;
+     vm.dataPosts = "";
+    vm.myReaction ="";
+    vm.Mydata = mainService.Mydata;
+     vm.posts.getData()
        .then(res=>{
-         that.dataPosts = res;
+         vm.dataPosts = res;
        })
     this.DynamicItemsFriends = function(onlyFriends,searchText=null) {
 
@@ -63,9 +63,9 @@ export class PrivatePostCtrl {
         })
 
     };
-    this.onlyFriendsData = new this.DynamicItemsFriends(friendsService.dataFollow.getmyFriends)
+    vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends)
 
-    this.DynamicItems = function(onlyFriends,id,dataFollows) {
+    vm.DynamicItems = function(onlyFriends,id,dataFollows) {
 
       this.loadedPages = {};
       this.dataFollows=dataFollows
@@ -80,7 +80,7 @@ export class PrivatePostCtrl {
     };
 
     // Required.
-    this.DynamicItems.prototype.getItemAtIndex = function(index) {
+    vm.DynamicItems.prototype.getItemAtIndex = function(index) {
       var pageNumber = Math.floor(index / this.PAGE_SIZE);
       var page = this.loadedPages[pageNumber];
 
@@ -92,70 +92,68 @@ export class PrivatePostCtrl {
     };
 
     // Required.
-    this.DynamicItems.prototype.getLength = function() {
+    vm.DynamicItems.prototype.getLength = function() {
       return this.numItems;
     };
 
-    this.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
+    vm.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
 
       this.loadedPages[pageNumber] = null;
 
 
         var pageOffset = pageNumber * this.PAGE_SIZE;
-        this.onlyFriends(pageOffset,this.id)
+      this.onlyFriends(pageOffset,this.id)
           .then(response=>{
             this.loadedPages[pageNumber] =response.result
           })
 
     };
 
-    this.DynamicItems.prototype.fetchNumItems_ = function() {
+    vm.DynamicItems.prototype.fetchNumItems_ = function() {
 
       this.dataFollows.getLength(this.id,1)
         .then(numPosts=>{
           this.numItems = numPosts.length
         })
-      this.numItems = 50000;
 
     };
-    this.allprivatePosts = new this.DynamicItems(this.onlyFriend,"all",friendsService.dataFollow)
+    vm.allprivatePosts = new vm.DynamicItems(vm.onlyFriend,"all",friendsService.dataFollow)
 
+    vm.getReaction = function(reaction,posts) {
 
-  }
-  getReaction(reaction,posts){
-    var that = this;
-    that.cheack = reaction;
-    this.cheack1 =posts;
-    posts.reactions.push({reaction:"true"})
-    if(reaction==0){
-      posts.no++;
-    } else posts.yes++;
-    this.Mydata.getReaction(reaction, posts).then(res=>{
-      posts.percent = res.percent;
-    });
-  }
-  checkReaction(id){
-    for(let i = 0; i<this.myReaction.length;i++){
-      if(id == this.myReaction[i].idPost) {
-        return false;
-      }
+      vm.cheack = reaction;
+      vm.cheack1 =posts;
+      posts.reactions.push({reaction:"true"})
+      if(reaction==0){
+        posts.no++;
+      } else posts.yes++;
+      vm.Mydata.getReaction(reaction, posts).then(res=>{
+        posts.percent = res.percent;
+      });
     }
-    return true;
-  }
-  checkMyReaction(post){
-    for(let i = 0; i<this.myReaction.length;i++){
-      if(post.id == this.myReaction[i].idPost) {
-        this.scope.count = parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
-        return true;
+    vm.checkReaction = function(id) {
+      for(let i = 0; i<vm.myReaction.length;i++){
+        if(id == vm.myReaction[i].idPost) {
+          return false;
+        }
       }
+      return true;
     }
-    return false;
-  }
-  showPost(id){
-    this.allprivatePosts = new this.DynamicItems(this.onlyFriend,id,this.friendsService.dataFollow)
-  }
-  allPrivatePost(){
-    this.allprivatePosts = new this.DynamicItems(this.onlyFriend,"all",this.friendsService.dataFollow)
+    vm.checkMyReaction = function(post) {
+      for(let i = 0; i<vm.myReaction.length;i++){
+        if(post.id == vm.myReaction[i].idPost) {
+          vm.scope.count = parseInt((post.yes/((post.no+post.yes)/100)).toString(),10)
+          return true;
+        }
+      }
+      return false;
+    }
+    vm.showPost = function(id){
+      vm.allprivatePosts = new vm.DynamicItems(vm.onlyFriend,id,vm.friendsService.dataFollow)
+    }
+    vm.allPrivatePost = function(){
+      vm.allprivatePosts = new vm.DynamicItems(vm.onlyFriend,"all",vm.friendsService.dataFollow)
+    }
   }
 
 }

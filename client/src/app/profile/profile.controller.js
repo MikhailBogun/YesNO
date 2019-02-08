@@ -1,14 +1,15 @@
 export class ProfileCtrl {
   constructor($http,mainService){
     'ngInject'
-    this.http = $http;
-    this.hello ="hello World!";
-    this.info={};
+    var vm =this;
+    vm.http = $http;
+    vm.hello ="hello World!";
+    vm.info={};
     this.face={};
-    this.mainService=mainService;
+    vm.mainService=mainService;
     ///localStorage.setItem('mykey','myvalue');
-    this.checkMenu = 0;
-    this.DynamicItems = function(data,privPosts) {
+    vm.checkMenu = 0;
+    vm.DynamicItems = function(data,privPosts) {
       this.loadedPages = {};
       this.private=privPosts
       this.myPosts=data.myPosts
@@ -53,15 +54,14 @@ export class ProfileCtrl {
     };
 
     this.DynamicItems.prototype.fetchNumItems_ = function() {
-      var that = this;
       this.data.lengthmyPosts(this.private)
         .then(numPosts=>{
-          that.numItems = numPosts.length
+          this.numItems = numPosts.length
         })
       //this.numItems = 50000;
 
     };
-    this.allPublicPosts = new this.DynamicItems(mainService.Mydata,0)
+    vm.allPublicPosts = new vm.DynamicItems(mainService.Mydata,0)
   }
   submit(){
 
@@ -80,7 +80,7 @@ export class ProfileCtrl {
   }
 
   removeFace(){
-    let formData= new FormData;
+    var formData= new FormData;
     formData.append("id",localStorage.getItem("id"));
     for (var data in this.face){
       formData.append(data, this.face[data]);
@@ -104,7 +104,7 @@ export class ProfileCtrl {
     let that = this;
     this.mainService.Mydata.deletePosts(post).then(res=>{
       if(res=="OK") {
-        that.allPublicPosts.loadedPages = {}
+        this.allPublicPosts.loadedPages = {}
 
       }
     });
