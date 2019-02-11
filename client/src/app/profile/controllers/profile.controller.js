@@ -1,4 +1,4 @@
-export class ProfileCtrl {
+export class ProfileController {
   constructor($http,mainService){
     'ngInject'
     var vm =this;
@@ -101,7 +101,6 @@ export class ProfileCtrl {
     }
   }
   DeletePost(post){
-    let that = this;
     this.mainService.Mydata.deletePosts(post).then(res=>{
       if(res=="OK") {
         this.allPublicPosts.loadedPages = {}

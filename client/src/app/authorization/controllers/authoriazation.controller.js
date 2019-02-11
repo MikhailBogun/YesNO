@@ -1,4 +1,4 @@
-export class authorization {
+export class AuthorizationController {
   //localStorage.setItem('mykey','myvalue');
   constructor($http,$location,$mdDialog,mainService,$document) {
     'ngInject'

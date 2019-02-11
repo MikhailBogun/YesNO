@@ -4,44 +4,44 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
   $stateProvider
     .state('home', {
       url: '/home',
-      templateUrl: 'app/main/main.html',
+      templateUrl: 'app/main/views/main.html',
       controller: 'MainController',
       controllerAs: 'main'
     })
     .state('follows',{
       url:'/follows',
-      templateUrl: 'app/friend/friend.html',
+      templateUrl: 'app/friend/views/friend.html',
       controller:'FriendController',
       controllerAs:'friend'
     })
     .state('registr',{
     url:'/hhhhh',
-    templateUrl: 'app/Registration/registration.html',
+    templateUrl: 'app/Registration/views/registration.html',
     controller:'RegistrationController',
     controllerAs:'reg'
   })
     .state('addPost',{
       url:'/addPost',
-      templateUrl: 'app/addPost/addPost.html',
+      templateUrl: 'app/addPost/views/addPost.html',
       controller:'addPostController',
       controllerAs:'addPost'
     })
     .state('authorization',{
       url:'/',
-      templateUrl: 'app/authorization/authorization.html',
-      controller:'authorization',
+      templateUrl: 'app/authorization/views/authorization.html',
+      controller:'AuthorizationController',
       controllerAs:'authorization'
     })
     .state('profile',{
       url:'/profile',
-      templateUrl: 'app/profile/profile.html',
-      controller:'ProfileCtrl',
+      templateUrl: 'app/profile/views/profile.html',
+      controller:'ProfileController',
       controllerAs:'profile'
     })
     .state('privatePost',{
       url:'/privatepost',
-      templateUrl: 'app/privatepost/privatepost.html',
-      controller:'PrivatePostCtrl',
+      templateUrl: 'app/privatepost/views/privatepost.html',
+      controller:'PrivatePostController',
       controllerAs:'privatePost'
     })
   $urlRouterProvider.otherwise('/');

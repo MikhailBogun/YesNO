@@ -1,4 +1,4 @@
-export class PrivatePostCtrl {
+export class PrivatePostController{
   constructor($scope,privatePostService, mainService,friendsService) {
     'ngInject';
     var vm = this;

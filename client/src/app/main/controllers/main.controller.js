@@ -7,14 +7,11 @@ export class MainController {
     vm.log = $log;
     vm.scope = $scope;
     vm.showPost = 0
-    vm.c = "DDDDD"
     vm.testC=false
     vm.testC1 = true
     vm.cheack ="";
     vm.cheack1="";
     vm.awesomeThings = [];
-    vm.classAnimation = '';
-    vm.creationDate = 1542888925003;
     vm.toastr = toastr;
     vm.UserAction = mainService.UsersAction;
     vm.myfirstsService = []
@@ -170,7 +167,6 @@ export class MainController {
       post.User.follows[0]=null
     }
     vm.showFollows = function(post){
-      let vm = this;
       vm.allPublicPosts.loadedPages={}
       post.User.follows[0]=1
       vm.UserAction.Follow(post.idUser).then(res =>{
