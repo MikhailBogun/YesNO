@@ -1,7 +1,18 @@
 export class MainController {
-  constructor ($log,$timeout,$scope, webDevTec,mainService, toastr, $http,friendsService) {
+  constructor ($window,$log,$timeout,$scope, webDevTec,mainService, toastr, $http,friendsService) {
     'ngInject';
     var vm = this;
+      // var socket = io.connect('http://localhost');
+      // socket.emit()
+
+    var socket = io.connect("http://localhost:8000/");
+    socket.on('news', function (data) {
+      console.log(data);
+      socket.emit('my other event', { my: 'data' });
+    });
+    socket.on('test', function(data) {
+      console.log(data)
+    });
     vm.http=$http;
     vm.friendsService =friendsService
     vm.log = $log;

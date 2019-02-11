@@ -6,6 +6,7 @@ const app = express();
 const multer  = require('multer')
 let server = require("http").createServer(app);
 let bodyparser = require("body-parser");
+const io = require('socket.io')(server)
 
 let storage = multer.diskStorage( {
   destination: function (req, file, cb) {
@@ -124,6 +125,24 @@ app.delete('/api/deletePost:id',controller.deletePost);
 
 
 });
+ io.sockets.on('connection', function(socket){
+     console.log("helloSocket")
+     let id = (socket.id).toString().substr(0,5)
+     let time = (new Date).toLocaleTimeString()
+     socket.emit('news',{hello:'world'});
+     socket.on('my other event', function (data) {
+         console.log(data);
+     });
+     socket.on("addPost",function(info){
+         console.log(info)
+         socket.emit("test",{test:"otoclal"})
+     })
+     socket.on('disconnect', function () {
+         console.log('user disconnected');
+     });
+
+     // socket.json.send({'event': 'connected', 'name': id, 'time': time});
+ });
 
 server.listen(8000);
 console.log("Запуск сервера..");

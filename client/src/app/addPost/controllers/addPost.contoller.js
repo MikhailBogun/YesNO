@@ -27,6 +27,9 @@ export class addPostController {
       that.res = res;
       that.dataUsers = {}
 
+      var socket = io.connect("http://localhost:8000/");
+
+        socket.emit('addPost', { my: 'Test socket Emit' });
       that.document[0].getElementById("fileup").value = null
     })
   }

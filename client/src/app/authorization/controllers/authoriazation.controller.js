@@ -2,6 +2,11 @@ export class AuthorizationController {
   //localStorage.setItem('mykey','myvalue');
   constructor($http,$location,$mdDialog,mainService,$document) {
     'ngInject'
+    var socket = io.connect("http://localhost:8000/");
+    socket.on('news', function (data) {
+      console.log(data);
+      socket.emit('my other event', { my: 'data' });
+    });
     this.document = $document
     this.service = mainService.UsersAction
     this.http = $http;
