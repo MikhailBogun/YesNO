@@ -16,6 +16,8 @@ export class AuthorizationController {
     this.showNewPass=0
     this.emailGetCode = {};
     this.newPass={}
+
+
   }
 
   submit(){

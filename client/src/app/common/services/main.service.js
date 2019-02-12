@@ -1,8 +1,13 @@
 export function MainService($http){
 
   'ngInject';
+
   return {
     Mydata: {
+      socket: function(){
+        var socket = io.connect("http://localhost:8000/");
+        return socket;
+      },
       getPosts: function(offset, text){
         return $http.get('api/PostAll', {
           params:{

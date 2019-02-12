@@ -37,7 +37,9 @@ let checkToken = function(req, res, next) {
     if (typeof req.headers.token === 'undefined') {
         res.sendStatus(401);
     } else {
+
            let id = jwt.verify(req.headers.token, config.secret).userid;
+
             db.User.findById(id)
                 .then(user => {
                   if(typeof user.id !== 'undefined'){
@@ -126,22 +128,21 @@ app.delete('/api/deletePost:id',controller.deletePost);
 
 });
  io.sockets.on('connection', function(socket){
-     console.log("helloSocket")
-     let id = (socket.id).toString().substr(0,5)
-     let time = (new Date).toLocaleTimeString()
-     socket.emit('news',{hello:'world'});
-     socket.on('my other event', function (data) {
-         console.log(data);
-     });
-     socket.on("addPost",function(info){
-         console.log(info)
-         socket.emit("test",{test:"otoclal"})
+     socket.on("addPost",async (info) => {
+         socket.join("some room")
+         let id = jwt.verify(info.token, config.secret).userid;
+         let date = await db.User.prototype.checkUser(id)
+         if(date) {
+             socket.broadcast.emit("check", {'login': date.login})
+         } else{
+             socket.emit("err", {"err":"token invalid"})
+         }
      })
+     socket.broadcast.emit('privateDate',{"test":"allo"})
      socket.on('disconnect', function () {
          console.log('user disconnected');
      });
 
-     // socket.json.send({'event': 'connected', 'name': id, 'time': time});
  });
 
 server.listen(8000);

@@ -19,6 +19,12 @@ module.exports = (sequelize, DataTypes) => {
 
   }
 
+  User.prototype.checkUser = async (id) => {
+      return await User.findById(id,{
+          attributes:['login']
+      });
+  }
+
   User.prototype.oneUser = async (email)=>{
       let person = await User.findOne({
           attributes:["id","salt","password"],

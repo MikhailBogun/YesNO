@@ -52,7 +52,7 @@
             <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
                  class="repeated-item fig">
               <h2 flex="noshrink">{{posts.message}}  {{posts.name}}</h2><br>
-              <div> <p class='fig'><img src="{{posts.image}}" width="80%" height="400vh" alt='Фотография'></p>
+              <div> <p class='fig'><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
                 <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)"  >Yes</button>
                   <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)" >No</button></div>

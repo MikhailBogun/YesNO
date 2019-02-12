@@ -29,7 +29,7 @@ export class addPostController {
 
       var socket = io.connect("http://localhost:8000/");
 
-        socket.emit('addPost', { my: 'Test socket Emit' });
+        socket.emit('addPost', { token: localStorage.getItem("id") });
       that.document[0].getElementById("fileup").value = null
     })
   }

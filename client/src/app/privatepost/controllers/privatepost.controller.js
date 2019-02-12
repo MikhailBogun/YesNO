@@ -2,6 +2,11 @@ export class PrivatePostController{
   constructor($scope,privatePostService, mainService,friendsService) {
     'ngInject';
     var vm = this;
+    vm.socket = io.connect("http://localhost:8000/");
+    vm.socket.on('privateDate',function(res){
+      console.log(res)
+      // $scope.$apply(vm.checkNewPosts = true);
+    });
     vm.onlyFriend = friendsService.dataFollow.getOnlyFriend
     vm.friendsService  = friendsService
     vm.Hello = "hello1";
