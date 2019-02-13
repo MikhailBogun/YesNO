@@ -2,11 +2,51 @@ export class PrivatePostController{
   constructor($scope,privatePostService, mainService,friendsService) {
     'ngInject';
     var vm = this;
-    vm.socket = io.connect("http://localhost:8000/");
+    vm.Mydata = mainService.Mydata;
+    vm.checkNewPosts = false;
+    vm.socket = vm.Mydata.socket()
     vm.socket.on('privateDate',function(res){
+      console.log("rabotaet")
       console.log(res)
       // $scope.$apply(vm.checkNewPosts = true);
     });
+    vm.socket.emit("auth", {token:localStorage.getItem('id')})
+
+    vm.socket.emit("addPrivatePost",{token:localStorage.getItem('id')});
+    vm.socket.on('send', function(res){
+      $scope.$apply(vm.checkNewPosts = true);
+      console.log(res)
+    });
+
+    $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+      console.log(oldUrl.slice(oldUrl.lastIndexOf("/")+1)=="privatepost")
+      if(oldUrl.slice(oldUrl.lastIndexOf("/")+1)=="privatepost"){
+        console.log("dissssssss")
+        vm.socket.emit("leave",{token:localStorage.getItem('id')})
+        vm.socket.disconnect()
+
+      }
+      // else if( newUrl.slice(newUrl.lastIndexOf("/")+1)=="privatepost"){
+      //   console.log("private")
+      //   vm.changeStart=1;
+      //   vm.socket = vm.Mydata.socket()
+      //   // vm.socket = vm.Mydata.socket()
+      //   // console.log("hello")
+      //   // vm.socket.on('privateDate',function(res){
+      //   //   console.log("rabotaet")
+      //   //   console.log(res)
+      //   //   // $scope.$apply(vm.checkNewPosts = true);
+      //   // });
+      //   console.log("world!")
+      //   // vm.socket.on('check',function(res){
+      //   //   $scope.$apply(vm.checkNewPosts = true);
+      //   // });
+      // }
+
+    });
+    vm.newPost = function () {
+      vm.allprivatePosts
+    }
     vm.onlyFriend = friendsService.dataFollow.getOnlyFriend
     vm.friendsService  = friendsService
     vm.Hello = "hello1";
@@ -14,7 +54,7 @@ export class PrivatePostController{
      vm.posts = privatePostService.PrivateData;
      vm.dataPosts = "";
     vm.myReaction ="";
-    vm.Mydata = mainService.Mydata;
+
      vm.posts.getData()
        .then(res=>{
          vm.dataPosts = res;

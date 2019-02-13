@@ -32,5 +32,16 @@ module.exports = (sequelize, DataTypes) => {
     follow.prototype.deleteFollow = async(user,)=>{
 
     }
+    follow.prototype.getFriend = async(id) => {
+        return await follow.findAll({
+            attributes:["idFollows"],
+            where: {
+                [Op.and]: [
+                    {idPerson:id},
+                    {relationship:2}
+                ]
+            }
+        })
+    }
   return follow;
 };

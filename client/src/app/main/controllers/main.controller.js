@@ -1,20 +1,23 @@
 export class MainController {
-  constructor ($window,$log,$timeout,$scope, webDevTec,mainService, toastr, $http,friendsService) {
+  constructor ($rootScope ,$window,$log,$timeout,$scope, webDevTec,mainService, toastr, $http,friendsService) {
     'ngInject';
     var vm = this;
-      // var socket = io.connect('http://localhost');
-      // socket.emit()
-    vm.checkNewPosts = false;
-    vm.socket = mainService.Mydata.socket()
+    vm.Mydata = mainService.Mydata;
 
+    vm.checkNewPosts = false;
+    vm.socket = vm.Mydata.socket()
     vm.socket.on('check',function(res){
+      console.log("zdesss")
       $scope.$apply(vm.checkNewPosts = true);
     });
-
-    $scope.$on("$locationChangeStart", function(){
-      console.log("hello")
-      // socket.disconnect()
+    $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl){
+      // console.log(newUrl.slice(newUrl.lastIndexOf("/")+1))
+      if(oldUrl.slice(oldUrl.lastIndexOf("/")+1)=="home"){
+        vm.socket.disconnect({test:"discccc"})
+      }
     });
+
+
     vm.http=$http;
     vm.friendsService =friendsService
     vm.log = $log;
@@ -30,7 +33,7 @@ export class MainController {
     vm.myfirstsService = []
     vm.TablePerson = [];
     vm.myReaction ="";
-    vm.Mydata = mainService.Mydata;
+
 
 
     // this.infiniteItems = {

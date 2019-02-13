@@ -127,9 +127,18 @@ app.delete('/api/deletePost:id',controller.deletePost);
 
 
 });
- io.sockets.on('connection', function(socket){
+ var userSocket ={}
+var test = {}
+ var soc = io.sockets.on('connection', function(socket){
+     // let idsocket = Date.now()
+     // st.push(idsocket)
+     // console.log({st:st})
+     // socket.on('auth', async (info){
+     //     console.logingo()
+     // })
      socket.on("addPost",async (info) => {
          socket.join("some room")
+
          let id = jwt.verify(info.token, config.secret).userid;
          let date = await db.User.prototype.checkUser(id)
          if(date) {
@@ -138,10 +147,46 @@ app.delete('/api/deletePost:id',controller.deletePost);
              socket.emit("err", {"err":"token invalid"})
          }
      })
-     socket.broadcast.emit('privateDate',{"test":"allo"})
+     socket.on('addPrivatePost', async(res) => {
+         let id = jwt.verify(res.token, config.secret).userid;
+         var friends = await db.follow.prototype.getFriend(id)
+         for(let i =0; i<friends.length; i++) {
+
+             console.log(userSocket[friends[i].dataValues.idFollows])
+             if(userSocket[friends[i].dataValues.idFollows]) {
+                 console.log("Pobeda")
+                 console.log(userSocket[friends[i].dataValues.idFollows])
+                 soc.to(userSocket[friends[i].dataValues.idFollows]).emit("send", {hello:"pidr"})
+             }
+         }
+     })
+     socket.emit('privateDate',{"test":"allo"})
+     socket.on("auth", async(info) => {
+         console.log("auth++++++++++++++++++")
+         let id = jwt.verify(info.token, config.secret).userid;
+         let date = await db.User.prototype.checkUser(id)
+         if(date && !userSocket[id]){
+             console.log("Взял")
+             userSocket[id] = socket.id
+             console.log(userSocket)
+             socket.emit("socket",{socket:socket.id})
+         }
+     });
+     socket.on("leave", async (res) => {
+         let id = jwt.verify(res.token, config.secret).userid;
+         let date = await db.User.prototype.checkUser(id)
+
+         if(date) {
+             delete userSocket[id]
+             console.log(userSocket)
+         }
+     })
+
      socket.on('disconnect', function () {
          console.log('user disconnected');
+
      });
+
 
  });
 
