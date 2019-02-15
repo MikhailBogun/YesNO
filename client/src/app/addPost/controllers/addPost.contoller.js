@@ -1,36 +1,55 @@
 export class addPostController {
-  constructor($document,$http,addPostService){
+  constructor($document,$http,addPostService,$scope){
     'ngInject'
-    this.document = $document
-    this.addPost = addPostService.addData;
-    this.http = $http;
-    this.dataUsers={};
-    this.checkbox = false
+    var vm = this;
+    vm.document = $document
+    vm.addPost = addPostService.addData;
+    vm.http = $http;
+    vm.dataUsers={};
+    vm.checkbox = false;
+    vm.socket = io.connect("http://localhost:8000/");
+
+    $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
+      console.log(oldUrl.slice(oldUrl.lastIndexOf("/") + 1) == "addPost")
+      if (oldUrl.slice(oldUrl.lastIndexOf("/") + 1) == "addPost") {
+        console.log("dissssssss")
+        vm.socket.emit("leave", {token: localStorage.getItem('id')})
+        vm.socket.disconnect()
+
+      }
+    })
+
   }
   submit() {
-      var that = this;
-      var formData = new FormData;
+    var formData = new FormData;
+    var vm = this;
 
-      for (var data in this.dataUsers) {
-        formData.append(data, this.dataUsers[data]);
-      }
-      formData.append("id", localStorage.getItem("id"));
-      that.ll = formData;
+    for (var data in this.dataUsers) {
+      formData.append(data, this.dataUsers[data]);
+    }
+    formData.append("id", localStorage.getItem("id"));
+    vm.ll = formData;
     if (this.checkbox == false) {
       formData.append("private", 0);
+      vm.socket.emit('addPost', { token: localStorage.getItem("id") });
     }
     else {
       formData.append("private", 1);
+      vm.socket.emit("addPrivatePost",{token:localStorage.getItem('id')});
+
+
+
 
     }
     this.addPost.addPublicPost(formData).then(res=>{
-      that.res = res;
-      that.dataUsers = {}
+      vm.res = res;
+      vm.dataUsers = {}
 
-      var socket = io.connect("http://localhost:8000/");
-
-        socket.emit('addPost', { token: localStorage.getItem("id") });
-      that.document[0].getElementById("fileup").value = null
+      // vm.socket.emit("addPrivatePost",{token:localStorage.getItem('id')});
+      // socket.emit('addPost', { token: localStorage.getItem("id") });
+      vm.document[0].getElementById("fileup").value = null
     })
   }
+
+
 }

@@ -137,7 +137,7 @@ var test = {}
      //     console.logingo()
      // })
      socket.on("addPost",async (info) => {
-         socket.join("some room")
+         // socket.join("some room")
 
          let id = jwt.verify(info.token, config.secret).userid;
          let date = await db.User.prototype.checkUser(id)
@@ -149,6 +149,8 @@ var test = {}
      })
      socket.on('addPrivatePost', async(res) => {
          let id = jwt.verify(res.token, config.secret).userid;
+         console.log("zdeeeesssss")
+         console.log(id)
          var friends = await db.follow.prototype.getFriend(id)
          for(let i =0; i<friends.length; i++) {
 

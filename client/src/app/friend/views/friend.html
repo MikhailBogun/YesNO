@@ -1,5 +1,26 @@
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--<md-input-container >-->
+
+  <!--<md-select ng-model="friendss" placeholder="Выберите тип оношения">-->
+    <!--<md-option value="friend" ng-click="friend.showUsers(2)">Друзья</md-option>-->
+    <!--<md-option value="follows" ng-click="friend.showUsers(1)">Я подписан</md-option>-->
+    <!--<md-option value="subscriber" ng-click="friend.showUsers(0)">На меня подисаны</md-option>-->
+  <!--</md-select>-->
+<!--</md-input-container>-->
+
+<!--<div class="virtualRepeatdemoDeferredLoading">-->
+  <!--<md-content layout="column">-->
+    <!--<md-virtual-repeat-container id="vertical-friend-container">-->
+      <!--<a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>-->
+      <!--<div md-virtual-repeat="friends in friend.onlyFriendsData" md-on-demand-->
+           <!--class="repeatedFriend-item">-->
+        <!--<p ng-click="friend.showPost(friends.id)" style="outline: none;"><img ng-src="{{friends.face}}" width="35" height="35" alt='Фотография'>  {{friends.login}}</p>-->
+
+      <!--</div>-->
+    <!--</md-virtual-repeat-container>-->
+  <!--</md-content>-->
+<!--</div>-->
 
 <div flex="100" class="container" >
   <div>
@@ -12,37 +33,58 @@
       <div layout-gt-sm="column">
   <md-input-container layout-gt-sm="60" flayout-gt-sm-offset="20">
 
-  <md-select ng-model="friendss" placeholder="Выберите тип оношения">
-    <md-option value="friend" ng-click="friend.show(0)">Друзья</md-option>
-    <md-option value="follows" ng-click="friend.show(1)">Я подписан</md-option>
-    <md-option value="subscriber" ng-click="friend.show(2)">На меня подисаны</md-option>
-  </md-select>
+    <md-select ng-model="friendss" placeholder="Выберите тип оношения">
+      <md-option value="friend" ng-click="friend.showUsers(2)">Друзья</md-option>
+      <md-option value="follows" ng-click="friend.showUsers(1)">Я подписан</md-option>
+      <md-option value="subscriber" ng-click="friend.showUsers(0)">На меня подисаны</md-option>
+    </md-select>
+
+  <!--<md-select ng-model="friendss" placeholder="Выберите тип оношения">-->
+    <!--<md-option value="friend" ng-click="friend.show(0)">Друзья</md-option>-->
+    <!--<md-option value="follows" ng-click="friend.show(1)">Я подписан</md-option>-->
+    <!--<md-option value="subscriber" ng-click="friend.show(2)">На меня подисаны</md-option>-->
+  <!--</md-select>-->
   </md-input-container>
+
+
+        <div class="virtualRepeatdemoDeferredLoading">
+          <md-content layout="column">
+            <md-virtual-repeat-container id="vertical-friend-container">
+              <!--<a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>-->
+              <div md-virtual-repeat="friends in friend.onlyFriendsData" md-on-demand
+                   class="repeatedFriend-item">
+                <p ng-click="friend.showPost(friends.id)" style="outline: none;"><img ng-src="{{friends.face}}" width="35" height="35" alt='Фотография'>  {{friends.login}}</p>
+                <md-button class="md-primary" type="button" ng-if="" ng-click="friend.deleteFollows1(awesome)">Отписаться</md-button>
+              </div>
+            </md-virtual-repeat-container>
+          </md-content>
+        </div>
+
       </div>
-  <table ng-show="friend.tableKey[0]" ng-if ="friend.friends[0]">
+  <!--<table ng-show="friend.tableKey[0]" ng-if ="friend.friends[0]">-->
 
 
-    <tr ng-repeat='awesome in friend.friends'  ng-show="awesome.id" >
-      <td ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
-      <td ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows(awesome)">Отписаться</md-button></td>
+    <!--<tr ng-repeat='awesome in friend.friends'  ng-show="awesome.id" >-->
+      <!--<td ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>-->
+      <!--<td ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows(awesome)">Отписаться</md-button></td>-->
 
-    </tr>
-  </table>
+    <!--</tr>-->
+  <!--</table>-->
 
-  <table  ng-show="friend.tableKey[1]" ng-if ="friend.followed[0]">
-    <tr ng-repeat='awesome in friend.followed' ng-show="awesome.id">
-      <td  ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
-      <td  ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows1(awesome)">Отписаться</md-button></td>
+  <!--<table  ng-show="friend.tableKey[1]" ng-if ="friend.followed[0]">-->
+    <!--<tr ng-repeat='awesome in friend.followed' ng-show="awesome.id">-->
+      <!--<td  ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>-->
+      <!--<td  ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows1(awesome)">Отписаться</md-button></td>-->
 
-    </tr>
-  </table>
-  <table ng-show="friend.tableKey[2]"  ng-if="friend.subscriber[0]">
-    <tr ng-repeat='awesome in friend.subscriber' ng-show="awesome.id">
-      <td  ><p ng-click="friend.showPost(awesome.id)" style="outline: none;"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>
-      <td ><md-button class="md-primary" type="button" ng-click="friend.follow(awesome)" ng-show="awesome.id">Подписаться</md-button></td>
+    <!--</tr>-->
+  <!--</table>-->
+  <!--<table ng-show="friend.tableKey[2]"  ng-if="friend.subscriber[0]">-->
+    <!--<tr ng-repeat='awesome in friend.subscriber' ng-show="awesome.id">-->
+      <!--<td  ><p ng-click="friend.showPost(awesome.id)" style="outline: none;"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>-->
+      <!--<td ><md-button class="md-primary" type="button" ng-click="friend.follow(awesome)" ng-show="awesome.id">Подписаться</md-button></td>-->
 
-    </tr>
-  </table>
+    <!--</tr>-->
+  <!--</table>-->
     </div>
 
     <div flex-gt-sm="80" flex="66" >

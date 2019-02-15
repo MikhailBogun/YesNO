@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
                             required: false
                         }
                     ],
-                    attributes: ["login", "face"],
+                    attributes: ["id","login", "face"],
                 }
 
             ],

@@ -17,7 +17,59 @@ export class FriendController {
     vm.UserAction = mainService.UsersAction;
     vm.MyData = mainService.Mydata;
     vm.scope.items=[]
-    vm.counter =3
+    vm.counter =3;
+
+    this.DynamicItemsFriends = function(onlyFriends,searchText=null,key) {
+
+      this.loadedPages = {};
+      this.searchText = searchText;
+      this.onlyFriends = onlyFriends
+      this.numItems = 0;
+      this.relationship = key;
+
+      this.PAGE_SIZE = 5;
+
+      this.fetchNumItems_();
+      this.check = []
+    };
+    this.DynamicItemsFriends.prototype.getItemAtIndex = function(index) {
+      var pageNumber = Math.floor(index / this.PAGE_SIZE);
+      var page = this.loadedPages[pageNumber];
+
+      if (page) {
+        return page[index % this.PAGE_SIZE];
+      } else if (page !== null) {
+        this.fetchPage_(pageNumber);
+      }
+    };
+
+    // Required.
+    this.DynamicItemsFriends.prototype.getLength = function() {
+      return this.numItems;
+    };
+
+    this.DynamicItemsFriends.prototype.fetchPage_ = function(pageNumber) {
+
+      this.loadedPages[pageNumber] = null;
+
+
+      var pageOffset = pageNumber * this.PAGE_SIZE;
+      this.onlyFriends(pageOffset,this.searchText,this.relationship)
+        .then(response=>{
+          this.loadedPages[pageNumber] =response.friends
+        })
+
+    };
+
+    this.DynamicItemsFriends.prototype.fetchNumItems_ = function() {
+
+      this.onlyFriends("length",this.searchText,this.relationship)
+        .then(numPosts=>{
+          this.numItems = numPosts.length
+        })
+
+    };
+    vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends,null,2)
 
     vm.DynamicItems = function(friendServ,id,dataFollows) {
 
@@ -67,7 +119,6 @@ export class FriendController {
         .then(numPosts=>{
           this.numItems = numPosts.length
         })
-      this.numItems = 50000;
 
     };
     vm.getDataFriends = function(friendsService, webDevTec){
@@ -121,6 +172,11 @@ export class FriendController {
       }
       vm.tableKey[key]=1
     }
+
+    vm.showUsers = function(key){
+      vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends,null,key)
+    }
+
     vm.addRow = function(){
       vm.rows.push("Row"+vm.counter)
       vm.counter++;

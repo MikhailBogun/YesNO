@@ -130,41 +130,44 @@ module.exports = {
     },
     showFriends: async function(req,res){
         let user = req.headers.idPerson;
+        console.log(req.query)
+        let friends = await db.User.prototype.showFriends(req.query.offset,user,req.query.relationship)
 
         if(req.query.offset=="length") {
-            let friends = await db.User.findAll({
-                attributes: [ "id"],
-                include: [{
-                    model: db.follow,
-                    attributes: [],
-                    where: {
-                        [Op.and]: [
-                            {idFollows: user},
-                            {relationship: 2}
-                        ]
-                    },
-                }]
-            })
-            res.json({length:friends.length})
+            res.json({length:friends})
+            // let friends = await db.User.findAll({
+            //     attributes: [ "id"],
+            //     include: [{
+            //         model: db.follow,
+            //         attributes: [],
+            //         where: {
+            //             [Op.and]: [
+            //                 {idFollows: user},
+            //                 {relationship: 2}
+            //             ]
+            //         },
+            //     }]
+            // })
+            // res.json({length:friends.length})
         } else {
-            let friends = await db.User.findAll({
-                attributes: ["login", "face", "id"],
-
-                include: [{
-                    model: db.follow,
-                    attributes: [],
-                    where: {
-                        [Op.and]: [
-                            {idFollows: user},
-                            {relationship: 2}
-
-                        ]
-                    },
-                }],
-                offset: req.query.offset,
-                limit: 5,
-                subQuery: false
-            })
+            // let friends = await db.User.findAll({
+            //     attributes: ["login", "face", "id"],
+            //
+            //     include: [{
+            //         model: db.follow,
+            //         attributes: [],
+            //         where: {
+            //             [Op.and]: [
+            //                 {idFollows: user},
+            //                 {relationship: 2}
+            //
+            //             ]
+            //         },
+            //     }],
+            //     offset: req.query.offset,
+            //     limit: 5,
+            //     subQuery: false
+            // })
 
             res.json({friends: friends})
         }
@@ -404,7 +407,7 @@ module.exports = {
                 attributes: ["login", "face", "id"],
                 include: [{
                     model: db.follow,
-                    as: 'check',
+                    as: 'iSigned',
                     attributes: [],
                     where: {
                         [Op.and]: [

@@ -12,40 +12,22 @@ export class PrivatePostController{
     });
     vm.socket.emit("auth", {token:localStorage.getItem('id')})
 
-    vm.socket.emit("addPrivatePost",{token:localStorage.getItem('id')});
     vm.socket.on('send', function(res){
       $scope.$apply(vm.checkNewPosts = true);
-      console.log(res)
     });
 
     $scope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
       console.log(oldUrl.slice(oldUrl.lastIndexOf("/")+1)=="privatepost")
       if(oldUrl.slice(oldUrl.lastIndexOf("/")+1)=="privatepost"){
-        console.log("dissssssss")
         vm.socket.emit("leave",{token:localStorage.getItem('id')})
         vm.socket.disconnect()
 
       }
-      // else if( newUrl.slice(newUrl.lastIndexOf("/")+1)=="privatepost"){
-      //   console.log("private")
-      //   vm.changeStart=1;
-      //   vm.socket = vm.Mydata.socket()
-      //   // vm.socket = vm.Mydata.socket()
-      //   // console.log("hello")
-      //   // vm.socket.on('privateDate',function(res){
-      //   //   console.log("rabotaet")
-      //   //   console.log(res)
-      //   //   // $scope.$apply(vm.checkNewPosts = true);
-      //   // });
-      //   console.log("world!")
-      //   // vm.socket.on('check',function(res){
-      //   //   $scope.$apply(vm.checkNewPosts = true);
-      //   // });
-      // }
 
     });
     vm.newPost = function () {
-      vm.allprivatePosts
+      vm.checkNewPosts = false;
+      vm.allprivatePosts.loadedPages={}
     }
     vm.onlyFriend = friendsService.dataFollow.getOnlyFriend
     vm.friendsService  = friendsService
@@ -156,7 +138,7 @@ export class PrivatePostController{
 
     vm.DynamicItems.prototype.fetchNumItems_ = function() {
 
-      this.dataFollows.getLength(this.id,1)
+      this.dataFollows.getLength(this.id,1,)
         .then(numPosts=>{
           this.numItems = numPosts.length
         })

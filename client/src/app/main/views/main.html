@@ -82,7 +82,7 @@
       <!--</div>-->
 
 <div  >
-  <div class="virtualRepeatdemoDeferredLoading ng-cloak" flex="100" ng-if="main.showPost==0" >
+  <div class="virtualRepeatdemoDeferredLoading" flex="100" ng-if="main.showPost==0" >
     <md-content layout="column">
       <md-virtual-repeat-container id="vertical-container">
         <div layout="column"  md-virtual-repeat="posts in main.allPublicPosts" md-on-demand="true"
@@ -108,7 +108,7 @@
       </md-virtual-repeat-container>
     </md-content>
   </div>
-  <div class="virtualRepeatdemoDeferredLoading ng-cloak" flex="100" ng-if="main.showPost==1" ng-cloak>
+  <div class="virtualRepeatdemoDeferredLoading " flex="100" ng-if="main.showPost==1">
     <md-content layout="column">
       <md-virtual-repeat-container id="vertical-container" ng-cloak>
         <div md-virtual-repeat="posts in main.allPublicPosts" md-on-demand
