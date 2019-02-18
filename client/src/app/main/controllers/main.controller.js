@@ -229,7 +229,13 @@ export class MainController {
     vm.deleteFollows = function(post){
       vm.UserAction.DeleteFollow(post.idUser).then(res=>{
         vm.res = res;
-        vm.allPublicPosts.loadedPages={};
+        for(var i in vm.allPublicPosts.loadedPages) {
+          for (var k in vm.allPublicPosts.loadedPages[i]) {
+            if(post.User.id == vm.allPublicPosts.loadedPages[i][k].User.id){
+              vm.allPublicPosts.loadedPages[i][k].User.follows[0] = false;
+            }
+          }
+        }
       })
       post.User.follows[0]=null
     }
@@ -238,21 +244,13 @@ export class MainController {
       vm.UserAction.Follow(post.idUser).then(res =>{
         vm.res = res;
         for(var i in vm.allPublicPosts.loadedPages) {
-          console.log(i)
           for (var k in vm.allPublicPosts.loadedPages[i]) {
             if(post.User.id == vm.allPublicPosts.loadedPages[i][k].User.id){
               vm.allPublicPosts.loadedPages[i][k].User.follows[0] = true;
-
             }
-                // console.log(vm.allPublicPosts.loadedPages[i][k])
           }
         }
-
-
-        // for(let i =0;i<)
-
-
-          vm.toastr.info('Follow')
+          vm.toastr.info('Follow ',post.User.login)
 
       })
     }

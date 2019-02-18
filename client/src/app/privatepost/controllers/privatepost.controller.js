@@ -41,12 +41,13 @@ export class PrivatePostController{
        .then(res=>{
          vm.dataPosts = res;
        })
-    this.DynamicItemsFriends = function(onlyFriends,searchText=null) {
+    this.DynamicItemsFriends = function(onlyFriends,searchText=null,key) {
 
       this.loadedPages = {};
       this.searchText=searchText;
       this.onlyFriends =onlyFriends
       this.numItems = 0;
+      this.relationship = key;
 
       this.PAGE_SIZE = 5;
 
@@ -75,7 +76,7 @@ export class PrivatePostController{
 
 
       var pageOffset = pageNumber * this.PAGE_SIZE;
-      this.onlyFriends(pageOffset)
+      this.onlyFriends(pageOffset,this.searchText,this.relationship)
         .then(response=>{
           this.loadedPages[pageNumber] =response.friends
         })
@@ -84,13 +85,13 @@ export class PrivatePostController{
 
     this.DynamicItemsFriends.prototype.fetchNumItems_ = function() {
 
-      this.onlyFriends("length")
+      this.onlyFriends("length",this.searchText,this.relationship)
         .then(numPosts=>{
           this.numItems = numPosts.length
         })
 
     };
-    vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends)
+    vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends,null,2)
 
     vm.DynamicItems = function(onlyFriends,id,dataFollows) {
 

@@ -2,6 +2,7 @@ export class FriendController {
   constructor ($timeout, friendsService,mainService, webDevTec, $http, $scope,toastr) {
     'ngInject'
     var vm = this;
+    vm.checkMySub = false
     friendsService.returnFriend().then(info=>{
       vm.friends = info.friends;
       vm.subscriber = info.subscriber;
@@ -18,6 +19,9 @@ export class FriendController {
     vm.MyData = mainService.Mydata;
     vm.scope.items=[]
     vm.counter =3;
+    vm.checkMobilePost=false
+
+
 
     this.DynamicItemsFriends = function(onlyFriends,searchText=null,key) {
 
@@ -121,6 +125,11 @@ export class FriendController {
         })
 
     };
+
+    vm.showUser = function(){
+      vm.checkMobilePost=false;
+    }
+
     vm.getDataFriends = function(friendsService, webDevTec){
       this.friendsData = friendsService.getFriends();
       this.TablePerson = webDevTec.getdata();
@@ -174,6 +183,11 @@ export class FriendController {
     }
 
     vm.showUsers = function(key){
+      if(key==0){
+        vm.checkMySub = true
+      } else {
+        vm.checkMySub = false
+      }
       vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends,null,key)
     }
 
@@ -182,6 +196,7 @@ export class FriendController {
       vm.counter++;
     }
     vm.showPost = function(id){
+      vm.checkMobilePost=true;
       vm.testOneDataPerson=new vm.DynamicItems(vm.friendsService.dataFollow.getPersonPosts,id,vm.friendsService.dataFollow)
 
     }
