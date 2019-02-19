@@ -157,14 +157,7 @@ export class MainController {
         return false;
       }
     }
-    // vm.activate = function($timeout, webDevTec) {
-    //   vm.getWebDevTec(webDevTec);
-    //   $timeout(() => {
-    //     vm.classAnimation = 'rubberBand';
-    //   }, 4000);
-    //   vm.getMydata(webDevTec);
-    //
-    // }
+
     vm.takeMyReactions = function() {
 
       vm.Mydata.takeReacions().then(res=>{
@@ -231,26 +224,49 @@ export class MainController {
         vm.res = res;
         for(var i in vm.allPublicPosts.loadedPages) {
           for (var k in vm.allPublicPosts.loadedPages[i]) {
-            if(post.User.id == vm.allPublicPosts.loadedPages[i][k].User.id){
-              vm.allPublicPosts.loadedPages[i][k].User.follows[0] = false;
+            if(typeof post.User_id!=="undefined") {
+              if(post.User_id == vm.allPublicPosts.loadedPages[i][k].User_id) {
+                vm.allPublicPosts.loadedPages[i][k].User_follows_id = false
+              }
+
+            } else {
+              if(post.User.id == vm.allPublicPosts.loadedPages[i][k].User.id){
+                  vm.allPublicPosts.loadedPages[i][k].User.follows[0] = false;
+              }
             }
+
           }
         }
       })
-      post.User.follows[0]=null
     }
     vm.showFollows = function(post){
-      post.User.follows[0]=1
+
       vm.UserAction.Follow(post.idUser).then(res =>{
         vm.res = res;
         for(var i in vm.allPublicPosts.loadedPages) {
           for (var k in vm.allPublicPosts.loadedPages[i]) {
-            if(post.User.id == vm.allPublicPosts.loadedPages[i][k].User.id){
-              vm.allPublicPosts.loadedPages[i][k].User.follows[0] = true;
+
+            if(typeof post.User_id!=="undefined"){
+
+              if(post.User_id == vm.allPublicPosts.loadedPages[i][k].User_id) {
+                vm.allPublicPosts.loadedPages[i][k].User_follows_id = true
+              }
+
+            } else{
+              if(post.User.id == vm.allPublicPosts.loadedPages[i][k].User.id){
+                vm.allPublicPosts.loadedPages[i][k].User.follows[0] = true;
+              }
+
             }
+
           }
         }
-          vm.toastr.info('Follow ',post.User.login)
+          if(post.User_login){
+            vm.toastr.info('Follow ', post.User_login)
+
+          } else {
+            vm.toastr.info('Follow ', post.User.login)
+          }
 
       })
     }

@@ -22,6 +22,7 @@ export function MainService($http){
             return promise.data
           });
       },
+
       deletePosts: function(post){
         return $http.delete('api/deletePost'+post.id, {
           headers:{
@@ -32,6 +33,7 @@ export function MainService($http){
             return res.data;
           })
       },
+
       myPosts: function(priv,offset){
         return $http.get('api/myPosts',{
           params:{
@@ -46,6 +48,7 @@ export function MainService($http){
             res =>{return res.data}
           );
       },
+
       lengthmyPosts: function(priv){
         return $http.get('api/lengthRowsMyPosts',{
           params:{

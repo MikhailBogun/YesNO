@@ -70,11 +70,12 @@ export class FriendsService{
         return res.data;
       })
     },
-      getPersonPosts: function(offset,id){
+      getPersonPosts: function(offset,id,priv=0){
         return $http.get('api/OnePersonPosts',{
           params:{
             id:id,
-            offset:offset
+            offset:offset,
+            private:priv
           },
           headers:{
             token: localStorage.getItem("id")
@@ -129,6 +130,9 @@ export class FriendsService{
       return res.data;
     })
   }
+
+
+
   Test(offset){
     return this.http.get('api/test',{
       params:{
@@ -141,5 +145,6 @@ export class FriendsService{
       return res.data;
     })
   }
+
 }
 

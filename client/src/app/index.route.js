@@ -15,7 +15,7 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
       controllerAs:'friend'
     })
     .state('registr',{
-    url:'/hhhhh',
+    url:'/registration',
     templateUrl: 'app/Registration/views/registration.html',
     controller:'RegistrationController',
     controllerAs:'reg'
@@ -45,5 +45,6 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
       controllerAs:'privatePost'
     })
   $urlRouterProvider.otherwise('/');
-  $locationProvider.html5Mode(true);
+
+  // $locationProvider.html5Mode(true);
 }

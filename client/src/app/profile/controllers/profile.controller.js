@@ -1,5 +1,5 @@
 export class ProfileController {
-  constructor($http,mainService){
+  constructor($http,mainService,friendsService){
     'ngInject'
     var vm =this;
     vm.http = $http;
@@ -46,10 +46,12 @@ export class ProfileController {
 
       var that = this
       var pageOffset = pageNumber * this.PAGE_SIZE;
-
-      this.myPosts(this.private,pageOffset).then(posts=>{
+      friendsService.dataFollow.getPersonPosts(pageOffset,null,this.private).then(posts=>{
         that.loadedPages[pageNumber] = posts.result;
       })
+      // this.myPosts(pageOffset,null,this.private).then(posts=>{
+      //   that.loadedPages[pageNumber] = posts.result;
+      // })
 
     };
 

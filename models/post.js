@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         // associations can be defined here
         post.hasMany(models.reaction, {foreignKey: "idPost"})// {foreignKey:"idPost"});//, {foreignKey: "id"});//, {foreignKey: 'idPost'});//, {foreignKey: 'id', targetKey:'idPost'})
         post.belongsTo(models.User, {foreignKey: "idUser"})
-        post.belongsTo(models.User, {as: "test", foreignKey: "idUser"})
+        post.belongsTo(models.User, {as: "checkMyPost", foreignKey: "idUser"})
     };
 
     post.prototype.allDataPosts = async (user, offset, privatePost) => {
@@ -43,9 +43,19 @@ module.exports = (sequelize, DataTypes) => {
                             attributes: ["relationship","idFollows"],
                             where: {idFollows: user},
                             required: false
-                        }
+                        },
+
+
                     ],
+
                     attributes: ["id","login", "face"],
+                },
+                {
+                    model: sequelize.models.User,
+                    as:"checkMyPost",
+                    attributes:["login"],
+                    where:{id:user},
+                    required:false
                 }
 
             ],
@@ -103,7 +113,7 @@ module.exports = (sequelize, DataTypes) => {
                                                 LEFT OUTER JOIN "reactions" AS "reactions" ON "post"."id" = "reactions"."idPost" AND "reactions"."idPerson"=:user 
                                                 LEFT OUTER JOIN "Users" AS "User" ON "post"."idUser" = "User"."id" 
                                                 LEFT OUTER JOIN "follows" AS "User->follows" ON "User"."id" = "User->follows"."idPerson" AND "User->follows"."idFollows"=:user 
-                                                WHERE ("post"."private" = 0 AND "post"."name" ILIKE :search_name) 
+                                                WHERE ("post"."private" = 0 AND ("post"."name" ILIKE :search_name OR "post"."message" ILIKE :search_name))
                                             ORDER BY "post"."id" DESC 
                                             LIMIT :limit
                                             OFFSET :offset;`,
@@ -163,7 +173,17 @@ module.exports = (sequelize, DataTypes) => {
             return await percent
         }
     }
-    post.prototype.deletePost =  async (idPost)=>{
+    post.prototype.getLenRows = async(visibility,searchText="",id) => {
+        if(id)
+
+        return await sequelize.query(`SELECT COUNT("post"."id")
+                                         FROM "posts" AS "post"
+                                         WHERE ("post"."private" =:private AND ("post"."name" ILIKE :search_name OR "post"."message" ILIKE :search_name));`
+            , {replacements: {search_name: '%' + searchText + "%",private: Number(visibility)}, type: sequelize.QueryTypes.SELECT}
+        )
+    }
+
+    post.prototype.deletePost =  async (idPost) => {
         let dataPost = await post.findById(idPost)
         await post.destroy({
             where:

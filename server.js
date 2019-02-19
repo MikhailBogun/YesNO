@@ -7,10 +7,11 @@ const multer  = require('multer')
 let server = require("http").createServer(app);
 let bodyparser = require("body-parser");
 const io = require('socket.io')(server)
+console.log(__dirname)
 
 let storage = multer.diskStorage( {
   destination: function (req, file, cb) {
-    cb(null, '/Users/sooprit/project/yesno/public/images/PostAll')
+    cb(null, __dirname+'/public/images/PostAll')
   },
   filename: function(req,file, cb){
   cb(null, Date.now()+file.originalname);
@@ -19,7 +20,7 @@ let storage = multer.diskStorage( {
 
 let storage_face = multer.diskStorage( {
   destination: function (req, file, cb) {
-    cb(null, '/Users/sooprit/project/yesno/client/src/assets/images/persons')
+    cb(null, __dirname+ '/public/images/persons')
 
   },
   filename: function(req,file, cb){
@@ -87,7 +88,7 @@ app.get("/api/showFriends", controller.showFriends);
 app.get("/api/onlyFriends", controller.onlyFriends);
 
 
-app.get('/api/myPosts', controller.myPosts);
+// app.get('/api/myPosts', controller.myPosts);
 
 app.get('/api/friends', controller.getFriends);
 
@@ -128,7 +129,6 @@ app.delete('/api/deletePost:id',controller.deletePost);
 
 });
  var userSocket ={}
-var test = {}
  var soc = io.sockets.on('connection', function(socket){
      // let idsocket = Date.now()
      // st.push(idsocket)

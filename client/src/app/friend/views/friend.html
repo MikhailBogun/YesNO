@@ -53,9 +53,7 @@
     <!--<md-option value="subscriber" ng-click="friend.show(2)">На меня подисаны</md-option>-->
   <!--</md-select>-->
   </md-input-container>
-
-
-        <div class="virtualRepeatdemoDeferredLoading" >
+        <div class="virtualRepeatdemoDeferredLoading"  >
           <md-content>
             <md-virtual-repeat-container id="vertical-friend-container">
               <!--<a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>-->
@@ -74,36 +72,11 @@
           </md-content>
         </div>
 
-
-  <!--<table ng-show="friend.tableKey[0]" ng-if ="friend.friends[0]">-->
-
-
-    <!--<tr ng-repeat='awesome in friend.friends'  ng-show="awesome.id" >-->
-      <!--<td ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>-->
-      <!--<td ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows(awesome)">Отписаться</md-button></td>-->
-
-    <!--</tr>-->
-  <!--</table>-->
-
-  <!--<table  ng-show="friend.tableKey[1]" ng-if ="friend.followed[0]">-->
-    <!--<tr ng-repeat='awesome in friend.followed' ng-show="awesome.id">-->
-      <!--<td  ><p ng-click="friend.showPost(awesome.id)"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>-->
-      <!--<td  ><md-button class="md-primary" type="button" ng-click="friend.deleteFollows1(awesome)">Отписаться</md-button></td>-->
-
-    <!--</tr>-->
-  <!--</table>-->
-  <!--<table ng-show="friend.tableKey[2]"  ng-if="friend.subscriber[0]">-->
-    <!--<tr ng-repeat='awesome in friend.subscriber' ng-show="awesome.id">-->
-      <!--<td  ><p ng-click="friend.showPost(awesome.id)" style="outline: none;"><img src="{{awesome.face}}" width="35" height="35" alt='Фотография'>  {{awesome.login}}</p></td>-->
-      <!--<td ><md-button class="md-primary" type="button" ng-click="friend.follow(awesome)" ng-show="awesome.id">Подписаться</md-button></td>-->
-
-    <!--</tr>-->
-  <!--</table>-->
     </div>
 
     <div flex-gt-sm="80" flex="70" flex-xs="100" hide-xs show-gt-xs>
       <h3 ng-if="!friend.testOneDataPerson.numItems" style="text-align: center;">       Выберите пользователя для отображения постов</h3>
-      <div class="virtualRepeatdemoDeferredLoading">
+      <div class="virtualRepeatdemoDeferredLoading ">
         <md-content layout="column">
           <md-virtual-repeat-container id="vertical-container">
             <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
