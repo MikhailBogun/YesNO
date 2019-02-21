@@ -45,24 +45,18 @@ module.exports = {
             next(e)
         }
     },
-    // myPosts: async function(req, res,next){
-    //     try{
-    //         let dataPosts = await db.post.prototype.onePersonPosts(req.headers.idPerson,req.query.private,req.query.offset)
-    //         res.json({result:dataPosts});
-    //         //Todo:Избавиться от этого контролера все перенести в котроллер ниже
-    //     } catch (e) {
-    //         next(e)
-    //     }
-    // },
+
     onePersonPosts: async function (req, res, next) {
         try {
             let {id, offset, private} = req.query;
             let result;
             if (private) {
-                result = await db.post.prototype.onePersonPosts(req.headers.idPerson, req.query.private, req.query.offset)
+                console.log("problem1")
+                result = await db.post.prototype.onePersonPosts(id, req.query.private, req.query.offset,req.headers.idPerson)
 
             } else {
                 result = await db.post.prototype.onePersonPosts(id, 0, offset, req.headers.idPerson)
+                console.log("problem2")
             }
             res.json({result: result});
         } catch (e) {
@@ -71,76 +65,34 @@ module.exports = {
     },
 
     getLengthRows: async function (req, res) {
-        let searchText = req.query.text
-        let user = req.headers.idPerson
-        let data = null
-        let {id, private} = req.query
+        let data = null;
+        let {id, private, searchText} = req.query;
 
-        if (private == 0) {
-            if (req.query.id == "all") {
-                if (typeof searchText === "undefined") {
-                    data = await db.post.findAll({
-                        attributes: ["id"],
-                        where: {private: 0}
-                    })
-                    data  = await db.post.prototype.getLenRows(private)
 
-                } else {
-                    data  = await db.post.prototype.getLenRows(private,searchText)
+        if (id == "all") {
+            if (typeof searchText === "undefined") {
 
-                }
+                data = await db.post.prototype.getLenRows(private);
+
             } else {
-                data = await db.post.findAll({
-                    attributes: ["id"],
-                    where: {
-                        [Op.and]: [{private: 0}, {idUser: req.query.id}]
-                    },
+                data = await db.post.prototype.getLenRows(private, searchText);
 
-                })
             }
-        } else if (private == 1) {
-            if (req.query.id == "all") {
-                console.log("hell")
-                data = await db.post.findAll({
-                    attributes: ["id", "name", "message", "image", "yes", "no", "percent", "idUser"],
-                    where: {private: 1},
-                    order: [
-                        ['id', 'DESC'],
-                    ],
-                    include: [{
-                        model: db.User, include: [
-                            {
-                                model: db.follow,
-                                attributes: [],
-                                where: {
-                                    [Op.and]: [
-                                        {relationship: 2},
-                                        {idFollows: user}
-                                    ]
-                                },
-                                required: true
-                            },
-                        ],
-                        attributes: ["login", "face"],
-                        required: true
-                    }]
-                })
-                console.log(data.length)
-            } else {
-                data = await db.post.findAll({
-                    attributes: ["id"],
-                    where: {
-                        [Op.and]: [{private: 1}, {idUser: req.query.id}]
-                    },
-                });
-            }
+        } else {
+            data = await db.post.prototype.getLenRows(private, "", req.query.id)
+
+            res.json({length: data});
+            return null;
         }
-        res.json({length: data.length})
+
+        res.json({length: Number(data[0].count)})
     },
     showFriends: async function (req, res) {
         let user = req.headers.idPerson;
-        console.log(req.query)
-        let friends = await db.User.prototype.showFriends(req.query.offset, user, req.query.relationship)
+        console.log(req.query.text)
+
+
+        let friends = await db.User.prototype.showFriends(req.query.offset, user, req.query.relationship,req.query.text)
 
         if (req.query.offset == "length") {
             res.json({length: friends})
@@ -149,20 +101,20 @@ module.exports = {
         }
     },
     onlyFriends: async function (req, res) {
-        let {id, offset} = req.query
-        let result = null
-        let user = req.headers.idPerson
+        let {id, offset} = req.query;
+        let result = null;
+        let user = req.headers.idPerson;
 
         if (id == "all") {
             result = await db.post.prototype.allDataPosts(user, req.query.offset, 1);
 
         } else {
-            result = await db.post.prototype.onePersonPosts(id, 0, offset, req.headers.idPerson)
+            result = await db.post.prototype.onePersonPosts(id, 0, offset, req.headers.idPerson);
         }
-
 
         res.json({result: result});
     },
+
     addPost: async function (req, res, next) {
         try {
             const decode = jwt.verify(req.body.id, secret)
@@ -176,7 +128,7 @@ module.exports = {
                 idUser: decode.userid,
                 private: req.body.private
             });
-            res.send(200);
+            res.status(200).send("Ok");
         } catch (e) {
             next(e)
         }
@@ -243,49 +195,42 @@ module.exports = {
         }
     },
 
-    follows: async function (req, res) {
-        let user = req.headers.idPerson
-        await db.follow.prototype.subscribe(user, req.body.follows)
-        res.send(200)
+    follows: async function (req, res,next) {
+        try {
+            let user = req.headers.idPerson;
+            await db.follow.prototype.subscribe(user, req.body.follows);
+            res.status(200).send("Ok")
+        } catch (e) {
+            next(e);
+        }
 
 
     },
-    removeFace: async function (req, res) {
+    removeFace: async function (req, res,next) {
+        try {
+            let user = req.headers.idPerson;
+            await db.User.prototype.newFace(user,req.files[0].filename)
 
-        let decode_follow = jwt.verify(req.body.id, secret);
-        await db.User.update({face: "public/images/PostAll" + req.files[0].filename}, {
-            where: {
-                id: decode_follow.userid,
-            }
-        });
+            res.send("assets/images/persons/" + req.files[0].filename);
 
-        res.send("assets/images/persons/" + req.files[0].filename);
+        } catch (e) {
+            next(e)
+        }
 
 
     },
     removePassword: async function (req, res, next) {
-        let decode_follow = jwt.verify(req.body.id, secret)
-        let data = await db.User.findAll({
-            where: {
-                id: decode_follow.userid
-            }
-        });
-        for (let i = 0; i < data.length; i++) {
-            let hash_password = require("crypto").createHash("sha256").update(req.body.password + data[i].dataValues.salt).digest("base64");
-            if (hash_password == data[i].dataValues.password) {
-                let salt = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-                let hash = require("crypto").createHash("sha256").update(req.body.newPassword + salt).digest("base64");
-                db.User.update({
-                    password: hash,
-                    salt: salt
-                }, {
-                    where: {
-                        id: decode_follow.userid,
-                    }
-                });
+        try {
+            let {newPassword, oldPassword} = req.body;
+            let test = await db.User.prototype.removePassword(oldPassword, newPassword, req.headers.idPerson);
+            if (test) {
+                res.status(200).send(true);
+
             } else {
-                next('Вели неправильный пароль!')
+                res.status(401).send("Ввели неправильнный пароль!");
             }
+        } catch(e) {
+            next(e)
         }
     },
     forgetPass: async function (req, res, next) {
@@ -335,61 +280,7 @@ module.exports = {
                 next("Неправильный Код")
             }
             res.sendStatus(200);
-        } catch (e) {
-            next(e)
-        }
-    },
-    getFriends: async function (req, res, next) {
-        try {
-            let user = req.headers.idPerson;
-            let friends = await db.User.findAll({
-                attributes: ["login", "face", "id"],
 
-                include: [{
-                    model: db.follow,
-                    attributes: [],
-                    where: {
-                        [Op.and]: [
-                            {idFollows: user},
-                            {relationship: 2}
-
-                        ]
-                    },
-                }]
-            })
-            let followed = await db.User.findAll({
-                attributes: ["login", "face", "id"],
-
-                include: [{
-                    model: db.follow,
-                    attributes: [],
-                    where: {
-                        [Op.and]: [
-                            {idFollows: user},
-                            {relationship: 1}
-
-                        ]
-                    },
-                }]
-            })
-
-            let subscriber = await db.User.findAll({
-                attributes: ["login", "face", "id"],
-                include: [{
-                    model: db.follow,
-                    as: 'iSigned',
-                    attributes: [],
-                    where: {
-                        [Op.and]: [
-                            {idPerson: user},
-                            {relationship: 1}
-                        ]
-                    }
-                }]
-            })
-
-
-            res.json({followed: followed, subscriber: subscriber, friends: friends});
         } catch (e) {
             next(e)
         }
@@ -403,43 +294,20 @@ module.exports = {
                 fs.unlinkSync(__dirname + "/.." + post.image);
                 res.sendStatus(200)
             }
+
         } catch (e) {
             next(e)
         }
     },
     deleteFollow: async function (req, res, next) {
         try {
-            var Op = db.Sequelize.Op
             var user = req.headers.idPerson;
+            await db.follow.prototype.deleteFollow(user, req.params.id);
 
-            db.follow.findOne({
-                where: {
-                    [Op.and]: [
-                        {idFollows: user},
-                        {idPerson: req.params.id}
-                    ]
-                }
-            }).then(followers => {
-                if (followers.relationship == 2) {
-                    db.follow.findOne({
-                        where: {
-                            [Op.and]: [
-                                {idFollows: req.params.id},
-                                {idPerson: user}
-                            ]
-                        }
-                    }).then(friend => {
-                        return friend.decrement('relationship', {by: 1});
-                    })
-                    return followers.destroy()
-                } else {
-                    return followers.destroy()
-                }
-            })
-            res.send(200)
+            res.status(200).send("Ok");
 
         } catch (e) {
-            next(e)
+            next(e);
         }
     }
 

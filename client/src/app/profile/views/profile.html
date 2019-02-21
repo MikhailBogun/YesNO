@@ -68,18 +68,18 @@
     </div>
 
 
-<div class="center-block" ng-if="profile.checkMenu==0">
+<div class="center-block dialog-demo-content" ng-if="profile.checkMenu==0">
 
   <form ng-submit="profile.submit()">
     <div class="form-group">
       <label for="">Текущий пароль</label>
-      <input type="text" class="form-control" ng-model="profile.info.password">
+      <input type="text" class="form-control" ng-model="profile.info.oldPassword">
     </div>
     <div class="form-group">
       <label for="">Новый пароль</label>
       <input type="text" class="form-control" ng-model="profile.info.newPassword">
     </div>
-    <button>Отправить</button>
+    <md-button type="submit">Отправить</md-button>
   </form>
   <br>
   <br>
@@ -89,7 +89,7 @@
       <input type="file" name="" id="" file-model="profile.face.image">
       <p></p>
     </div>
-    <button>Отправить</button>
+    <md-button type="submit">Отправить</md-button>
 
   </form>
 </div>

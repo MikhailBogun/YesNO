@@ -1,8 +1,10 @@
 export class ProfileController {
-  constructor($http,mainService,friendsService){
+  constructor($http,mainService,friendsService, $mdDialog, $document){
     'ngInject'
     var vm =this;
     vm.http = $http;
+    vm.document = $document;
+    vm.dialog = $mdDialog;
     vm.hello ="hello World!";
     vm.info={};
     this.face={};
@@ -68,16 +70,39 @@ export class ProfileController {
   submit(){
 
 
-
     this.info.id = localStorage.getItem("id");
-    this.http.post('api/removePassword', this.info)
-      .then(function(res){
-        this.res = res;
+    this.http.put('api/removePassword', this.info,{
+      headers: {
+          token: localStorage.getItem("id")
+        }
+    })
+      .then(res => {
         this.info={};
+
       })
-      .catch(function(error){
-        this.error =error;
+      .catch(error  => {
+
+        if(error.status===401) {
+
+          this.dialog.show(
+            this.dialog.alert()
+              .clickOutsideToClose(true)
+              .title('Ошибка')
+              .textContent(error.data)
+              .ariaLabel('Left to right demo')
+              .ok('Понял!')
+              // You can specify either sting with query selector
+              .openFrom('#left')
+              // or an element
+              .closeTo(angular.element(this.document[0].querySelector('#right')))
+          );
+          this.info = {};
+
+        }
+
+
       });
+
 
   }
 
@@ -86,20 +111,10 @@ export class ProfileController {
     formData.append("id",localStorage.getItem("id"));
     for (var data in this.face){
       formData.append(data, this.face[data]);
-      this.http.post('api/removeFace', formData,{
-        transformRequest: angular.identity,
-        headers: {
-          token: localStorage.getItem("id"),
-          'Content-Type':undefined
-        }
+      this.mainService.UsersAction.newFace(formData).then(res=>{
+        this.res = res;
+        this.dataUsers={};
       })
-        .then(function(res){
-          this.res = res;
-          this.dataUsers={};
-        })
-        .catch(function(error){
-          this.error =error;
-        });
     }
   }
   DeletePost(post){

@@ -2,24 +2,22 @@ export class FriendController {
   constructor ($timeout, friendsService,mainService, webDevTec, $http, $scope,toastr) {
     'ngInject'
     var vm = this;
-    vm.checkMySub = false
-    friendsService.returnFriend().then(info=>{
-      vm.friends = info.friends;
-      vm.subscriber = info.subscriber;
-      vm.followed = info.followed
-    })
-    vm.toastr = toastr
+    vm.checkMySub = false;
+
+    vm.searchText='';
+
+    vm.toastr = toastr;
     vm.friendsService= friendsService;
-    vm.tableKey=[1,0,0]
+    vm.tableKey=[1,0,0];
     vm.http = $http;
     vm.scope = $scope;
     vm.promise = $scope.pr;
     vm.TablePerson = [];
     vm.UserAction = mainService.UsersAction;
     vm.MyData = mainService.Mydata;
-    vm.scope.items=[]
+    vm.scope.items=[];
     vm.counter =3;
-    vm.checkMobilePost=false
+    vm.checkMobilePost=false;
 
 
 
@@ -58,10 +56,11 @@ export class FriendController {
 
 
       var pageOffset = pageNumber * this.PAGE_SIZE;
+      console.log(this.searchText)
       this.onlyFriends(pageOffset,this.searchText,this.relationship)
         .then(response=>{
           this.loadedPages[pageNumber] =response.friends
-        })
+        });
 
     };
 
@@ -181,14 +180,21 @@ export class FriendController {
       }
       vm.tableKey[key]=1
     }
+    vm.searchT = function (){
+
+      vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends,vm.searchText,3)
+
+    }
 
     vm.showUsers = function(key){
+      vm.key = key;
       if(key==0){
         vm.checkMySub = true
       } else {
         vm.checkMySub = false
       }
       vm.onlyFriendsData = new vm.DynamicItemsFriends(friendsService.dataFollow.getmyFriends,null,key)
+      console.log(vm.onlyFriendsData)
     }
 
     vm.addRow = function(){

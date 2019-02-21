@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 
   }
 
-  User.prototype.showFriends = async(offset,user,relationship) => {
+  User.prototype.showFriends = async(offset,user,relationship,searchText=null) => {
       let options ={}
        options.include = [{
               model: sequelize.models.follow,
@@ -45,10 +45,30 @@ module.exports = (sequelize, DataTypes) => {
                   ]
               }
           }]
+      } else if(relationship==3){
+          options={}
+          options.attributes = ["login", "face", "id"];
+          if(searchText && offset=="length"){
+              return await sequelize.query(`
+                    SELECT  COUNT("id") FROM "Users" AS "User" WHERE "User"."login" ILIKE :search_login;
+              `,
+                  { replacements: {   search_login: '%'+searchText+"%"},
+                      type: sequelize.QueryTypes.SELECT })
+              // await sequelize.query(`
+              //       SELECT "login", "face", "id" FROM "Users" AS "User" LIMIT 5 OFFSET '0';
+              // `)
+          } else if (searchText) {
+              return await sequelize.query(`
+                    SELECT "id","login","face" FROM "Users" AS "User" WHERE "User"."login" ILIKE :search_login LIMIT 5 OFFSET :offset;
+              `,
+                  { replacements: {   search_login: '%'+searchText+"%", offset:offset},
+                      type: sequelize.QueryTypes.SELECT })
+          }
       }
 
         if(offset=="length"){
             options.attributes = []
+            console.log(await User.count(options))
             return await User.count(options)
 
         } else {
@@ -101,6 +121,39 @@ module.exports = (sequelize, DataTypes) => {
     }
   User.prototype.createNewUser = async(data)=>{
       return await User.create(data)
+  }
+
+  User.prototype.newFace = async(id,filename) => {
+     return await User.update({face:"public/images/persons/"+filename},
+          {
+              where: {
+                  id:id
+              }
+          })
+  }
+
+  User.prototype.removePassword = async (oldPass,newPass,id) => {
+      let checkPass = await User.findById(id,{
+          attributes:["salt","password"]
+      });
+
+      let password = bcrypt.hashSync(oldPass,checkPass.salt);
+
+      if(password===checkPass.password) {
+
+          let newSalt = bcrypt.genSaltSync(10);
+          let hashPass = bcrypt.hashSync(newPass, newSalt)
+          return await User.update({
+                  password: hashPass,
+                  salt: newSalt
+              },
+              {
+                  where: {id: id}
+              })
+      } else {
+          return await null;
+      }
+
   }
   // User.prototype.showFriends= async(query)=>{
   //     const options = {

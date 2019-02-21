@@ -11,7 +11,7 @@ export class AuthorizationController {
     this.service = mainService.UsersAction
     this.http = $http;
     this.location = $location;
-    this.dialog = $mdDialog
+    this.dialog = $mdDialog;
     this.show = 1
     this.showNewPass=0
     this.emailGetCode = {};

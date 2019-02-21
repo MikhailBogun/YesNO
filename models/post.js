@@ -173,8 +173,14 @@ module.exports = (sequelize, DataTypes) => {
             return await percent
         }
     }
-    post.prototype.getLenRows = async(visibility,searchText="",id) => {
-        if(id)
+    post.prototype.getLenRows = async(visibility,searchText="",id=null) => {
+         if(id){
+             return await post.count({
+                 where: {
+                     [Op.and]: [{private: visibility}, {idUser: id}]
+                 },
+             })
+         }
 
         return await sequelize.query(`SELECT COUNT("post"."id")
                                          FROM "posts" AS "post"
@@ -192,5 +198,8 @@ module.exports = (sequelize, DataTypes) => {
                 }})
         return dataPost
     }
+
+
+
     return post;
 };

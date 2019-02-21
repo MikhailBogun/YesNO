@@ -107,12 +107,26 @@ export function MainService($http){
 
     },
     UsersAction: {
+
       rewritePass: function(newPass){
         return $http.post('forget/newPass',newPass)
           .then(res =>{
             return res.data;
           })
       },
+
+      newFace: function(formData){
+        return $http.put('api/removeFace',formData,{
+          transformRequest: angular.identity,
+          headers: {
+            token: localStorage.getItem("id"),
+            'Content-Type':undefined
+          }
+        }).then(res=>{
+          return res.data;
+        })
+      },
+
       Follow: function (idUser){
         return $http.post('api/follow',{
           follows:idUser,

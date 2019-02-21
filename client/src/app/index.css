@@ -66,8 +66,9 @@
 
 .virtualRepeatdemoDeferredLoading #vertical-friend-container
 {
-  height:80vh;
+  height:70vh;
   width: 100%;
+  max-height: 800px;
 
 
 }
@@ -146,8 +147,8 @@
 .virtualRepeatdemoDeferredLoading .repeatedFriend-item {
   border-bottom: 0px solid #ddd;
   box-sizing: border-box;
-  height: 4%;
-  padding-top: 5px; }
+  height: 80px;
+  padding-top: 8px; }
 
 .virtualRepeatdemoDeferredLoading md-content {
   margin: 0px; }
@@ -176,6 +177,12 @@
   text-align: center;
   color: #00b3ee;
   font-family: 'Lobster', cursive;
+}
+
+.friends-login {
+  outline: none;
+  font-family: 'Times New Roman', cursive;
+  font-size:100%;
 }
 
 .buttondemoBasicUsage section {

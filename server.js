@@ -90,7 +90,8 @@ app.get("/api/onlyFriends", controller.onlyFriends);
 
 // app.get('/api/myPosts', controller.myPosts);
 
-app.get('/api/friends', controller.getFriends);
+//app.get('/api/friends', controller.getFriends);
+
 
 app.post("/registration/", controller.register_user);
 app.post('/api/addPost',upload.array('image'), controller.addPost);
@@ -101,9 +102,9 @@ app.post("/forget/", controller.forgetPass);
 app.post("/forget/newPass", controller.newPassword);
 
 app.post('/api/follow', controller.follows);
-app.get('/api/friends', controller.getFriends);
-app.post('/api/removeFace',upload_face.array('image'), controller.removeFace);
-app.post('/api/removePassword', controller.removePassword);
+// app.get('/api/friends', controller.getFriends);
+app.put('/api/removeFace',upload_face.array('image'), controller.removeFace);
+app.put('/api/removePassword', controller.removePassword);
 app.post('/api/getReaction', controller.getReaction);
 
 
@@ -130,14 +131,8 @@ app.delete('/api/deletePost:id',controller.deletePost);
 });
  var userSocket ={}
  var soc = io.sockets.on('connection', function(socket){
-     // let idsocket = Date.now()
-     // st.push(idsocket)
-     // console.log({st:st})
-     // socket.on('auth', async (info){
-     //     console.logingo()
-     // })
+
      socket.on("addPost",async (info) => {
-         // socket.join("some room")
 
          let id = jwt.verify(info.token, config.secret).userid;
          let date = await db.User.prototype.checkUser(id)
@@ -149,16 +144,13 @@ app.delete('/api/deletePost:id',controller.deletePost);
      })
      socket.on('addPrivatePost', async(res) => {
          let id = jwt.verify(res.token, config.secret).userid;
-         console.log("zdeeeesssss")
-         console.log(id)
+
          var friends = await db.follow.prototype.getFriend(id)
          for(let i =0; i<friends.length; i++) {
 
-             console.log(userSocket[friends[i].dataValues.idFollows])
              if(userSocket[friends[i].dataValues.idFollows]) {
-                 console.log("Pobeda")
-                 console.log(userSocket[friends[i].dataValues.idFollows])
-                 soc.to(userSocket[friends[i].dataValues.idFollows]).emit("send", {hello:"pidr"})
+
+                 soc.to(userSocket[friends[i].dataValues.idFollows]).emit("send", {hello:"user"})
              }
          }
      })
@@ -168,9 +160,9 @@ app.delete('/api/deletePost:id',controller.deletePost);
          let id = jwt.verify(info.token, config.secret).userid;
          let date = await db.User.prototype.checkUser(id)
          if(date && !userSocket[id]){
-             console.log("Взял")
+
              userSocket[id] = socket.id
-             console.log(userSocket)
+
              socket.emit("socket",{socket:socket.id})
          }
      });
@@ -180,7 +172,6 @@ app.delete('/api/deletePost:id',controller.deletePost);
 
          if(date) {
              delete userSocket[id]
-             console.log(userSocket)
          }
      })
 
