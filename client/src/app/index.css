@@ -178,6 +178,13 @@
   color: #00b3ee;
   font-family: 'Lobster', cursive;
 }
+.postText {
+  text-align: center;
+  font-size:110%;
+  min-font-size: 1em;
+  max-font-size: 10em;
+  font-family: 'Lobster', cursive;
+}
 
 .friends-login {
   outline: none;

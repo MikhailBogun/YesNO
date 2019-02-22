@@ -7,7 +7,7 @@ const multer  = require('multer')
 let server = require("http").createServer(app);
 let bodyparser = require("body-parser");
 const io = require('socket.io')(server)
-console.log(__dirname)
+
 
 let storage = multer.diskStorage( {
   destination: function (req, file, cb) {
@@ -40,19 +40,18 @@ let checkToken = function(req, res, next) {
     } else {
 
            let id = jwt.verify(req.headers.token, config.secret).userid;
-
             db.User.findById(id)
                 .then(user => {
                   if(typeof user.id !== 'undefined'){
                     req.headers.idPerson = user.id;
                       next()
                   } else{
-                    res.sendStatus(404)
+                    res.sendStatus(404);
                   }
                 });
     }
     } catch{
-    res.sendStatus(403)
+    res.sendStatus(403);
     }
 }
 
@@ -64,33 +63,20 @@ app.use(bodyparser.urlencoded({ extended:true }));
 app.use("/", express.static(__dirname + "/"));
 app.use('/',express.static(__dirname+'/public/images'))
 app.use('/api', checkToken)
-app.use('/authorization/',function(err, req, res, next) {
 
-    if(err.stack=='Пользователя несуществует!') {
-        res.status(404).send('Пользователя не существуют!');
-
-    } else if(err.stack=="Вели неправильный пароль!") {
-        res.status(401).send('Вели неправильный пароль!');
-
-    } else {
-        res.status(500).send('Ошибка сервера!');
-
-    }
-})
 
 
 app.get("/api/PostAll",controller.PostAll);
-// app.get("/api/PrivateData", controller.PrivateData);
 app.get("/api/OnePersonPosts", controller.onePersonPosts);
 app.get("/api/getLengthRows", controller.getLengthRows);
 app.get('/api/lengthRowsMyPosts', controller.lengthRowsMyPosts);
 app.get("/api/showFriends", controller.showFriends);
 app.get("/api/onlyFriends", controller.onlyFriends);
 
+app.use('/',function(err, req, res, next) {
+    res.status(500).send('Ошибка сервера!');
 
-// app.get('/api/myPosts', controller.myPosts);
-
-//app.get('/api/friends', controller.getFriends);
+});
 
 
 app.post("/registration/", controller.register_user);
@@ -100,17 +86,15 @@ app.post('/api/addPost',upload.array('image'), controller.addPost);
 app.post('/authorization/', controller.Authorization);
 app.post("/forget/", controller.forgetPass);
 app.post("/forget/newPass", controller.newPassword);
-
 app.post('/api/follow', controller.follows);
-// app.get('/api/friends', controller.getFriends);
-app.put('/api/removeFace',upload_face.array('image'), controller.removeFace);
-app.put('/api/removePassword', controller.removePassword);
 app.post('/api/getReaction', controller.getReaction);
 
+app.put('/api/removeFace',upload_face.array('image'), controller.removeFace);
+app.put('/api/removePassword', controller.removePassword);
 
 app.delete('/api/follow/delete:id',controller.deleteFollow);
-
 app.delete('/api/deletePost:id',controller.deletePost);
+
 
  app.use('/',function(err, req, res, next) {
     if(err=='Пользователя несуществует!') {
@@ -119,9 +103,9 @@ app.delete('/api/deletePost:id',controller.deletePost);
         res.status(401).send('Вели неправильный пароль!');
 
     } else if(err==1){
-        res.status(401).send("Пользователь с таким email уже зарегистрирован!")
+        res.status(401).send("Пользователь с таким email уже зарегистрирован!");
     } else if(err=="Неправильный Код"){
-        res.status(401).send("Неверный код")
+        res.status(401).send("Неверный код");
 
     } else {
         res.status(500).send('Ошибка сервера!');
@@ -129,36 +113,37 @@ app.delete('/api/deletePost:id',controller.deletePost);
 
 
 });
- var userSocket ={}
- var soc = io.sockets.on('connection', function(socket){
+
+ let userSocket ={}
+ let soc = io.sockets.on('connection', function(socket){
 
      socket.on("addPost",async (info) => {
 
          let id = jwt.verify(info.token, config.secret).userid;
-         let date = await db.User.prototype.checkUser(id)
+         let date = await db.User.prototype.checkUser(id);
          if(date) {
-             socket.broadcast.emit("check", {'login': date.login})
+             socket.broadcast.emit("check", {'login': date.login});
          } else{
-             socket.emit("err", {"err":"token invalid"})
+             socket.emit("err", {"err":"token invalid"});
          }
      })
      socket.on('addPrivatePost', async(res) => {
          let id = jwt.verify(res.token, config.secret).userid;
 
-         var friends = await db.follow.prototype.getFriend(id)
+         var friends = await db.follow.prototype.getFriend(id);
          for(let i =0; i<friends.length; i++) {
 
              if(userSocket[friends[i].dataValues.idFollows]) {
 
-                 soc.to(userSocket[friends[i].dataValues.idFollows]).emit("send", {hello:"user"})
+                 soc.to(userSocket[friends[i].dataValues.idFollows]).emit("send", {hello:"user"});
              }
          }
      })
      socket.emit('privateDate',{"test":"allo"})
      socket.on("auth", async(info) => {
-         console.log("auth++++++++++++++++++")
+
          let id = jwt.verify(info.token, config.secret).userid;
-         let date = await db.User.prototype.checkUser(id)
+         let date = await db.User.prototype.checkUser(id);
          if(date && !userSocket[id]){
 
              userSocket[id] = socket.id

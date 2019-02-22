@@ -151,6 +151,7 @@ export class FriendController {
       vm.UserAction.DeleteFollow(followers.id).then(res=>{
         vm.res = res;
       })
+
       for(let key in followers){
         delete followers[key]
       }
@@ -190,6 +191,8 @@ export class FriendController {
       vm.key = key;
       if(key==0){
         vm.checkMySub = true
+      }else if(key==3){
+        vm.checkMySub = null
       } else {
         vm.checkMySub = false
       }

@@ -1,6 +1,7 @@
 <div layout="row" layout-align="center center" layout-wrap>
   <form flex = "60" flex-gt-sm="20" class="dialog-demo-content" ng-submit="authorization.submit()"
         ng-if="authorization.show==1">
+    <p class="login-text " style=" font-size: 200%"> YesNo</p>
     <div class="form-group">
       <label for="" class="login-text "><h4>Email</h4></label>
       <input type="text" class="form-control" ng-model="authorization.Users.email">
@@ -21,7 +22,7 @@
     <form  ng-submit="authorization.getCode(authorization.emailGetCode)" >
       <div class="form-group">
         <label for="" class="login-text "><h4>Email</h4></label>
-        <input input class="form-control" required type="email" ng-model="authorization.emailGetCode.email "  minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
+        <input input class="form-control" required type="email" ng-model="authorization.emailGetCode.email "  minlength="4" maxlength="12" ng-pattern="/^.+@.com+\..+$/">
         <br>
         <md-button type ="submit" class="md-primary" ng-hide="authorization.showNewPass==2" >Получить код</md-button>
       </div>

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="center-block" style=" width:80%;">
   <div layout="column" >
   <div flex-gt-sm="100" flex="100" >
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
@@ -33,10 +33,10 @@
 
       <div class="virtualRepeatdemoDeferredLoading ng-cloak" >
         <md-content layout="column">
-          <md-virtual-repeat-container id="vertical-container" ng-cloak>
+          <md-virtual-repeat-container id="verticall-container" ng-cloak>
             <div md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
-                 class="repeated-item fig">
-              <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
+                 class="repeate-item">
+              <h2>{{posts.message+"  "+posts.name}}</h2><br>
               <div> <p class='fig'><img ng-src="{{posts.image}}" width="70%" height="400vh"  alt='Фотография'></p>
                 <div ng-if="!posts.reactions[0]" ng-cloak><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)" >Yes</button>

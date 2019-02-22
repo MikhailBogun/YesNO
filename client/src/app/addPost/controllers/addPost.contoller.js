@@ -44,9 +44,6 @@ export class addPostController {
     this.addPost.addPublicPost(formData).then(res=>{
       vm.res = res;
       vm.dataUsers = {}
-
-      // vm.socket.emit("addPrivatePost",{token:localStorage.getItem('id')});
-      // socket.emit('addPost', { token: localStorage.getItem("id") });
       vm.document[0].getElementById("fileup").value = null
     })
   }

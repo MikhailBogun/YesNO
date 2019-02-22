@@ -1,13 +1,29 @@
 
 
 
-<div class="container">
+<div class="center-block" style=" width:80%;">
   <div>
-  <div>
-    <acme-navbar creation-date="main.creationDate"></acme-navbar>
-  </div>
+  <div layout="row" layout-align-xs="space-between start">
+    <acme-navbar creation-date="main.creationDate" flex></acme-navbar>
+
+      <md-menu hide-gt-xs	show-xs flex>
+        <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
+          <md-icon >note</md-icon>
+        </md-button>
+        <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+          <md-menu-item >
+            <md-button ng-click="profile.PageContect(1)">My public posts</md-button></md-menu-item>
+          <md-menu-item ng-click="profile.PageContect(2)"><md-button >My private posts</md-button></md-menu-item>
+          <md-menu-item ng-click="profile.PageContect(0)"><md-button >Change Info for me</md-button></md-menu-item>
+
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+
+
 
 </div>
+  <div hide-xs flex>
   <md-content class="md-padding" >
     <md-nav-bar
       md-no-ink-bar="disableInkBar"
@@ -23,43 +39,46 @@
         Change Info for me
       </md-nav-item>
     </md-nav-bar>
+</div>
 
 
 
-    <div class="virtualRepeatdemoDeferredLoading ng-cloak" ng-if = "profile.checkMenu==1" >
+    <div class="virtualRepeatdemoDeferredLoading container" ng-if = "profile.checkMenu==1" >
       <md-content layout="column">
-        <md-virtual-repeat-container id="vertical-container" ng-cloak>
-          <div md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
-               class="repeated-item fig" >
+        <md-virtual-repeat-container id="verticall-container" >
+          <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
+               class="repeate-item" >
 
-            <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
-            <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500"  alt='Фотография'></p>
-              <div class="progressB" ><br><prbar></prbar></div>
+            <b class='postText'>{{posts.message+posts.name+posts.reactions[0].reaction}}</b><br>
+            <div flex="70"> <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
+
               <br>
-
-              <button type="button" class=" check-element animate-show-hide btn btn-danger" ng-click="profile.DeletePost(posts)" >Удалить</button>
-
             </div>
+            <div flex="10" class="progressB" ><br><prbar></prbar>
+              <md-button ng-click="profile.DeletePost(posts)" >Удалить</md-button></div>
+
+
 
           </div>
         </md-virtual-repeat-container>
       </md-content>
     </div>
 
-    <div class="virtualRepeatdemoDeferredLoading ng-cloak" ng-if = "profile.checkMenu==2" >
+    <div class="virtualRepeatdemoDeferredLoading container" ng-if = "profile.checkMenu==2" >
       <md-content layout="column">
-        <md-virtual-repeat-container id="vertical-container" ng-cloak>
-          <div md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
-               class="repeated-item fig" >
+        <md-virtual-repeat-container id="verticall-container" >
+          <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
+               class="repeate-item " >
 
-            <h2>{{posts.message+posts.name+posts.reactions[0].reaction}}</h2><br>
-            <div> <p class='fig'><img ng-src="{{posts.image}}" width="65%" height="500"  alt='Фотография'></p>
-              <div class="progressB" ><br><prbar></prbar></div>
+            <b class='postText'>{{posts.message+posts.name+posts.reactions[0].reaction}}</b><br>
+            <div flex ="70"> <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
+
               <br>
 
-              <button type="button" class=" check-element animate-show-hide btn btn-danger"
-                      ng-click="profile.DeletePost(posts)" >Удалить</button>
-
+            </div>
+            <div flex="10" class="progressB" ><br><prbar></prbar>
+              <md-button
+                         ng-click="profile.DeletePost(posts)" >Удалить</md-button>
             </div>
 
           </div>

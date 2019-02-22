@@ -1,101 +1,86 @@
-
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<!--<md-input-container >-->
 
-  <!--<md-select ng-model="friendss" placeholder="Выберите тип оношения">-->
-    <!--<md-option value="friend" ng-click="friend.showUsers(2)">Друзья</md-option>-->
-    <!--<md-option value="follows" ng-click="friend.showUsers(1)">Я подписан</md-option>-->
-    <!--<md-option value="subscriber" ng-click="friend.showUsers(0)">На меня подисаны</md-option>-->
-  <!--</md-select>-->
-<!--</md-input-container>-->
-
-<!--<div class="virtualRepeatdemoDeferredLoading">-->
-  <!--<md-content layout="column">-->
-    <!--<md-virtual-repeat-container id="vertical-friend-container">-->
-      <!--<a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>-->
-      <!--<div md-virtual-repeat="friends in friend.onlyFriendsData" md-on-demand-->
-           <!--class="repeatedFriend-item">-->
-        <!--<p ng-click="friend.showPost(friends.id)" style="outline: none;"><img ng-src="{{friends.face}}" width="35" height="35" alt='Фотография'>  {{friends.login}}</p>-->
-
-      <!--</div>-->
-    <!--</md-virtual-repeat-container>-->
-  <!--</md-content>-->
-<!--</div>-->
 <div class="center-block" style=" width:80%;">
 
-
-  <div layout-xs ="row" layout-align-xs="space-between center">
+  <div layout-xs="row" layout-align-xs="space-between center">
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
-    <div  layout-xs ="column" layout-align-xs="center end">
-        <md-button lex-xs="100" aria-label="Open menu with custom trigger" class="md-icon-button" ng-click="friend.showUser()">
-          <md-icon >perm_identity</md-icon>
-        </md-button>
+    <div layout-xs="column" layout-align-xs="start end">
+      <md-button lex-xs="100" aria-label="Open menu with custom trigger" class="md-icon-button"
+                 ng-click="friend.showUser()">
+        <md-icon>perm_identity</md-icon>
+      </md-button>
 
     </div>
 
   </div>
 
-
   <div layout="row" layout-xs="column">
     <div flex-gt-sm="20" flex="30" flex-xs="0" layout-align="start center" ng-hide="!friend.checkMobilePost"></div>
     <div flex-gt-sm="20" flex="30" flex-xs="0" layout-align="start center" ng-hide="friend.checkMobilePost">
-  <md-input-container >
-
-    <md-select ng-model="friendss" placeholder="Выберите тип оношения">
-      <md-option value="friend" ng-click="friend.showUsers(3)">Все пользователи</md-option>
-      <md-option value="friend" ng-click="friend.showUsers(2)">Друзья</md-option>
-      <md-option value="follows" ng-click="friend.showUsers(1)">Я подписан</md-option>
-      <md-option value="subscriber" ng-click="friend.showUsers(0)">На меня подисаны</md-option>
-    </md-select>
-
-  <!--<md-select ng-model="friendss" placeholder="Выберите тип оношения">-->
-    <!--<md-option value="friend" ng-click="friend.show(0)">Друзья</md-option>-->
-    <!--<md-option value="follows" ng-click="friend.show(1)">Я подписан</md-option>-->
-    <!--<md-option value="subscriber" ng-click="friend.show(2)">На меня подисаны</md-option>-->
-  <!--</md-select>-->
-  </md-input-container>
-      <div  ng-if="friend.key==3">
       <md-input-container>
-        <label>Введите имя пользователя</label>
-        <input ng-model="friend.searchText">
+
+        <md-select ng-model="friendss" placeholder="Выберите тип оношения">
+          <md-option value="friend" ng-click="friend.showUsers(3)">Все пользователи</md-option>
+          <md-option value="friendd" ng-click="friend.showUsers(2)">Друзья</md-option>
+          <md-option value="follows" ng-click="friend.showUsers(1)">Я подписан</md-option>
+          <md-option value="subscriber" ng-click="friend.showUsers(0)">На меня подисаны</md-option>
+        </md-select>
+
       </md-input-container>
-        <md-button class=" md-icon-button md-primary" data-dismiss="modal" type="submit" id="submit" value="Submit" ng-click="friend.searchT()"><md-icon>search</md-icon></md-button>
+      <div ng-if="friend.key==3">
+        <md-input-container>
+          <label>Введите имя пользователя</label>
+          <input ng-model="friend.searchText">
+        </md-input-container>
+        <md-button class=" md-icon-button md-primary" data-dismiss="modal" type="submit" id="submit" value="Submit"
+                   ng-click="friend.searchT()">
+          <md-icon>search</md-icon>
+        </md-button>
 
       </div>
-        <div class="virtualRepeatdemoDeferredLoading"  >
-          <md-content>
-            <md-virtual-repeat-container id="vertical-friend-container"  >
-              <!--<a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>-->
-              <div layout-align="space-around start" md-virtual-repeat="friends in friend.onlyFriendsData" md-on-demand
-                   class="repeatedFriend-item">
+      <div class="virtualRepeatdemoDeferredLoading">
+        <md-content>
+          <md-virtual-repeat-container id="vertical-friend-container">
 
-                <div  layout="row"  layout-align = "center start" ng-if="friends.id">
+            <div layout-align="space-around start" md-virtual-repeat="friends in friend.onlyFriendsData" md-on-demand
+                 class="repeatedFriend-item">
 
-                <p flex="20"  ng-click="friend.showPost(friends.id)" class="friends-login">
-                  <img ng-src="{{friends.face}}" style =" width:30px; height:30px; "  alt='Фотография' >  {{friends.login}}</p>
-                  <md-button flex="80"  class="md-primary " type="button" ng-click="friend.follow(friends)" ng-if="friend.checkMySub==true">Подписаться</md-button>
-                  <md-button flex="80"  class="md-primary " type="button" ng-if="friend.checkMySub==false" ng-click="friend.deleteFollows1(friends)" >Отписаться</md-button>
+              <div layout="row" layout-align="center start" ng-if="friends.id">
+
+                <p flex="20" ng-click="friend.showPost(friends.id)" class="friends-login">
+                  <img ng-src="{{friends.face}}" style=" width:30px; height:30px; " alt='Фотография'> {{friends.login}}
+                </p>
+                <md-button flex="80" class="md-primary " type="button" ng-click="friend.follow(friends)"
+                           ng-if="friend.checkMySub==true || !friends.follow && friend.key == 3">Подписаться
+                </md-button>
+                <md-button flex="80" class="md-primary " type="button" ng-if="friend.checkMySub==false || friends.follow && friend.key == 3"
+                           ng-click="friend.deleteFollows1(friends)">Отписаться
+                </md-button>
               </div>
-              </div>
-            </md-virtual-repeat-container>
-          </md-content>
-        </div>
+            </div>
+          </md-virtual-repeat-container>
+        </md-content>
+      </div>
 
     </div>
 
     <div flex-gt-sm="80" flex="70" flex-xs="100" hide-xs show-gt-xs>
-      <h3 ng-if="!friend.testOneDataPerson.numItems" style="text-align: center;">       Выберите пользователя для отображения постов</h3>
+      <h3 ng-if="!friend.testOneDataPerson.numItems" style="text-align: center;"> Выберите пользователя для отображения
+        постов</h3>
       <div class="virtualRepeatdemoDeferredLoading ">
         <md-content layout="column">
-          <md-virtual-repeat-container id="vertical-container">
+          <md-virtual-repeat-container id="verticall-container">
             <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
-                 class="repeated-item fig">
-              <h2 flex="noshrink">{{posts.message}}  {{posts.name}}</h2><br>
-              <div> <p ><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
+                 class="repeate-item ">
+              <h2 flex="noshrink">{{posts.message}} {{posts.name}}</h2><br>
+              <div><p><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
                 <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
-                  <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)"  >Yes</button>
-                  <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)" >No</button></div>
-                <div class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
+                  <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)">Yes</button>
+                  <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)">No</button>
+                </div>
+                <div class="progressB" ng-if="posts.reactions[0]"><br>
+                  <prbar></prbar>
+                </div>
 
               </div>
 
@@ -110,15 +95,18 @@
           style="text-align: center;">Выберите пользователя для отображения постов</h3>
       <div class="virtualRepeatdemoDeferredLoading">
         <md-content layout="column">
-          <md-virtual-repeat-container id="vertical-container" >
-            <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
-                 class="repeated-item fig">
-              <h2 flex="noshrink">{{posts.message}}  {{posts.name}}</h2><br>
-              <div> <p ><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
-                <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
-                  <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)"  >Yes</button>
-                  <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)" >No</button></div>
-                <div class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
+          <md-virtual-repeat-container  id="verticall-container">
+            <div  layout="column" layout-align="center stretch" md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
+                 class="repeate-item">
+              <b style="font-size: 120%; font-family:'Times New Roman'";>{{posts.message}}  {{posts.name}}</b><br>
+              <div > <p><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
+                <div  ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
+                  <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)">Yes</button>
+                  <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)">No</button>
+                </div>
+                <div class="progressB" ng-if="posts.reactions[0]"><br>
+                  <prbar></prbar>
+                </div>
 
               </div>
 
@@ -127,10 +115,5 @@
         </md-content>
       </div>
     </div>
-
-
-
-
   </div>
-
 </div>

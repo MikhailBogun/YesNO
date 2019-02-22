@@ -50,6 +50,10 @@ module.exports = {
         try {
             let {id, offset, private} = req.query;
             let result;
+
+            if(!id){
+                id = req.headers.idPerson;
+            }
             if (private) {
                 console.log("problem1")
                 result = await db.post.prototype.onePersonPosts(id, req.query.private, req.query.offset,req.headers.idPerson)
@@ -95,6 +99,7 @@ module.exports = {
         let friends = await db.User.prototype.showFriends(req.query.offset, user, req.query.relationship,req.query.text)
 
         if (req.query.offset == "length") {
+
             res.json({length: friends})
         } else {
             res.json({friends: friends})
@@ -136,19 +141,18 @@ module.exports = {
     Authorization: async function (req, res, next) {
         try {
             let {password, email} = req.body;
-
-            let user = await db.User.prototype.oneUser(email)
+            let user = await db.User.prototype.oneUser(email);
 
             if (user) {
                 let hashPassword = bcrypt.hashSync(password, user.salt)
                 if (user.password !== hashPassword) {
-                    next("Вели неправильный пароль!")
+                    res.status(401).send('Вели неправильный пароль!');
                 } else {
-                    const token_authorization = jwt.sign({userid: user.id}, secret)
+                    const token_authorization = jwt.sign({userid: user.id}, secret);
                     res.json({token: token_authorization});
                 }
             } else {
-                next("Пользователя несуществует!")
+                res.status(404).send('Пользователя не существуют!');
             }
         } catch (ex) {
             next(ex)
@@ -173,7 +177,7 @@ module.exports = {
                 const token_register = jwt.sign({userid: data.id}, secret);
                 res.json({token: token_register})
             } else {
-                next(1)
+                res.status(401).send("Пользователь с таким email уже зарегистрирован!");
             }
         } catch (e) {
             next(e)
@@ -262,7 +266,7 @@ module.exports = {
                 });
                 res.send(200)
             } else {
-                next('Пользователя несуществует!')
+                res.status(404).send('Пользователя не существуют!');
 
             }
         } catch (e) {
@@ -277,7 +281,7 @@ module.exports = {
             let password = bcrypt.hashSync(pass, salt)
             let checkUpdatePass = await db.User.prototype.updatePassword(email, code, password, salt)
             if (checkUpdatePass[0] !== 1) {
-                next("Неправильный Код")
+                res.status(401).send("Неверный код");
             }
             res.sendStatus(200);
 
@@ -292,7 +296,7 @@ module.exports = {
             if (post) {
 
                 fs.unlinkSync(__dirname + "/.." + post.image);
-                res.sendStatus(200)
+                res.sendStatus(200);
             }
 
         } catch (e) {
@@ -302,7 +306,31 @@ module.exports = {
     deleteFollow: async function (req, res, next) {
         try {
             var user = req.headers.idPerson;
-            await db.follow.prototype.deleteFollow(user, req.params.id);
+            //await db.follow.prototype.deleteFollow(user, req.params.id);
+            db.follow.findOne({
+                where: {
+                    [Op.and]: [
+                        {idFollows: user},
+                        {idPerson: req.params.id}
+                    ]
+                }
+            }).then(followers => {
+                if (followers.relationship == 2) {
+                    db.follow.findOne({
+                        where: {
+                            [Op.and]: [
+                                {idFollows: req.params.id},
+                                {idPerson: user}
+                            ]
+                        }
+                    }).then(friend => {
+                        return friend.decrement('relationship', {by: 1});
+                    })
+                    return followers.destroy()
+                } else {
+                    return followers.destroy()
+                }
+            })
 
             res.status(200).send("Ok");
 
