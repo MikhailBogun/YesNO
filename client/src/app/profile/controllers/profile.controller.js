@@ -7,15 +7,21 @@ export class ProfileController {
     vm.dialog = $mdDialog;
     vm.hello ="hello World!";
     vm.info={};
-    this.face={};
+    vm.face={};
+
+
+
     vm.mainService=mainService;
+    vm.mainService.Mydata.getMyImageFace().then(face => {
+      vm.myFace = face.pathImg;
+    })
     ///localStorage.setItem('mykey','myvalue');
     vm.checkMenu = 0;
     vm.DynamicItems = function(data,privPosts) {
       this.loadedPages = {};
-      this.private=privPosts
-      this.myPosts=data.myPosts
-      this.data=data
+      this.private=privPosts;
+      this.myPosts=data.myPosts;
+      this.data=data;
       this.numItems = 0;
 
 
@@ -112,7 +118,7 @@ export class ProfileController {
     for (var data in this.face){
       formData.append(data, this.face[data]);
       this.mainService.UsersAction.newFace(formData).then(res=>{
-        this.res = res;
+        this.myFace=res;
         this.dataUsers={};
       })
     }

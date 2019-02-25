@@ -72,6 +72,7 @@ app.get("/api/getLengthRows", controller.getLengthRows);
 app.get('/api/lengthRowsMyPosts', controller.lengthRowsMyPosts);
 app.get("/api/showFriends", controller.showFriends);
 app.get("/api/onlyFriends", controller.onlyFriends);
+app.get("/api/getMyImage", controller.getImage)
 
 app.use('/',function(err, req, res, next) {
     res.status(500).send('Ошибка сервера!');
@@ -141,6 +142,7 @@ app.delete('/api/deletePost:id',controller.deletePost);
      })
      socket.emit('privateDate',{"test":"allo"})
      socket.on("auth", async(info) => {
+         console.log("hello")
 
          let id = jwt.verify(info.token, config.secret).userid;
          let date = await db.User.prototype.checkUser(id);

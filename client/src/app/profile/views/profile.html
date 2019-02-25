@@ -1,28 +1,28 @@
+<div class="center-block" style=" width:80%;" layout="row" layout-align-xs="space-between start">
+  <acme-navbar creation-date="main.creationDate" flex></acme-navbar>
 
+  <md-menu hide-gt-xs	show-xs flex>
+    <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
+      <md-icon >note</md-icon>
+    </md-button>
+    <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+      <md-menu-item >
+        <md-button ng-click="profile.PageContect(1)">My public posts</md-button></md-menu-item>
+      <md-menu-item ng-click="profile.PageContect(2)"><md-button >My private posts</md-button></md-menu-item>
+      <md-menu-item ng-click="profile.PageContect(0)"><md-button >Change Info about yourself</md-button></md-menu-item>
 
-
-<div class="center-block" style=" width:80%;">
-  <div>
-  <div layout="row" layout-align-xs="space-between start">
-    <acme-navbar creation-date="main.creationDate" flex></acme-navbar>
-
-      <md-menu hide-gt-xs	show-xs flex>
-        <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
-          <md-icon >note</md-icon>
-        </md-button>
-        <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
-          <md-menu-item >
-            <md-button ng-click="profile.PageContect(1)">My public posts</md-button></md-menu-item>
-          <md-menu-item ng-click="profile.PageContect(2)"><md-button >My private posts</md-button></md-menu-item>
-          <md-menu-item ng-click="profile.PageContect(0)"><md-button >Change Info for me</md-button></md-menu-item>
-
-          </md-menu-item>
-        </md-menu-content>
-      </md-menu>
+      </md-menu-item>
+    </md-menu-content>
+  </md-menu>
 
 
 
 </div>
+
+
+<div class="center-block" style=" width:80%;">
+  <div>
+
   <div hide-xs flex>
   <md-content class="md-padding" >
     <md-nav-bar
@@ -36,7 +36,7 @@
         My private posts
       </md-nav-item>
       <md-nav-item md-nav-click="profile.PageContect(0)" name="page3" >
-        Change Info for me
+        Change Info about yourself
       </md-nav-item>
     </md-nav-bar>
 </div>
@@ -49,7 +49,7 @@
           <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
                class="repeate-item" >
 
-            <b class='postText'>{{posts.message+posts.name+posts.reactions[0].reaction}}</b><br>
+            <b class='postText'>{{posts.message+"  "+posts.name}}</b><br>
             <div flex="70"> <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
 
               <br>
@@ -70,7 +70,7 @@
           <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
                class="repeate-item " >
 
-            <b class='postText'>{{posts.message+posts.name+posts.reactions[0].reaction}}</b><br>
+            <b class='postText'>{{posts.message+"  "+posts.name}}</b><br>
             <div flex ="70"> <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
 
               <br>
@@ -88,7 +88,9 @@
 
 
 <div class="center-block dialog-demo-content" ng-if="profile.checkMenu==0">
-
+  <div layout = "row" layout-align="space-between start">
+    <img ng-src="{{profile.myFace}}" style="height: 90%; width: 90%; max-height: 200px; max-width: 300px" alt="Foto" layout-align-xs="20" flex="40">
+    <div flex="60" layout-align-xs="80">
   <form ng-submit="profile.submit()">
     <div class="form-group">
       <label for="">Текущий пароль</label>
@@ -111,5 +113,8 @@
     <md-button type="submit">Отправить</md-button>
 
   </form>
+    </div>
+  </div>
+</div>
 </div>
 </div>

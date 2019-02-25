@@ -48,6 +48,16 @@ export function MainService($http){
             res =>{return res.data}
           );
       },
+      getMyImageFace: function(){
+        return $http.get('api/getMyImage',{
+          headers: {
+            token: localStorage.getItem("id")
+          }
+        })
+          .then(
+            res =>{return res.data}
+          );
+      },
 
       lengthmyPosts: function(priv){
         return $http.get('api/lengthRowsMyPosts',{

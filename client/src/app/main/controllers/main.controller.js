@@ -35,59 +35,6 @@ export class MainController {
     vm.myReaction ="";
 
 
-
-    // this.infiniteItems = {
-    //   numLoaded_: [],
-    //   toLoad_: 0,
-    //   offset:5,
-    //   test:[],
-    //
-    //   // Required.
-    //   getItemAtIndex: function(index) {
-    //
-    //     if (index > this.toLoad_) {
-    //       this.fetchMoreItems_(index);
-    //       return null;
-    //     } else {
-    //       return this.numLoaded_[index];
-    //     }
-    //
-    //
-    //   },
-    //
-    //   // Required.
-    //   // For infinite scroll behavior, we always return a slightly higher
-    //   // number than the previously loaded items.
-    //   getLength: function() {
-    //
-    //     if(this.toLoad_<70) {
-    //       console.log(this.toLoad_)
-    //       return this.toLoad_ + 5;
-    //
-    //     } else{
-    //       return this.toLoad_
-    //     }
-    //   },
-    //
-    //   fetchMoreItems_: function(index) {
-    //     // For demo purposes, we simulate loading more items with a timed
-    //     // promise. In real code, this function would likely contain an
-    //     // $http request.
-    //
-    //     if (this.toLoad_ < index) {
-    //       this.toLoad_ += 5;
-    //       vm.Mydata.getPosts(this.toLoad_,null).then(response => {
-    //          this.numLoaded_ = this.numLoaded_.concat(response.result)
-    //         // this.numLoaded_ .push(response.result);
-    //
-    //       })
-    //         //
-    //         // this.numLoaded_ = this.toLoad_;
-    //
-    //     }
-    //   }
-    // };
-
     vm.DynamicItems = function(id,dataFollows,text=null) {
       this.text = text;
       this.loadedPages = {};

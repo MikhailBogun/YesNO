@@ -5,7 +5,7 @@
 </div>
 <div layout="row" layout-align="center center">
 
-<div flex="40" flex-gt-sm="60">
+<div flex="80" flex-gt-sm="80">
   <input type="checkbox" id="subscribeNews" name="subscribe" value="newsletter" ng-model="addPost.checkbox">
   <label for="subscribeNews">Приватный пост</label>
   <form ng-submit="addPost.submit()">
@@ -14,8 +14,8 @@
       <input type="text" class="form-control" ng-model="addPost.dataUsers.hashteg" minlength="1" maxlength="20">
     </div>
     <div class="form-group">
-      <label for="">Massage</label>
-      <input type="text" class="form-control" ng-model="addPost.dataUsers.message" minlength="1" maxlength="20" >
+      <label for="">Message</label>
+      <input type="text" class="form-control" ng-model="addPost.dataUsers.message" minlength="1" maxlength="40" >
     </div>
     <div class="form-group">
       <label class="btn btn-default" >Add Image<input id="fileup" file-model="addPost.dataUsers.image" type="file" hidden> </label>

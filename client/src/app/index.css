@@ -179,11 +179,12 @@
   font-family: 'Lobster', cursive;
 }
 .postText {
+
   text-align: center;
-  font-size:110%;
-  min-font-size: 1em;
-  max-font-size: 10em;
-  font-family: 'Lobster', cursive;
+  font-size:calc(10px + 1vw);
+  max-font-size: 2vw;
+  min-font-size: 8px;
+  font-family: 'Times New Roman', cursive;
 }
 
 .friends-login {

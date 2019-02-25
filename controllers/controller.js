@@ -212,10 +212,11 @@ module.exports = {
     },
     removeFace: async function (req, res,next) {
         try {
-            let user = req.headers.idPerson;
-            await db.User.prototype.newFace(user,req.files[0].filename)
 
-            res.send("assets/images/persons/" + req.files[0].filename);
+            let user = req.headers.idPerson;
+            await db.User.prototype.newFace(user,req.files[0].filename);
+
+            res.send("public/images/persons/" + req.files[0].filename);
 
         } catch (e) {
             next(e)
@@ -285,6 +286,15 @@ module.exports = {
             }
             res.sendStatus(200);
 
+        } catch (e) {
+            next(e)
+        }
+    },
+    getImage: async function(req,res,next){
+        try{
+                let face = await db.User.prototype.getImage(req.headers.idPerson)
+
+                res.json({pathImg:face.face})
         } catch (e) {
             next(e)
         }

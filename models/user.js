@@ -183,6 +183,10 @@ module.exports = (sequelize, DataTypes) => {
         }
 
     }
+    User.prototype.getImage = async function(id){
+        let face = await User.findById(id,{attributes:["face"]});
+        return await face;
+    }
 
     return User;
 };

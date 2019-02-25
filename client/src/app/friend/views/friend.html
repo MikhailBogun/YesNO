@@ -72,7 +72,7 @@
           <md-virtual-repeat-container id="verticall-container">
             <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
                  class="repeate-item ">
-              <h2 flex="noshrink">{{posts.message}} {{posts.name}}</h2><br>
+              <b class="postText" flex="noshrink">{{posts.message}} {{posts.name}}</b><br>
               <div><p><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
                 <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)">Yes</button>

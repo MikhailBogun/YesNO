@@ -2,61 +2,62 @@ export class AuthorizationController {
   //localStorage.setItem('mykey','myvalue');
   constructor($http,$location,$mdDialog,mainService,$document) {
     'ngInject'
-    var socket = io.connect("http://localhost:8000/");
+    var vm = this;
+    var socket = io.connect("http://localhost:3000/");
     socket.on('news', function (data) {
       console.log(data);
       socket.emit('my other event', { my: 'data' });
     });
-    this.document = $document
-    this.service = mainService.UsersAction
-    this.http = $http;
-    this.location = $location;
-    this.dialog = $mdDialog;
-    this.show = 1
-    this.showNewPass=0
-    this.emailGetCode = {};
-    this.newPass={}
+    vm.document = $document
+    vm.service = mainService.UsersAction
+    vm.http = $http;
+    vm.location = $location;
+    vm.dialog = $mdDialog;
+    vm.show = 1
+    vm.showNewPass=0
+    vm.emailGetCode = {};
+    vm.newPass={}
 
 
   }
 
   submit(){
-    var that = this;
+    var vm = this;
 
     this.http.post('authorization/', this.Users)
       .then(function(res){
-        that.res = res;
+        vm.res = res;
         if (res.data!="") {
           localStorage.clear()
           localStorage.setItem("id",res.data.token)
-          that.location.path('/home')
+          vm.location.path('/home')
         }
-        that.Users={};
+        vm.Users={};
       })
       .catch(function(error){
-        that.error =error;
-        that.textContent = "";
+        vm.error =error;
+        vm.textContent = "";
         if(error.status==500){
 
-          that.textContent= " Ошибка сервера! Пожалуйсто повторите немного позже";
+          vm.textContent= " Ошибка сервера! Пожалуйсто повторите немного позже";
         } else if(error.status==401){
-          that.textContent='Вы вели неправильный пароль! Повторите еще раз'
+          vm.textContent='Вы вели неправильный пароль! Повторите еще раз'
         } else if(error.status==404)
         {
-          that.textContent='Неправильно введен пароль либо еmail! Повторите еще раз'
+          vm.textContent='Неправильно введен пароль либо еmail! Повторите еще раз'
 
         }
-        that.dialog.show(
-          that.dialog.alert()
+        vm.dialog.show(
+          vm.dialog.alert()
             .clickOutsideToClose(true)
             .title('Ошибка')
-            .textContent(that.textContent)
+            .textContent(vm.textContent)
             .ariaLabel('Left to right demo')
             .ok('Понял!')
             // You can specify either sting with query selector
             .openFrom('#left')
             // or an element
-            .closeTo(angular.element(that.document[0].querySelector('#right')))
+            .closeTo(angular.element(vm.document[0].querySelector('#right')))
         )
 
       });
@@ -65,64 +66,64 @@ export class AuthorizationController {
     this.show=0
   }
   getCode(email){
-    var that = this;
+    var vm = this;
     this.http.post('forget/', email)
       .then(function(res){
-        that.showNewPass=2
-        that.resStatus = res.status;
-        that.newPass["email"]=email.email
+        vm.showNewPass=2
+        vm.resStatus = res.status;
+        vm.newPass["email"]=email.email
       })
       .catch(function(error){
-        that.error =error;
-        that.textContent = "";
+        vm.error =error;
+        vm.textContent = "";
         if(error.status==500){
 
-          that.textContent= " Ошибка сервера! Пожалуйсто повторите немного позже";
+          vm.textContent= " Ошибка сервера! Пожалуйсто повторите немного позже";
         } else if(error.status==404)
         {
-          that.textContent='Пользователь с таким email не зарегистрирован! Исправте ошибки и повторите еще раз'
+          vm.textContent='Пользователь с таким email не зарегистрирован! Исправте ошибки и повторите еще раз'
 
         }
-        that.dialog.show(
-          that.dialog.alert()
+        vm.dialog.show(
+          vm.dialog.alert()
             .clickOutsideToClose(true)
             .title('Ошибка')
-            .textContent(that.textContent)
+            .textContent(vm.textContent)
             .ariaLabel('Left to right demo')
             .ok('Понял!')
             // You can specify either sting with query selector
             .openFrom('#left')
             // or an element
-            .closeTo(angular.element(that.document[0].querySelector('#right')))
+            .closeTo(angular.element(vm.document[0].querySelector('#right')))
         )
   });
   }
   refreshPass(){
-    var that = this;
+    var vm = this;
     this.service.rewritePass(this.newPass).then(statusNewPass=>{
-      that.showNewPass=0
-      that.show = 1
-      that.statusNewPass = statusNewPass
+      vm.showNewPass=0
+      vm.show = 1
+      vm.statusNewPass = statusNewPass
 
     }).catch(error=>{
       if(error.status==500){
 
-        that.textContent= " Ошибка сервера! Пожалуйсто повторите немного позже";
+        vm.textContent= " Ошибка сервера! Пожалуйсто повторите немного позже";
       } else if(error.status==401) {
-        that.textContent = 'Вы вели неправильный код! Повторите еще раз'
+        vm.textContent = 'Вы вели неправильный код! Повторите еще раз'
       }
 
-      that.dialog.show(
-        that.dialog.alert()
+      vm.dialog.show(
+        vm.dialog.alert()
           .clickOutsideToClose(true)
           .title('Ошибка')
-          .textContent(that.textContent)
+          .textContent(vm.textContent)
           .ariaLabel('Left to right demo')
           .ok('Понял!')
           // You can specify either sting with query selector
           .openFrom('#left')
           // or an element
-          .closeTo(angular.element(that.document[0].querySelector('#right')))
+          .closeTo(angular.element(vm.document[0].querySelector('#right')))
       )
     })
   }

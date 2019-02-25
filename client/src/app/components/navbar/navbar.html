@@ -4,16 +4,16 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" >
-        <span class="glyphicon glyphicon-globe"></span> <b class="postText">YesNo</b>
+        <span class="glyphicon glyphicon-globe"></span> <b class="postText" style="font-family: 'Lobster', cursive; font-size:150%;">YesNo</b>
       </a>
     </div>
 
-    <div  layout="row" class="collapse navbar-collapse" id="bs-example-navbar-collapse-10">
-      <ul flex class="nav navbar-nav">
-        <li  class="active"><a ui-sref="home">Home</a></li>
-        <li class="active"><a ui-sref="follows">Folllows</a></li>
-        <li class="active"><a ui-sref="addPost">AddPost</a></li>
-        <li  class="active"><a ui-sref="privatePost">Private</a></li>
+    <div   class=" navbar-collapse" id="bs-example-navbar-collapse-80">
+      <ul layout="row" class="nav navbar-nav">
+        <li flex="20"  class="active"><a ui-sref="home">Home</a></li>
+        <li flex="20" class="active"><a ui-sref="follows">Folllows</a></li>
+        <li flex="20" class="active"><a ui-sref="addPost">AddPost</a></li>
+        <li flex="20" class="active"><a ui-sref="privatePost">Private</a></li>
         <li  flex="20" class="active"><a ui-sref="profile">Profile</a></li>
       </ul>
 
@@ -26,7 +26,7 @@
 </nav>
 
 <md-menu hide-gt-xs	show-xs flex>
-  <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
+  <md-button aria-label="YesNo" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
     <md-icon >list</md-icon>
   </md-button>
   <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">

@@ -218,6 +218,8 @@ export class FriendController {
 
       vm.MyData.getReaction(reaction, posts,0).then(res=>{
         vm.scope.percent = res;
+        console.log(res)
+        posts.percent = res.percent;
       });
     }
 
