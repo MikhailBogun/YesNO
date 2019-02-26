@@ -68,7 +68,7 @@
       <div layout="column" layout-align="center stretch"
            md-virtual-repeat="posts in main.allPublicPosts" md-on-demand="true"
            class="repeate-item" >
-        <h3 flex="10" class="postText">{{posts.message+"  "+posts.name}}</h3><br>
+        <b flex="10" class="postText">{{posts.message+"  "+posts.name}}</b><br>
         <div flex="70">
 
           <img ng-src="{{posts.image}}" class="imgMyOne"   alt='Фотография'></div>

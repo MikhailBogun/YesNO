@@ -15,9 +15,9 @@ module.exports = (sequelize, DataTypes) => {
 
     post.associate = function (models) {
         // associations can be defined here
-        post.hasMany(models.reaction, {foreignKey: "idPost"})// {foreignKey:"idPost"});//, {foreignKey: "id"});//, {foreignKey: 'idPost'});//, {foreignKey: 'id', targetKey:'idPost'})
-        post.belongsTo(models.User, {foreignKey: "idUser"})
-        post.belongsTo(models.User, {as: "checkMyPost", foreignKey: "idUser"})
+        post.hasMany(models.reaction, {foreignKey: "idPost"})
+        post.belongsTo(models.User, {foreignKey: "idUser"});
+        post.belongsTo(models.User, {as: "checkMyPost", foreignKey: "idUser"});
     };
 
     post.prototype.allDataPosts = async (user, offset, privatePost) => {
@@ -158,45 +158,71 @@ module.exports = (sequelize, DataTypes) => {
             let percent =0
             onePost.increment('no', {by: 1});
             onePost.update({percent: percent});
-            return await percent
+            return await percent;
 
         }else if(reaction==1){
             let percent = (onePost.yes + reaction) / ((onePost.no + onePost.yes + 1) / 100);
             onePost.increment('yes', {by: 1});
             onePost.update({percent: percent});
-            return await percent
+            return await percent;
 
         }else if(reaction ==0){
             let percent = (onePost.yes) / ((onePost.no + 1 + onePost.yes) / 100);
             onePost.increment('no', {by: 1});
             onePost.update({percent: percent});
-            return await percent
+            return await percent;
         }
     }
-    post.prototype.getLenRows = async(visibility,searchText="",id=null) => {
+    post.prototype.getLenRows = async(visibility,searchText="",id=null,person) => {
          if(id){
              return await post.count({
                  where: {
                      [Op.and]: [{private: visibility}, {idUser: id}]
                  },
-             })
+             });
          }
-
-        return await sequelize.query(`SELECT COUNT("post"."id")
+         console.log(visibility)
+         if(visibility==0){
+            return await sequelize.query(`SELECT COUNT("post"."id")
                                          FROM "posts" AS "post"
                                          WHERE ("post"."private" =:private AND ("post"."name" ILIKE :search_name OR "post"."message" ILIKE :search_name));`
-            , {replacements: {search_name: '%' + searchText + "%",private: Number(visibility)}, type: sequelize.QueryTypes.SELECT}
-        )
+                , {
+                    replacements: {search_name: '%' + searchText + "%", private: Number(visibility)},
+                    type: sequelize.QueryTypes.SELECT
+                }
+            )
+        }
+        else {
+            console.log(person)
+            return await sequelize.query(`
+                                         
+                                         SELECT COUNT("post"."id")
+
+                                        FROM "posts" AS "post"
+                                               INNER JOIN "Users" AS "User" ON "post"."idUser" = "User"."id"
+                                               INNER JOIN "follows" AS "User->follows" ON "User"."id" = "User->follows"."idPerson" AND
+                                                                                          ("User->follows"."relationship" = 2 AND "User->follows"."idFollows" =:person)
+                                        
+                                        
+                                        WHERE "post"."private" = 1
+                                         
+                                         `
+                , {
+                    replacements: {person:String(person)},
+                    type: sequelize.QueryTypes.SELECT
+                }
+            )
+        }
     }
 
     post.prototype.deletePost =  async (idPost) => {
-        let dataPost = await post.findById(idPost)
+        let dataPost = await post.findById(idPost);
         await post.destroy({
             where:
                 {
                     id:idPost
                 }})
-        return dataPost
+        return dataPost;
     }
 
 

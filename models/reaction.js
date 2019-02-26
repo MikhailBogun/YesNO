@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       reaction.belongsTo(models.post, {foreignKey:"idPost"});// associations can be defined here
   };
   reaction.prototype.createNewReaction = async (data)=>{
-    return await reaction.create(data)
+    return await reaction.create(data);
   }
   return reaction;
 };

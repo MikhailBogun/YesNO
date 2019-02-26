@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
 
   follow.associate = function(models) {
     // associations can be defined here
-      follow.belongsTo(models.User, {foreignKey:'idPerson'})
-      follow.belongsTo(models.User, {foreignKey:'idFollows'})
+      follow.belongsTo(models.User, {foreignKey:'idPerson'});
+      follow.belongsTo(models.User, {foreignKey:'idFollows'});
   };
 
     follow.prototype.subscribe = async (user,subscriber) => {
@@ -35,8 +35,8 @@ module.exports = (sequelize, DataTypes) => {
     follow.prototype.deleteFollow = async(user,id)=>{
         const where = {
             [Op.and]: [
-                {idFollows: id},
-                {idPerson: user}
+                {idFollows: user},
+                {idPerson: id}
             ]
         };
         let subscriber = await follow.findOne(
@@ -53,7 +53,11 @@ module.exports = (sequelize, DataTypes) => {
         if(subscriber.relationship===2){
             await follow.decrement("relationship", {
                     by: 1,
-                    where: where
+                    where: {
+                        idFollows: id,
+                        idPerson: user
+
+                    }
                 });
 
             return await follow.destroy({

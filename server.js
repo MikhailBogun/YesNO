@@ -3,10 +3,10 @@ const db = require("./models/index");
 const jwt = require('jsonwebtoken');
 const config = require( './config/config.json')
 const app = express();
-const multer  = require('multer')
+const multer  = require('multer');
 let server = require("http").createServer(app);
 let bodyparser = require("body-parser");
-const io = require('socket.io')(server)
+const io = require('socket.io')(server);
 
 
 let storage = multer.diskStorage( {

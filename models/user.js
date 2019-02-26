@@ -12,10 +12,10 @@ module.exports = (sequelize, DataTypes) => {
     const Op = sequelize.Sequelize.Op;
     User.associate = function (models) {
         // associations can be defined here
-        User.hasMany(models.post, {foreignKey: "idUser"})
-        User.hasMany(models.post, {as: "test", foreignKey: "idUser"})
-        User.hasMany(models.follow, {as: "iSigned", foreignKey: "idFollows"})
-        User.hasMany(models.follow, {foreignKey: "idPerson"})
+        User.hasMany(models.post, {foreignKey: "idUser"});
+        User.hasMany(models.post, {as: "test", foreignKey: "idUser"});
+        User.hasMany(models.follow, {as: "iSigned", foreignKey: "idFollows"});
+        User.hasMany(models.follow, {foreignKey: "idPerson"});
 
 
     }

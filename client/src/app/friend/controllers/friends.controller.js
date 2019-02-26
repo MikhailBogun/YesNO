@@ -112,7 +112,7 @@ export class FriendController {
         var pageOffset = pageNumber * this.PAGE_SIZE;
         this.friendServ(pageOffset,this.id)
           .then(response=>{
-            this.loadedPages[pageNumber] =response.result
+            this.loadedPages[pageNumber] =response.result;
           })
 
     };
@@ -120,7 +120,7 @@ export class FriendController {
     vm.DynamicItems.prototype.fetchNumItems_ = function() {
       this.dataFollows.getLength(this.id,0)
         .then(numPosts=>{
-          this.numItems = numPosts.length
+          this.numItems = numPosts.length;
         })
 
     };
@@ -163,10 +163,10 @@ export class FriendController {
         vm.res = res;
       })
       vm.toastr.info('Подписались на  <a  target="_blank"><b>'+subs.login+'</b></a>');
-      let bufer ={}
+      let bufer ={};
       for(let key in subs){
-        bufer[key] = subs[key]
-        delete subs[key]
+        bufer[key] = subs[key];
+        delete subs[key];
       }
       vm.friends.push(bufer)
     }

@@ -40,9 +40,10 @@ module.exports = {
                 }
 
             });
-            res.json({length: dataPosts.length})
-        } catch (e) {
-            next(e)
+            res.json({length: dataPosts.length});
+        }
+        catch (e) {
+            next(e);
         }
     },
 
@@ -56,53 +57,53 @@ module.exports = {
             }
             if (private) {
                 console.log("problem1")
-                result = await db.post.prototype.onePersonPosts(id, req.query.private, req.query.offset,req.headers.idPerson)
+                result = await db.post.prototype.onePersonPosts(id, req.query.private, req.query.offset,req.headers.idPerson);
 
-            } else {
-                result = await db.post.prototype.onePersonPosts(id, 0, offset, req.headers.idPerson)
-                console.log("problem2")
             }
+            else {
+                result = await db.post.prototype.onePersonPosts(id, 0, offset, req.headers.idPerson);
+                }
             res.json({result: result});
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
     getLengthRows: async function (req, res) {
         let data = null;
         let {id, private, searchText} = req.query;
-
+        console.log(req.query)
 
         if (id == "all") {
             if (typeof searchText === "undefined") {
+                    data = await db.post.prototype.getLenRows(private);
 
-                data = await db.post.prototype.getLenRows(private);
 
             } else {
                 data = await db.post.prototype.getLenRows(private, searchText);
 
             }
-        } else {
+        } else if(id == "allPrivatePost") {
+            data = await db.post.prototype.getLenRows(private,"",null,req.headers.idPerson);
+        }
+        else {
             data = await db.post.prototype.getLenRows(private, "", req.query.id)
 
             res.json({length: data});
             return null;
         }
 
-        res.json({length: Number(data[0].count)})
+        res.json({length: Number(data[0].count)});
     },
     showFriends: async function (req, res) {
         let user = req.headers.idPerson;
-        console.log(req.query.text)
-
-
         let friends = await db.User.prototype.showFriends(req.query.offset, user, req.query.relationship,req.query.text)
 
         if (req.query.offset == "length") {
 
-            res.json({length: friends})
+            res.json({length: friends});
         } else {
-            res.json({friends: friends})
+            res.json({friends: friends});
         }
     },
     onlyFriends: async function (req, res) {
@@ -110,7 +111,7 @@ module.exports = {
         let result = null;
         let user = req.headers.idPerson;
 
-        if (id == "all") {
+        if (id == "all" || id=="allPrivatePost") {
             result = await db.post.prototype.allDataPosts(user, req.query.offset, 1);
 
         } else {
@@ -135,7 +136,7 @@ module.exports = {
             });
             res.status(200).send("Ok");
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
     Authorization: async function (req, res, next) {
@@ -155,7 +156,7 @@ module.exports = {
                 res.status(404).send('Пользователя не существуют!');
             }
         } catch (ex) {
-            next(ex)
+            next(ex);
         }
 
     },
@@ -163,7 +164,7 @@ module.exports = {
         try {
 
             let {login, password, email} = req.body;
-            let user = await db.User.prototype.oneUser(email)
+            let user = await db.User.prototype.oneUser(email);
             if (!user) {
                 let salt = bcrypt.genSaltSync(10);
                 let hash_password = bcrypt.hashSync(password, salt);
@@ -175,12 +176,12 @@ module.exports = {
                     email: email
                 });
                 const token_register = jwt.sign({userid: data.id}, secret);
-                res.json({token: token_register})
+                res.json({token: token_register});
             } else {
                 res.status(401).send("Пользователь с таким email уже зарегистрирован!");
             }
         } catch (e) {
-            next(e)
+            next(e);
         }
 
     },
@@ -195,7 +196,7 @@ module.exports = {
             let percent = await db.post.prototype.incrementYesOrNo(req.body.post.id, req.body.reaction);
             res.json({percent: percent});
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
 
@@ -219,7 +220,7 @@ module.exports = {
             res.send("public/images/persons/" + req.files[0].filename);
 
         } catch (e) {
-            next(e)
+            next(e);
         }
 
 
@@ -235,15 +236,15 @@ module.exports = {
                 res.status(401).send("Ввели неправильнный пароль!");
             }
         } catch(e) {
-            next(e)
+            next(e);
         }
     },
     forgetPass: async function (req, res, next) {
 
         try {
-            let email = req.body.email
+            let email = req.body.email;
             let code = String(Math.random().toString(9).substring(2, 8));
-            let checkEmail = await db.User.prototype.updateCodeEmail(email, code)
+            let checkEmail = await db.User.prototype.updateCodeEmail(email, code);
             if (checkEmail[0] === 1) {
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
@@ -260,18 +261,22 @@ module.exports = {
                     html: html//
                 };
                 transporter.sendMail(mailOptions, function (err, info) {
-                    if (err)
-                        console.log(err)
-                    else
+                    if (err) {
+                        console.log(err);
+                        next(err);
+                    }
+                    else {
                         console.log(info);
+                        next(err);
+                    }
                 });
-                res.send(200)
+                res.send(200);
             } else {
                 res.status(404).send('Пользователя не существуют!');
 
             }
         } catch (e) {
-            next(e)
+            next(e);
         }
 
     },
@@ -279,8 +284,8 @@ module.exports = {
         try {
             let {email, pass, code} = req.body;
             let salt = bcrypt.genSaltSync(10);
-            let password = bcrypt.hashSync(pass, salt)
-            let checkUpdatePass = await db.User.prototype.updatePassword(email, code, password, salt)
+            let password = bcrypt.hashSync(pass, salt);
+            let checkUpdatePass = await db.User.prototype.updatePassword(email, code, password, salt);
             if (checkUpdatePass[0] !== 1) {
                 res.status(401).send("Неверный код");
             }
@@ -292,11 +297,11 @@ module.exports = {
     },
     getImage: async function(req,res,next){
         try{
-                let face = await db.User.prototype.getImage(req.headers.idPerson)
+                let face = await db.User.prototype.getImage(req.headers.idPerson);
 
-                res.json({pathImg:face.face})
+                res.json({pathImg:face.face});
         } catch (e) {
-            next(e)
+            next(e);
         }
     },
     deletePost: async function (req, res, next) {
@@ -316,32 +321,7 @@ module.exports = {
     deleteFollow: async function (req, res, next) {
         try {
             var user = req.headers.idPerson;
-            //await db.follow.prototype.deleteFollow(user, req.params.id);
-            db.follow.findOne({
-                where: {
-                    [Op.and]: [
-                        {idFollows: user},
-                        {idPerson: req.params.id}
-                    ]
-                }
-            }).then(followers => {
-                if (followers.relationship == 2) {
-                    db.follow.findOne({
-                        where: {
-                            [Op.and]: [
-                                {idFollows: req.params.id},
-                                {idPerson: user}
-                            ]
-                        }
-                    }).then(friend => {
-                        return friend.decrement('relationship', {by: 1});
-                    })
-                    return followers.destroy()
-                } else {
-                    return followers.destroy()
-                }
-            })
-
+            await db.follow.prototype.deleteFollow(user, req.params.id);
             res.status(200).send("Ok");
 
         } catch (e) {

@@ -38,7 +38,7 @@
                  class="repeate-item">
               <h2>{{posts.message+"  "+posts.name}}</h2><br>
               <div> <p class='fig'><img ng-src="{{posts.image}}" width="70%" height="400vh"  alt='Фотография'></p>
-                <div ng-if="!posts.reactions[0]" ng-cloak><!--ng-if='!posts.reactions[0].reaction'--><br>
+                <div ng-if="!posts.reactions[0]" ng-cloak><br>
                   <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)" >Yes</button>
                   <button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)" >No</button></div>
                 <div class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
