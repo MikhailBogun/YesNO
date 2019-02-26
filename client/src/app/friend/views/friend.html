@@ -4,7 +4,10 @@
 
   <div layout-xs="row" layout-align-xs="space-between center">
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
-    <div layout-xs="column" layout-align-xs="start end">
+    <div flex="10" hide-gt-xs	show-xs>
+      <b class="postText" style="font-family: 'Lobster', cursive; font-size:150%;">YesNo</b>
+    </div>
+    <div layout-xs="column" layout-align-xs="start end" ng-show="friend.checkMobilePost" 	show-xs >
       <md-button lex-xs="100" aria-label="Open menu with custom trigger" class="md-icon-button"
                  ng-click="friend.showUser()">
         <md-icon>perm_identity</md-icon>
@@ -109,9 +112,7 @@
                 <div class="progressB" ng-if="posts.reactions[0]"><br>
                   <prbar></prbar>
                 </div>
-
               </div>
-
             </div>
           </md-virtual-repeat-container>
         </md-content>

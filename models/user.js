@@ -67,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
                            "follow"."id" AS "follow"
                     FROM "Users" AS "User"
                         LEFT OUTER JOIN  "follows" AS "follow" ON "follow"."idPerson"="User"."id" AND  "follow"."idFollows" =:user
-                    WHERE "User"."login" ILIKE :search_login LIMIT 5 OFFSET :offset;
+                    WHERE (("User"."login" ILIKE :search_login) AND "User"."id" !=:user) LIMIT 5 OFFSET :offset;
               `,
                     {
                         replacements: {search_login: '%' + searchText + "%", offset: offset,user:user},
@@ -82,6 +82,7 @@ module.exports = (sequelize, DataTypes) => {
                            "follow"."id" AS "follow"
                     FROM "Users" AS "User"
                         LEFT OUTER JOIN  "follows" AS "follow" ON "follow"."idPerson"="User"."id" AND  "follow"."idFollows" =:user
+                    WHERE ("User"."id" !=:user)
                     LIMIT 5
                     OFFSET :offset;
               `,

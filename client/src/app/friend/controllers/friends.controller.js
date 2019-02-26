@@ -1,5 +1,5 @@
 export class FriendController {
-  constructor($timeout, friendsService, mainService, $http, $scope, toastr) {
+  constructor($timeout, friendsService, mainService, $http, $scope, toastr,$document) {
     'ngInject'
     var vm = this;
     vm.checkMySub = false;
@@ -16,6 +16,8 @@ export class FriendController {
     vm.scope.items = [];
     vm.counter = 3;
     vm.checkMobilePost = false;
+    vm.document =$document;
+
 
 
     this.DynamicItemsFriends = function (onlyFriends, searchText = null, key) {
@@ -172,7 +174,10 @@ export class FriendController {
     }
 
     vm.showPost = function (id) {
-      vm.checkMobilePost = true;
+      console.log(vm.document[0].body.clientWidth)
+      if(this.document[0].body.clientWidth<=600) {
+        vm.checkMobilePost = true;
+      }
       vm.testOneDataPerson = new vm.DynamicItems(vm.friendsService.dataFollow.getPersonPosts, id, vm.friendsService.dataFollow);
     }
 

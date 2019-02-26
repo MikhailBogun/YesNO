@@ -1,9 +1,11 @@
 export class PrivatePostController {
-  constructor($scope, privatePostService, mainService, friendsService) {
+  constructor($scope, mainService, friendsService,$document) {
     'ngInject';
     var vm = this;
+    vm.document =$document;
     vm.Mydata = mainService.Mydata;
     vm.checkNewPosts = false;
+    vm.checkMobilePost = false;
     vm.oneuserPosts =friendsService.dataFollow.getmyFriends;
     vm.socket = vm.Mydata.socket();
     vm.socket.on('privateDate', function (res) {
@@ -32,14 +34,10 @@ export class PrivatePostController {
 
     vm.friendsService = friendsService;
     vm.scope = $scope;
-    vm.posts = privatePostService.PrivateData;
     vm.dataPosts = "";
     vm.myReaction = "";
 
-    vm.posts.getData()
-      .then(res => {
-        vm.dataPosts = res;
-      });
+
 
     this.DynamicItemsFriends = function (onlyFriends, searchText = null, key) {
       this.loadedPages = {};
@@ -166,12 +164,21 @@ export class PrivatePostController {
       }
       return false;
     };
+    vm.showUser = function () {
+      vm.checkMobilePost = false;
+    }
 
     vm.showPost = function (id) {
+      if(this.document[0].body.clientWidth<=600) {
+        vm.checkMobilePost = true;
+      }
       vm.allprivatePosts = new vm.DynamicItems(vm.friendsService.dataFollow.getPersonPosts, id, vm.friendsService.dataFollow,1);
     };
 
     vm.allPrivatePost = function () {
+      if(this.document[0].body.clientWidth<=600) {
+        vm.checkMobilePost = true;
+      }
       vm.allprivatePosts = new vm.DynamicItems(vm.onlyFriend, "allPrivatePost", vm.friendsService.dataFollow);
     };
   }

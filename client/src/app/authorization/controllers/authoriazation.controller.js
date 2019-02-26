@@ -19,6 +19,7 @@ export class AuthorizationController {
     vm.newPass = {};
 
 
+
   }
 
   submit() {
