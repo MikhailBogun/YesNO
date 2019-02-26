@@ -1,3 +1,4 @@
+
 Install required tools yo, gulp and bower:
 
     npm install -g yo gulp bower
@@ -16,11 +17,15 @@ Run yo gulp-angular, and select desired technologies:
     
     yo gulp-angular
 
-patch /yesno:
+in the config, specify the password and paths to your database.
+
+install  patch  - /yesno:
 
     npm install -i
+    sequelize db:migrate
 
-patch /yesno/client:
+install patch -  /yesno/client:
     
     npm install -i
     bower install -i    
+
