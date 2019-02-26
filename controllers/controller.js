@@ -72,7 +72,7 @@ module.exports = {
         let data = null;
         let {id, private, searchText} = req.query;
 
-        if (id == "all") {
+        if (id === "all") {
             if (typeof searchText === "undefined") {
                     data = await db.post.prototype.getLenRows(private);
 
@@ -81,7 +81,7 @@ module.exports = {
                 data = await db.post.prototype.getLenRows(private, searchText);
 
             }
-        } else if(id == "allPrivatePost") {
+        } else if(id === "allPrivatePost") {
             data = await db.post.prototype.getLenRows(private,"",null,req.headers.idPerson);
         }
         else {
@@ -97,7 +97,7 @@ module.exports = {
         let user = req.headers.idPerson;
         let friends = await db.User.prototype.showFriends(req.query.offset, user, req.query.relationship,req.query.text)
 
-        if (req.query.offset == "length") {
+        if (req.query.offset === "length") {
 
             res.json({length: friends});
         } else {
@@ -109,7 +109,7 @@ module.exports = {
         let result = null;
         let user = req.headers.idPerson;
 
-        if (id == "all" || id=="allPrivatePost") {
+        if (id === "all" || id==="allPrivatePost") {
             result = await db.post.prototype.allDataPosts(user, req.query.offset, 1);
 
         } else {
@@ -144,7 +144,7 @@ module.exports = {
 
             if (user) {
                 let hashPassword = bcrypt.hashSync(password, user.salt)
-                if (user.password !== hashPassword) {
+                if (user.password !=== hashPassword) {
                     res.status(401).send('Вели неправильный пароль!');
                 } else {
                     const token_authorization = jwt.sign({userid: user.id}, secret);
@@ -284,7 +284,7 @@ module.exports = {
             let salt = bcrypt.genSaltSync(10);
             let password = bcrypt.hashSync(pass, salt);
             let checkUpdatePass = await db.User.prototype.updatePassword(email, code, password, salt);
-            if (checkUpdatePass[0] !== 1) {
+            if (checkUpdatePass[0] !=== 1) {
                 res.status(401).send("Неверный код");
             }
             res.sendStatus(200);

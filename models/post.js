@@ -154,19 +154,19 @@ module.exports = (sequelize, DataTypes) => {
 
     post.prototype.incrementYesOrNo = async (idPost,reaction)=>{
         let onePost = await post.findById(idPost);
-        if(reaction==0 && onePost.yes ==0){
+        if(reaction===0 && onePost.yes ===0){
             let percent =0
             onePost.increment('no', {by: 1});
             onePost.update({percent: percent});
             return await percent;
 
-        }else if(reaction==1){
+        }else if(reaction===1){
             let percent = (onePost.yes + reaction) / ((onePost.no + onePost.yes + 1) / 100);
             onePost.increment('yes', {by: 1});
             onePost.update({percent: percent});
             return await percent;
 
-        }else if(reaction ==0){
+        }else if(reaction ===0){
             let percent = (onePost.yes) / ((onePost.no + 1 + onePost.yes) / 100);
             onePost.increment('no', {by: 1});
             onePost.update({percent: percent});
@@ -182,7 +182,7 @@ module.exports = (sequelize, DataTypes) => {
              });
          }
          console.log(visibility)
-         if(visibility==0){
+         if(visibility===0){
             return await sequelize.query(`SELECT COUNT("post"."id")
                                          FROM "posts" AS "post"
                                          WHERE ("post"."private" =:private AND ("post"."name" ILIKE :search_name OR "post"."message" ILIKE :search_name));`
