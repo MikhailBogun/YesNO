@@ -69,8 +69,8 @@
     </div>
 
     <div flex-gt-sm="80" flex="70" flex-xs="100" hide-xs show-gt-xs>
-      <h3 ng-if="!friend.testOneDataPerson.numItems" style="text-align: center;"> Выберите пользователя для отображения
-        постов</h3>
+      <b ng-if="!friend.testOneDataPerson.numItems" class="postText" style="text-align: center;"> Выберите пользователя для отображения
+        постов</b>
       <div class="virtualRepeatdemoDeferredLoading ">
         <md-content layout="column">
           <md-virtual-repeat-container id="verticall-container">
