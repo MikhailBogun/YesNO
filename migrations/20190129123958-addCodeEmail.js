@@ -13,7 +13,7 @@ module.exports = {
           'Users',
           'codeEmail',
           {
-              type: Sequelize.TEXT
+              type: Sequelize.INTEGER
           }
       );
   },
