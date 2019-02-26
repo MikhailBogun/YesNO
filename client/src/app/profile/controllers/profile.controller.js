@@ -1,39 +1,32 @@
 export class ProfileController {
-  constructor($http,mainService,friendsService, $mdDialog, $document){
+  constructor($http, mainService, friendsService, $mdDialog, $document) {
     'ngInject'
-    var vm =this;
+    var vm = this;
     vm.http = $http;
     vm.document = $document;
     vm.dialog = $mdDialog;
-    vm.hello ="hello World!";
-    vm.info={};
-    vm.face={};
+    vm.info = {};
+    vm.face = {};
 
 
-
-    vm.mainService=mainService;
+    vm.mainService = mainService;
     vm.mainService.Mydata.getMyImageFace().then(face => {
       vm.myFace = face.pathImg;
     })
     ///localStorage.setItem('mykey','myvalue');
     vm.checkMenu = 0;
-    vm.DynamicItems = function(data,privPosts) {
+    vm.DynamicItems = function (data, privPosts) {
       this.loadedPages = {};
-      this.private=privPosts;
-      this.myPosts=data.myPosts;
-      this.data=data;
+      this.private = privPosts;
+      this.myPosts = data.myPosts;
+      this.data = data;
       this.numItems = 0;
-
-
       this.PAGE_SIZE = 5;
-
       this.fetchNumItems_();
       this.check = []
     };
 
-    // Required.
-    this.DynamicItems.prototype.getItemAtIndex = function(index) {
-
+    this.DynamicItems.prototype.getItemAtIndex = function (index) {
       var pageNumber = Math.floor(index / this.PAGE_SIZE);
       var page = this.loadedPages[pageNumber];
       if (page) {
@@ -43,18 +36,15 @@ export class ProfileController {
       }
     };
 
-    // Required.
-    this.DynamicItems.prototype.getLength = function() {
+    this.DynamicItems.prototype.getLength = function () {
       return this.numItems;
     };
 
-    this.DynamicItems.prototype.fetchPage_ = function(pageNumber) {
-
+    this.DynamicItems.prototype.fetchPage_ = function (pageNumber) {
       this.loadedPages[pageNumber] = null;
-
       var that = this
       var pageOffset = pageNumber * this.PAGE_SIZE;
-      friendsService.dataFollow.getPersonPosts(pageOffset,null,this.private).then(posts=>{
+      friendsService.dataFollow.getPersonPosts(pageOffset, null, this.private).then(posts => {
         that.loadedPages[pageNumber] = posts.result;
       })
       // this.myPosts(pageOffset,null,this.private).then(posts=>{
@@ -63,33 +53,30 @@ export class ProfileController {
 
     };
 
-    this.DynamicItems.prototype.fetchNumItems_ = function() {
+    this.DynamicItems.prototype.fetchNumItems_ = function () {
       this.data.lengthmyPosts(this.private)
-        .then(numPosts=>{
+        .then(numPosts => {
           this.numItems = numPosts.length
-        })
-      //this.numItems = 50000;
-
+        });
     };
-    vm.allPublicPosts = new vm.DynamicItems(mainService.Mydata,0)
+    vm.allPublicPosts = new vm.DynamicItems(mainService.Mydata, 0)
   }
-  submit(){
+
+  submit() {
 
 
     this.info.id = localStorage.getItem("id");
-    this.http.put('api/removePassword', this.info,{
+    this.http.put('api/removePassword', this.info, {
       headers: {
-          token: localStorage.getItem("id")
-        }
+        token: localStorage.getItem("id")
+      }
     })
       .then(res => {
-        this.info={};
+        this.info = {};
 
       })
-      .catch(error  => {
-
-        if(error.status===401) {
-
+      .catch(error => {
+        if (error.status === 401) {
           this.dialog.show(
             this.dialog.alert()
               .clickOutsideToClose(true)
@@ -103,40 +90,37 @@ export class ProfileController {
               .closeTo(angular.element(this.document[0].querySelector('#right')))
           );
           this.info = {};
-
         }
-
-
       });
-
-
   }
 
-  removeFace(){
-    var formData= new FormData;
-    formData.append("id",localStorage.getItem("id"));
-    for (var data in this.face){
+  removeFace() {
+    var formData = new FormData;
+    formData.append("id", localStorage.getItem("id"));
+    for (var data in this.face) {
       formData.append(data, this.face[data]);
-      this.mainService.UsersAction.newFace(formData).then(res=>{
-        this.myFace=res;
-        this.dataUsers={};
+      this.mainService.UsersAction.newFace(formData).then(res => {
+        this.myFace = res;
+        this.dataUsers = {};
       })
     }
   }
-  DeletePost(post){
-    this.mainService.Mydata.deletePosts(post).then(res=>{
-      if(res=="OK") {
+
+  DeletePost(post) {
+    this.mainService.Mydata.deletePosts(post).then(res => {
+      if (res == "OK") {
         this.allPublicPosts.loadedPages = {}
 
       }
     });
   }
-  PageContect(value){
-    this.checkMenu=value;
-    if(value==2){
-      this.allPublicPosts = new this.DynamicItems(this.mainService.Mydata,1)
-    } else if(value==1){
-      this.allPublicPosts = new this.DynamicItems(this.mainService.Mydata,0)
+
+  PageContect(value) {
+    this.checkMenu = value;
+    if (value == 2) {
+      this.allPublicPosts = new this.DynamicItems(this.mainService.Mydata, 1)
+    } else if (value == 1) {
+      this.allPublicPosts = new this.DynamicItems(this.mainService.Mydata, 0)
     }
-}
+  }
 }

@@ -1,62 +1,64 @@
 <div class="center-block" style=" width:80%;" layout="row" layout-align-xs="space-between start">
   <acme-navbar creation-date="main.creationDate" flex></acme-navbar>
 
-  <md-menu hide-gt-xs	show-xs flex>
+  <md-menu hide-gt-xs show-xs flex>
     <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
-      <md-icon >note</md-icon>
+      <md-icon>note</md-icon>
     </md-button>
     <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
-      <md-menu-item >
-        <md-button ng-click="profile.PageContect(1)">My public posts</md-button></md-menu-item>
-      <md-menu-item ng-click="profile.PageContect(2)"><md-button >My private posts</md-button></md-menu-item>
-      <md-menu-item ng-click="profile.PageContect(0)"><md-button >Change Info about yourself</md-button></md-menu-item>
+      <md-menu-item>
+        <md-button ng-click="profile.PageContect(1)">My public posts</md-button>
+      </md-menu-item>
+      <md-menu-item ng-click="profile.PageContect(2)">
+        <md-button>My private posts</md-button>
+      </md-menu-item>
+      <md-menu-item ng-click="profile.PageContect(0)">
+        <md-button>Change Info about yourself</md-button>
+      </md-menu-item>
 
       </md-menu-item>
     </md-menu-content>
   </md-menu>
-
-
-
 </div>
-
 
 <div class="center-block" style=" width:80%;">
   <div>
 
-  <div hide-xs flex>
-  <md-content class="md-padding" >
-    <md-nav-bar
-      md-no-ink-bar="disableInkBar"
-      md-selected-nav-item="currentNavItem"
-      nav-bar-aria-label="navigation links">
-      <md-nav-item md-nav-click="profile.PageContect(1)" name="page1" >
-        My public posts
-      </md-nav-item>
-      <md-nav-item md-nav-click="profile.PageContect(2)" name="page2" ng-disabled="secondTabDisabled" >
-        My private posts
-      </md-nav-item>
-      <md-nav-item md-nav-click="profile.PageContect(0)" name="page3" >
-        Change Info about yourself
-      </md-nav-item>
-    </md-nav-bar>
-</div>
+    <div hide-xs flex>
+      <md-content class="md-padding">
+        <md-nav-bar
+          md-no-ink-bar="disableInkBar"
+          md-selected-nav-item="currentNavItem"
+          nav-bar-aria-label="navigation links">
+          <md-nav-item md-nav-click="profile.PageContect(1)" name="page1">
+            My public posts
+          </md-nav-item>
+          <md-nav-item md-nav-click="profile.PageContect(2)" name="page2" ng-disabled="secondTabDisabled">
+            My private posts
+          </md-nav-item>
+          <md-nav-item md-nav-click="profile.PageContect(0)" name="page3">
+            Change Info about yourself
+          </md-nav-item>
+        </md-nav-bar>
+    </div>
 
 
-
-    <div class="virtualRepeatdemoDeferredLoading container" ng-if = "profile.checkMenu==1" >
+    <div class="virtualRepeatdemoDeferredLoading container" ng-if="profile.checkMenu==1">
       <md-content layout="column">
-        <md-virtual-repeat-container id="verticall-container" >
-          <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
-               class="repeate-item" >
+        <md-virtual-repeat-container id="verticall-container">
+          <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts"
+               md-on-demand
+               class="repeate-item">
 
-            <b class='postText'>{{posts.message+"  "+posts.name}}</b><br>
-            <div flex="70"> <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
+            <b class='postText'>{{posts.message+" "+posts.name}}</b><br>
+            <div flex="70"><img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
 
               <br>
             </div>
-            <div flex="10" class="progressB" ><br><prbar></prbar>
-              <md-button ng-click="profile.DeletePost(posts)" >Удалить</md-button></div>
-
+            <div flex="10" class="progressB"><br>
+              <prbar></prbar>
+              <md-button ng-click="profile.DeletePost(posts)">Удалить</md-button>
+            </div>
 
 
           </div>
@@ -64,57 +66,59 @@
       </md-content>
     </div>
 
-    <div class="virtualRepeatdemoDeferredLoading container" ng-if = "profile.checkMenu==2" >
+    <div class="virtualRepeatdemoDeferredLoading container" ng-if="profile.checkMenu==2">
       <md-content layout="column">
-        <md-virtual-repeat-container id="verticall-container" >
-          <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts" md-on-demand
-               class="repeate-item " >
+        <md-virtual-repeat-container id="verticall-container">
+          <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts"
+               md-on-demand
+               class="repeate-item ">
 
-            <b class='postText'>{{posts.message+"  "+posts.name}}</b><br>
-            <div flex ="70"> <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
+            <b class='postText'>{{posts.message+" "+posts.name}}</b><br>
+            <div flex="70"><img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
 
               <br>
 
             </div>
-            <div flex="10" class="progressB" ><br><prbar></prbar>
+            <div flex="10" class="progressB"><br>
+              <prbar></prbar>
               <md-button
-                         ng-click="profile.DeletePost(posts)" >Удалить</md-button>
+                ng-click="profile.DeletePost(posts)">Удалить
+              </md-button>
             </div>
 
           </div>
         </md-virtual-repeat-container>
       </md-content>
     </div>
+    <div class="center-block dialog-demo-content" ng-if="profile.checkMenu==0">
+      <div layout="row" layout-align="space-between start">
+        <img ng-src="{{profile.myFace}}" style="height: 90%; width: 90%; max-height: 200px; max-width: 300px" alt="Foto"
+             layout-align-xs="20" flex="40">
+        <div flex="60" layout-align-xs="80">
+          <form ng-submit="profile.submit()">
+            <div class="form-group">
+              <label for="">Текущий пароль</label>
+              <input type="text" class="form-control" ng-model="profile.info.oldPassword">
+            </div>
+            <div class="form-group">
+              <label for="">Новый пароль</label>
+              <input type="text" class="form-control" ng-model="profile.info.newPassword">
+            </div>
+            <md-button type="submit">Отправить</md-button>
+          </form>
+          <br>
+          <br>
+          <form ng-submit="profile.removeFace()">
+            <div class="form-group">
+              <label for="">Изменить фото</label>
+              <input type="file" name="" id="" file-model="profile.face.image">
+              <p></p>
+            </div>
+            <md-button type="submit">Отправить</md-button>
 
-
-<div class="center-block dialog-demo-content" ng-if="profile.checkMenu==0">
-  <div layout = "row" layout-align="space-between start">
-    <img ng-src="{{profile.myFace}}" style="height: 90%; width: 90%; max-height: 200px; max-width: 300px" alt="Foto" layout-align-xs="20" flex="40">
-    <div flex="60" layout-align-xs="80">
-  <form ng-submit="profile.submit()">
-    <div class="form-group">
-      <label for="">Текущий пароль</label>
-      <input type="text" class="form-control" ng-model="profile.info.oldPassword">
-    </div>
-    <div class="form-group">
-      <label for="">Новый пароль</label>
-      <input type="text" class="form-control" ng-model="profile.info.newPassword">
-    </div>
-    <md-button type="submit">Отправить</md-button>
-  </form>
-  <br>
-  <br>
-  <form ng-submit="profile.removeFace()">
-    <div class="form-group">
-      <label for="">Изменить фото</label>
-      <input type="file" name="" id="" file-model="profile.face.image">
-      <p></p>
-    </div>
-    <md-button type="submit">Отправить</md-button>
-
-  </form>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-</div>
-</div>
 </div>

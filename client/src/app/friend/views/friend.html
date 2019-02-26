@@ -53,7 +53,8 @@
                 <md-button flex="80" class="md-primary " type="button" ng-click="friend.follow(friends)"
                            ng-if="friend.checkMySub==true || !friends.follow && friend.key == 3">Подписаться
                 </md-button>
-                <md-button flex="80" class="md-primary " type="button" ng-if="friend.checkMySub==false || friends.follow && friend.key == 3"
+                <md-button flex="80" class="md-primary " type="button"
+                           ng-if="friend.checkMySub==false || friends.follow && friend.key == 3"
                            ng-click="friend.deleteFollows1(friends)">Отписаться
                 </md-button>
               </div>
@@ -95,12 +96,13 @@
           style="text-align: center;">Выберите пользователя для отображения постов</h3>
       <div class="virtualRepeatdemoDeferredLoading">
         <md-content layout="column">
-          <md-virtual-repeat-container  id="verticall-container">
-            <div  layout="column" layout-align="center stretch" md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
+          <md-virtual-repeat-container id="verticall-container">
+            <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in friend.testOneDataPerson"
+                 md-on-demand
                  class="repeate-item">
-              <b style="font-size: 120%; font-family:'Times New Roman'";>{{posts.message}}  {{posts.name}}</b><br>
-              <div > <p><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
-                <div  ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
+              <b style="font-size: 120%; font-family:'Times New Roman'" ;>{{posts.message}} {{posts.name}}</b><br>
+              <div><p><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
+                <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)">Yes</button>
                   <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)">No</button>
                 </div>

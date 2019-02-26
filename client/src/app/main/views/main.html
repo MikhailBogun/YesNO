@@ -1,4 +1,3 @@
-
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="center-block" style=" width:80%;">
 
@@ -6,55 +5,64 @@
   <div>
     <acme-navbar creation-date="main.creationDate"></acme-navbar>
   </div>
-  <div >
+  <div>
 
 
     <section class="no-print" layout-align="end center" layout-padding flex>
       <div layout="row" layout-align="start center" flex>
         <div class="input-group">
-          <input type="text" class="form-control" ng-model="main.searchText" placeholder="Search posts" aria-describedby="addon">
+          <input type="text" class="form-control" ng-model="main.searchText" placeholder="Search posts"
+                 aria-describedby="addon">
         </div>
-        <md-button class=" md-icon-button md-primary" data-dismiss="modal" type="submit" id="submit" value="Submit" ng-click="main.search(main.searchText)"><md-icon>search</md-icon></md-button>
+        <md-button class=" md-icon-button md-primary" data-dismiss="modal" type="submit" id="submit" value="Submit"
+                   ng-click="main.search(main.searchText)">
+          <md-icon>search</md-icon>
+        </md-button>
       </div>
     </section>
 
-</div>
+  </div>
   <div ng-if="main.checkNewPosts" layout="row">
     <div></div>
-    <md-button ng-click="main.newPost()"  style=" width: 100vh" flex>Отобразить новые посты</md-button>
+    <md-button ng-click="main.newPost()" style=" width: 100vh" flex>Отобразить новые посты</md-button>
   </div>
 </div>
 
 
-
-<div class="virtualRepeatdemoDeferredLoading container" flex="100" ng-if="main.showPost==0" >
+<div class="virtualRepeatdemoDeferredLoading container" flex="100" ng-if="main.showPost==0">
   <md-content layout="column">
     <md-virtual-repeat-container id="vertical-container">
       <div layout="column" layout-align="center stretch"
            md-virtual-repeat="posts in main.allPublicPosts" md-on-demand="true"
-           class="repeate-item" >
-        <p  class="postText">{{posts.message+"  "+posts.name}}</p><br>
+           class="repeate-item">
+        <p class="postText">{{posts.message+" "+posts.name}}</p><br>
         <div flex="70">
 
-          <img ng-src="{{posts.image}}" class="imgMyOne"   alt='Фотография'></div>
-        <div flex="10" class ="progressB" ng-if="!posts.reactions[0]"><br>
-          <button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)" >Yes</button>
-          <button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
-        <div  flex="none"class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
+          <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'></div>
+        <div flex="10" class="progressB" ng-if="!posts.reactions[0]"><br>
+          <button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)">Yes</button>
+          <button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)">No</button>
+        </div>
+        <div flex="none" class="progressB" ng-if="posts.reactions[0]"><br>
+          <prbar></prbar>
+        </div>
 
 
         <br>
         <div flex="10">
           <p>{{posts.User.login}}
-            <img  ng-src="{{posts.User.face}}" width="35" height="35" alt='Фотография'>
+            <img ng-src="{{posts.User.face}}" width="35" height="35" alt='Фотография'>
 
-            <button ng-if="!posts.checkMyPost" type="button" class=" check-element animate-show-hide btn btn-success" ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]" >Подписаться</button>
-            <button ng-if="!posts.checkMyPost" type="button"  ng-show="posts.User.follows[0] " class="btn btn-warning" ng-click="main.deleteFollows(posts)">Отписаться</button>
+            <button ng-if="!posts.checkMyPost" type="button" class=" check-element animate-show-hide btn btn-success"
+                    ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]">Подписаться
+            </button>
+            <button ng-if="!posts.checkMyPost" type="button" ng-show="posts.User.follows[0] " class="btn btn-warning"
+                    ng-click="main.deleteFollows(posts)">Отписаться
+            </button>
 
-          </h4>
+            </h4>
           </p>
         </div>
-
 
 
       </div>
@@ -62,31 +70,38 @@
   </md-content>
 </div>
 
-<div class="virtualRepeatdemoDeferredLoading container" flex="100" ng-if="main.showPost==1" >
+<div class="virtualRepeatdemoDeferredLoading container" flex="100" ng-if="main.showPost==1">
   <md-content layout="column">
     <md-virtual-repeat-container id="verticall-container">
       <div layout="column" layout-align="center stretch"
            md-virtual-repeat="posts in main.allPublicPosts" md-on-demand="true"
-           class="repeate-item" >
-        <b flex="10" class="postText">{{posts.message+"  "+posts.name}}</b><br>
+           class="repeate-item">
+        <b flex="10" class="postText">{{posts.message+" "+posts.name}}</b><br>
         <div flex="70">
 
-          <img ng-src="{{posts.image}}" class="imgMyOne"   alt='Фотография'></div>
-        <div flex="10" class ="progressB" ng-if="!posts.reactions[0]"><br>
-          <button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)" >Yes</button>
-          <button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)" >No</button></div>
-        <div flex="10" flex="none"class="progressB" ng-if="posts.reactions_id" ><br><prbar></prbar></div>
+          <img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'></div>
+        <div flex="10" class="progressB" ng-if="!posts.reactions[0]"><br>
+          <button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)">Yes</button>
+          <button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)">No</button>
+        </div>
+        <div flex="10" flex="none" class="progressB" ng-if="posts.reactions_id"><br>
+          <prbar></prbar>
+        </div>
 
 
         <br>
         <div flex="10">
           <p>{{posts.User_login}}
-            <img  ng-src="{{posts.User_face}}" width="35" height="35" alt='Фотография'>
-            <button type="button" class=" check-element animate-show-hide btn btn-success" ng-click="main.showFollows(posts)" ng-show="!posts.User_follows_id" >Подписаться</button>
-            <button  type="button"  ng-show="posts.User_follows_id" class="btn btn-warning" ng-click="main.deleteFollows(posts)">Отписаться</button></h4>
+            <img ng-src="{{posts.User_face}}" width="35" height="35" alt='Фотография'>
+            <button type="button" class=" check-element animate-show-hide btn btn-success"
+                    ng-click="main.showFollows(posts)" ng-show="!posts.User_follows_id">Подписаться
+            </button>
+            <button type="button" ng-show="posts.User_follows_id" class="btn btn-warning"
+                    ng-click="main.deleteFollows(posts)">Отписаться
+            </button>
+            </h4>
           </p>
         </div>
-
 
 
       </div>
@@ -94,8 +109,8 @@
   </md-content>
 </div>
 
-    </div>
-  </div>
+</div>
+</div>
 
 
 

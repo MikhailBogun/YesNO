@@ -56,7 +56,6 @@ module.exports = {
                 id = req.headers.idPerson;
             }
             if (private) {
-                console.log("problem1")
                 result = await db.post.prototype.onePersonPosts(id, req.query.private, req.query.offset,req.headers.idPerson);
 
             }
@@ -72,7 +71,6 @@ module.exports = {
     getLengthRows: async function (req, res) {
         let data = null;
         let {id, private, searchText} = req.query;
-        console.log(req.query)
 
         if (id == "all") {
             if (typeof searchText === "undefined") {

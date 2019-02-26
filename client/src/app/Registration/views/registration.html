@@ -1,19 +1,20 @@
-<div layout="row" layout-align="center center"  layout-wrap>
-  <form flex = "60"  flex-gt-sm="20" class="dialog-demo-content" ng-submit="reg.submit()" >
+<div layout="row" layout-align="center center" layout-wrap>
+  <form flex="60" flex-gt-sm="20" class="dialog-demo-content" ng-submit="reg.submit()">
     <div class="form-group">
       <label for="" class="login-text "><h4>Enter your future Login</h4></label>
-    <input class="form-control" required type="name" ng-model="reg.dataUsers.login" minlength="1" maxlength="12">
+      <input class="form-control" required type="name" ng-model="reg.dataUsers.login" minlength="1" maxlength="12">
     </div>
     <div class="form-group">
       <label for="" class="login-text"><h4>Enter your Password</h4></label>
-    <input class="form-control" required type="password" ng-model="reg.dataUsers.password" minlength="1" maxlength="12">
-  </div>
+      <input class="form-control" required type="password" ng-model="reg.dataUsers.password" minlength="1"
+             maxlength="12">
+    </div>
     <div class="form-group">
       <label for="" class="login-text"><h4>Enter your Email</h4></label>
-      <input class="form-control" required type="email" ng-model="reg.dataUsers.email "  minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/">
+      <input class="form-control" required type="email" ng-model="reg.dataUsers.email " minlength="10" maxlength="100"
+             ng-pattern="/^.+@.+\..+$/">
     </div>
-
-    <md-button class="md-primary"  type ="submit">Регистрация</md-button>
+    <md-button class="md-primary" type="submit">Регистрация</md-button>
   </form>
 
 </div>

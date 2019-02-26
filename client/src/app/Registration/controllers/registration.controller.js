@@ -1,19 +1,17 @@
 export class RegistrationController {
-  constructor(registration,$mdDialog,$document){
+  constructor(registration, $mdDialog, $document) {
     'ngInject'
     var vm = this;
-    vm.document = $document
-    vm.dataUsers={}
-     vm.Mydata = registration.Mydata;
-    vm.dialog= $mdDialog
-    vm.show=1;
+    vm.document = $document;
+    vm.dataUsers = {};
+    vm.Mydata = registration.Mydata;
+    vm.dialog = $mdDialog;
+    vm.show = 1;
 
-    vm.submit = function() {
-
-
+    vm.submit = function () {
       vm.Mydata.getUser(vm.dataUsers).then(res => {
           vm.ret = res;
-          if(typeof res !=='undefined') {
+          if (typeof res !== 'undefined') {
             vm.dialog.show(
               vm.dialog.alert()
                 .clickOutsideToClose(true)
@@ -28,13 +26,10 @@ export class RegistrationController {
             )
           }
         }
-      )
-
+      );
     }
-    vm.forgotPass = function(){
-      vm.show=0
+    vm.forgotPass = function () {
+      vm.show = 0;
     }
-
   }
-
 }

@@ -1,60 +1,55 @@
 <div class="center-block" style=" width:80%;">
-  <div layout="column" >
-  <div flex-gt-sm="100" flex="100" >
-    <acme-navbar creation-date="main.creationDate"></acme-navbar>
-  </div>
-  <!--<div class="mySearch">-->
-  <!--<form class="form-inline my-2 my-lg-0">-->
-    <!--<input class="form-control" type="search" placeholder="Search" aria-label="Search" ng-model="searchText">-->
-
-  <!--</form>-->
-  <!--</div>-->
-  </div>
-
+  <div layout="column">
     <div flex-gt-sm="100" flex="100">
-    <div layout="row">
-    <div flex-gt-sm="20" flex="33" ng-cloak>
-
-      <div class="virtualRepeatdemoDeferredLoading">
-        <md-content layout="column">
-          <md-virtual-repeat-container id="vertical-friend-container">
-            <a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>
-            <div md-virtual-repeat="friend in privatePost.onlyFriendsData" md-on-demand
-                 class="repeatedFriend-item">
-              <p ng-click="privatePost.showPost(friend.id)" style="outline: none;"><img ng-src="{{friend.face}}" width="35" height="35" alt='Фотография'>  {{friend.login}}</p>
-
-            </div>
-          </md-virtual-repeat-container>
-        </md-content>
-      </div>
+      <acme-navbar creation-date="main.creationDate"></acme-navbar>
     </div>
-    <div flex-gt-sm="80" flex="66" >
-      <md-button ng-if="privatePost.checkNewPosts" ng-click="privatePost.newPost()" style=" width: 120vh">Отобразить новые посты</md-button>
+  </div>
+  <div flex-gt-sm="100" flex="100">
+    <div layout="row">
+      <div flex-gt-sm="20" flex="33" ng-cloak>
 
-      <div class="virtualRepeatdemoDeferredLoading ng-cloak" >
-        <md-content layout="column">
-          <md-virtual-repeat-container id="verticall-container" ng-cloak>
-            <div md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
-                 class="repeate-item">
-              <h2>{{posts.message+"  "+posts.name}}</h2><br>
-              <div> <p class='fig'><img ng-src="{{posts.image}}" width="70%" height="400vh"  alt='Фотография'></p>
-                <div ng-if="!posts.reactions[0]" ng-cloak><br>
-                  <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)" >Yes</button>
-                  <button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)" >No</button></div>
-                <div class="progressB" ng-if="posts.reactions[0]" ><br><prbar></prbar></div>
+        <div class="virtualRepeatdemoDeferredLoading">
+          <md-content layout="column">
+            <md-virtual-repeat-container id="vertical-friend-container">
+              <a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>
+              <div md-virtual-repeat="friend in privatePost.onlyFriendsData" md-on-demand
+                   class="repeatedFriend-item">
+                <p ng-click="privatePost.showPost(friend.id)" style="outline: none;"><img ng-src="{{friend.face}}"
+                                                                                          width="35" height="35"
+                                                                                          alt='Фотография'>
+                  {{friend.login}}</p>
 
               </div>
-
-            </div>
-          </md-virtual-repeat-container>
-        </md-content>
+            </md-virtual-repeat-container>
+          </md-content>
+        </div>
       </div>
-
+      <div flex-gt-sm="80" flex="66">
+        <md-button ng-if="privatePost.checkNewPosts" ng-click="privatePost.newPost()" style=" width: 120vh">Отобразить
+          новые посты
+        </md-button>
+        <div class="virtualRepeatdemoDeferredLoading ng-cloak">
+          <md-content layout="column">
+            <md-virtual-repeat-container id="verticall-container" ng-cloak>
+              <div md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
+                   class="repeate-item">
+                <h2>{{posts.message+" "+posts.name}}</h2><br>
+                <div><p class='fig'><img ng-src="{{posts.image}}" width="70%" height="400vh" alt='Фотография'></p>
+                  <div ng-if="!posts.reactions[0]" ng-cloak><br>
+                    <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)">Yes
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)">No</button>
+                  </div>
+                  <div class="progressB" ng-if="posts.reactions[0]"><br>
+                    <prbar></prbar>
+                  </div>
+                </div>
+              </div>
+            </md-virtual-repeat-container>
+          </md-content>
+        </div>
+      </div>
     </div>
   </div>
-
 </div>
-
-
 </div>
-  </div>
