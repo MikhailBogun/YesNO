@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         }];
 
-        if (relationship === 0) {
+        if (relationship == 0) {
             options.include = [{
                 model: sequelize.models.follow,
                 as: 'iSigned',
@@ -45,10 +45,10 @@ module.exports = (sequelize, DataTypes) => {
                     ]
                 }
             }];
-        } else if (relationship === 3) {
+        } else if (relationship == 3) {
             options = {}
             options.attributes = ["login", "face", "id"];
-            if (searchText && offset === "length") {
+            if (searchText && offset == "length") {
                 let countFriendSearch = await sequelize.query(`
                     SELECT  COUNT("id") FROM "Users" AS "User" WHERE "User"."login" ILIKE :search_login;
               `,
@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
             }
         }
 
-        if (offset === "length") {
+        if (offset == "length") {
             options.attributes = [];
             console.log(await User.count(options));
             return await User.count(options);

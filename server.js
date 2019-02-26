@@ -42,7 +42,7 @@ let checkToken = function (req, res, next) {
             let id = jwt.verify(req.headers.token, config.secret).userid;
             db.User.findById(id)
                 .then(user => {
-                    if (typeof user.id !=== 'undefined') {
+                    if (typeof user.id !== 'undefined') {
                         req.headers.idPerson = user.id;
                         next()
                     } else {
@@ -95,14 +95,14 @@ app.delete('/api/deletePost:id', controller.deletePost);
 
 
 app.use('/', function (err, req, res, next) {
-    if (err === 'Пользователя несуществует!') {
+    if (err == 'Пользователя несуществует!') {
         res.status(404).send('Пользователя не существуют!');
-    } else if (err === "Вели неправильный пароль!") {
+    } else if (err == "Вели неправильный пароль!") {
         res.status(401).send('Вели неправильный пароль!');
 
-    } else if (err === 1) {
+    } else if (err == 1) {
         res.status(401).send("Пользователь с таким email уже зарегистрирован!");
-    } else if (err === "Неправильный Код") {
+    } else if (err == "Неправильный Код") {
         res.status(401).send("Неверный код");
 
     } else {
