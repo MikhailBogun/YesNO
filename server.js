@@ -67,15 +67,13 @@ app.use('/', express.static(__dirname + '/public/images'))
 app.use('/api', checkToken)
 
 app.get('/', async (req,res,next) => {
-
     try{
-        console.log("hello")
         res.render("index",{title:"YesNo"});
-        console.log("hello")
     } catch(e) {
         next(e)
     }
 })
+
 app.get("/api/PostAll", controller.PostAll);
 app.get("/api/OnePersonPosts", controller.onePersonPosts);
 app.get("/api/getLengthRows", controller.getLengthRows);
