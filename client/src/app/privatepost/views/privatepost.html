@@ -33,8 +33,8 @@
             <md-virtual-repeat-container id="verticall-container" ng-cloak>
               <div md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
                    class="repeate-item">
-                <h2>{{posts.message+" "+posts.name}}</h2><br>
-                <div><p class='fig'><img ng-src="{{posts.image}}" width="70%" height="400vh" alt='Фотография'></p>
+                <b class="postText">{{posts.message+" "+posts.name}}</b><br>
+                <div><p ><img ng-src="{{posts.image}}"  class="imgMyOne" s style alt='Фотография'></p>
                   <div ng-if="!posts.reactions[0]" ng-cloak><br>
                     <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)">Yes
                     </button>

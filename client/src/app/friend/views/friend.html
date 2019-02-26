@@ -71,10 +71,10 @@
       <div class="virtualRepeatdemoDeferredLoading ">
         <md-content layout="column">
           <md-virtual-repeat-container id="verticall-container">
-            <div md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
+            <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
                  class="repeate-item ">
-              <b class="postText" flex="noshrink">{{posts.message}} {{posts.name}}</b><br>
-              <div><p><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
+              <b flex ="10" class="postText" flex="noshrink">{{posts.message}} {{posts.name}}</b><br>
+              <div flex="70"><p><img src="{{posts.image}}" class="imgMyOne" alt='Фотография'></p>
                 <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)">Yes</button>
                   <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)">No</button>
