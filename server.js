@@ -2,6 +2,7 @@ const express = require("express");
 const db = require("./models/index");
 const jwt = require('jsonwebtoken');
 const config = require('./config/config.json')
+var path = require('path')
 const app = express();
 const multer = require('multer');
 let server = require("http").createServer(app);
@@ -54,15 +55,27 @@ let checkToken = function (req, res, next) {
         res.sendStatus(403);
     }
 }
-
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+// app.engine('html', require('ejs').renderFile);
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended: true}));
 app.use("/", express.static(__dirname + "/"));
+app.use("/", express.static(__dirname + "/client/dist/"));
 app.use('/', express.static(__dirname + '/public/images'))
 app.use('/api', checkToken)
 
+app.get('/', async (req,res,next) => {
 
+    try{
+        console.log("hello")
+        res.render("index",{title:"YesNo"});
+        console.log("hello")
+    } catch(e) {
+        next(e)
+    }
+})
 app.get("/api/PostAll", controller.PostAll);
 app.get("/api/OnePersonPosts", controller.onePersonPosts);
 app.get("/api/getLengthRows", controller.getLengthRows);
