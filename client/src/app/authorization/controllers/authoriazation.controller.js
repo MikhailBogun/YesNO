@@ -3,7 +3,8 @@ export class AuthorizationController {
   constructor($http, $location, $mdDialog, mainService, $document) {
     'ngInject'
     var vm = this;
-    var socket = io.connect("http://localhost:8000/");
+    console.log($location.$$absUrl)
+    var socket = io.connect($location.$$absUrl);
     socket.on('news', function (data) {
       console.log(data);
       socket.emit('my other event', {my: 'data'});

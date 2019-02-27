@@ -1,9 +1,9 @@
 export class MainController {
-  constructor($rootScope, $window, $log, $timeout, $scope, mainService, toastr, $http, friendsService) {
+  constructor($rootScope, $location,$window, $log, $timeout, $scope, mainService, toastr, $http, friendsService) {
     'ngInject';
     var vm = this;
     vm.Mydata = mainService.Mydata;
-
+    vm.socket = vm.Mydata.socket($location.$$absUrl);
     vm.checkNewPosts = false;
     vm.socket = vm.Mydata.socket()
     vm.socket.on('check', function (res) {
@@ -11,6 +11,7 @@ export class MainController {
     });
 
     $scope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
+      console.log(newUrl.slice(0,newUrl.lastIndexOf("/")+1))
       if (oldUrl.slice(oldUrl.lastIndexOf("/") + 1) == "home") {
         vm.socket.disconnect({test: "disconect?"})
       }

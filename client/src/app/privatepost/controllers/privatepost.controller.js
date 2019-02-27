@@ -1,5 +1,5 @@
 export class PrivatePostController {
-  constructor($scope, mainService, friendsService,$document) {
+  constructor($scope, mainService, friendsService,$document,$location) {
     'ngInject';
     var vm = this;
     vm.document =$document;
@@ -7,7 +7,7 @@ export class PrivatePostController {
     vm.checkNewPosts = false;
     vm.checkMobilePost = false;
     vm.oneuserPosts =friendsService.dataFollow.getmyFriends;
-    vm.socket = vm.Mydata.socket();
+    vm.socket = vm.Mydata.socket($location.$$absUrl);
     vm.socket.on('privateDate', function (res) {
       console.log(res)
       // $scope.$apply(vm.checkNewPosts = true);
@@ -22,7 +22,6 @@ export class PrivatePostController {
       if (oldUrl.slice(oldUrl.lastIndexOf("/") + 1) == "privatepost") {
         vm.socket.emit("leave", {token: localStorage.getItem('id')});
         vm.socket.disconnect();
-
       }
 
     });

@@ -4,8 +4,8 @@ export function MainService($http){
 
   return {
     Mydata: {
-      socket: function(){
-        var socket = io.connect("http://localhost:8000/");
+      socket: function(url){
+        var socket = io.connect(url);
         return socket;
       },
       getPosts: function(offset, text){

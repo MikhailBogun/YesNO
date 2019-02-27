@@ -1,5 +1,5 @@
 export class addPostController {
-  constructor($document, $http, addPostService, $scope) {
+  constructor($document, $http, addPostService, $scope,$location) {
     'ngInject'
     var vm = this;
     vm.document = $document;
@@ -7,7 +7,7 @@ export class addPostController {
     vm.http = $http;
     vm.dataUsers = {};
     vm.checkbox = false;
-    vm.socket = io.connect("http://localhost:8000/");
+    vm.socket = io.connect($location.$$absUrl);
 
     $scope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
       if (oldUrl.slice(oldUrl.lastIndexOf("/") + 1) == "addPost") {
