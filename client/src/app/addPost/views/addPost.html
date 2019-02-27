@@ -5,27 +5,30 @@
   </div>
   <div layout="row" layout-align="center center">
 
-    <div flex="80" flex-gt-sm="80">
-      <input type="checkbox" id="subscribeNews" name="subscribe" value="newsletter" ng-model="addPost.checkbox">
-      <label for="subscribeNews">Приватный пост</label>
+    <div flex = "60" flex-gt-sm="40">
+      <md-checkbox ng-model="addPost.checkbox" aria-label="Checkbox">
+        <b style ="font-family: 'sans-serif';"> Приватный пост</b>
+      </md-checkbox>
+      <!--<input type="checkbox" id="subscribeNews" name="subscribe" value="newsletter" ng-model="addPost.checkbox">-->
+      <!--<label for="subscribeNews"><b style =" font-family: 'sans-serif'; "> Приватный пост</b> </label>-->
       <form ng-submit="addPost.submit()">
         <div class="form-group">
-          <label for="">HashTeg</label>
+          <label for=""><b style ="font-family: 'sans-serif';">ХэшТег</b></label>
           <input type="text" class="form-control" ng-model="addPost.dataUsers.hashteg" minlength="1" maxlength="20">
         </div>
         <div class="form-group">
-          <label for="">Message</label>
+          <label for=""><b style ="font-family: 'sans-serif';">Сообщение</b></label>
           <input type="text" class="form-control" ng-model="addPost.dataUsers.message" minlength="1" maxlength="40">
         </div>
         <div class="form-group">
-          <label class="btn btn-default">Add Image<input id="fileup" file-model="addPost.dataUsers.image" type="file"
+          <label class="btn btn-default"> <b style ="font-family: 'sans-serif';">Добавить фото</b><input id="fileup" file-model="addPost.dataUsers.image" type="file"
                                                          hidden> </label>
           <md-icon>add_a_photo</md-icon>
           <p></p>
 
         </div>
 
-        <md-button type="submit">Добавить фото</md-button>
+        <md-button type="submit" class="md-raised md-primary">Добавить фото</md-button>
       </form>
 
     </div>

@@ -10,7 +10,7 @@
     <div layout-xs="column" layout-align-xs="start end" ng-show="friend.checkMobilePost" 	show-xs >
       <md-button lex-xs="100" aria-label="Open menu with custom trigger" class="md-icon-button"
                  ng-click="friend.showUser()">
-        <md-icon>perm_identity</md-icon>
+        <md-icon>reply</md-icon>
       </md-button>
 
     </div>
@@ -42,7 +42,7 @@
 
       </div>
       <div class="virtualRepeatdemoDeferredLoading">
-        <md-content>
+        <md-content class="contentPost">
           <md-virtual-repeat-container id="vertical-friend-container">
 
             <div layout-align="space-around start" md-virtual-repeat="friends in friend.onlyFriendsData" md-on-demand
@@ -72,21 +72,21 @@
       <b ng-if="!friend.testOneDataPerson.numItems" class="postText" style="text-align: center;"> Выберите пользователя для отображения
         постов</b>
       <div class="virtualRepeatdemoDeferredLoading ">
-        <md-content layout="column">
+        <md-content layout="column" class="contentPost">
           <md-virtual-repeat-container id="verticall-container">
             <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in friend.testOneDataPerson" md-on-demand
                  class="repeate-item ">
-              <b flex ="10" class="postText" flex="noshrink">{{posts.message}} {{posts.name}}</b><br>
-              <div flex="70"><p><img src="{{posts.image}}" class="imgMyOne" alt='Фотография'></p>
+              <b  class="postText" flex="noshrink">{{posts.message}} {{posts.name}}</b><br>
+              <div flex="70"><img src="{{posts.image}}" class="imgMyOne" alt='Фотография'></div>
                 <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)">Yes</button>
                   <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)">No</button>
                 </div>
-                <div class="progressB" ng-if="posts.reactions[0]"><br>
+                <div flex="10" class="progressB" ng-if="posts.reactions[0]"><br>
                   <prbar></prbar>
                 </div>
 
-              </div>
+
 
             </div>
           </md-virtual-repeat-container>
@@ -98,18 +98,18 @@
       <h3 ng-if="!friend.testOneDataPerson.numItems"
           style="text-align: center;">Выберите пользователя для отображения постов</h3>
       <div class="virtualRepeatdemoDeferredLoading">
-        <md-content layout="column">
+        <md-content layout="column" class="contentPost">
           <md-virtual-repeat-container id="verticall-container">
             <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in friend.testOneDataPerson"
                  md-on-demand
                  class="repeate-item">
-              <b style="font-size: 120%; font-family:'Times New Roman'" ;>{{posts.message}} {{posts.name}}</b><br>
-              <div><p><img src="{{posts.image}}" width="80%" height="350vh" alt='Фотография'></p>
+              <b class="postText" ;>{{posts.message}} {{posts.name}}</b><br>
+              <div flex="70"><img src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
                 <div ng-if="!posts.reactions[0]"><!--ng-if='!posts.reactions[0].reaction'--><br>
                   <button type="button" class="btn btn-success" ng-click="friend.getReaction(1,posts)">Yes</button>
                   <button type="button" class="btn btn-danger" ng-click="friend.getReaction(0,posts)">No</button>
                 </div>
-                <div class="progressB" ng-if="posts.reactions[0]"><br>
+                <div flex="10" class="progressB" ng-if="posts.reactions[0]"><br>
                   <prbar></prbar>
                 </div>
               </div>

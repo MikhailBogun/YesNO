@@ -5,7 +5,7 @@
     <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
       <md-icon>note</md-icon>
     </md-button>
-    <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+    <md-menu-content width="4" ng-mouseleave="$mdMenu.close()" class="">
       <md-menu-item>
         <md-button ng-click="profile.PageContect(1)">My public posts</md-button>
       </md-menu-item>
@@ -25,7 +25,7 @@
   <div>
 
     <div hide-xs flex>
-      <md-content class="md-padding">
+      <md-content class="md-padding contentPost" >
         <md-nav-bar
           md-no-ink-bar="disableInkBar"
           md-selected-nav-item="currentNavItem"
@@ -44,7 +44,7 @@
 
 
     <div class="virtualRepeatdemoDeferredLoading container" ng-if="profile.checkMenu==1">
-      <md-content layout="column">
+      <md-content layout="column" class="contentPost">
         <md-virtual-repeat-container id="verticall-container">
           <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts"
                md-on-demand
@@ -67,7 +67,7 @@
     </div>
 
     <div class="virtualRepeatdemoDeferredLoading container" ng-if="profile.checkMenu==2">
-      <md-content layout="column">
+      <md-content layout="column" class="contentPost">
         <md-virtual-repeat-container id="verticall-container">
           <div layout="column" layout-align="center stretch" md-virtual-repeat="posts in profile.allPublicPosts"
                md-on-demand
@@ -91,10 +91,12 @@
       </md-content>
     </div>
     <div class="center-block dialog-demo-content" ng-if="profile.checkMenu==0">
-      <div layout="row" layout-align="space-between start">
-        <img ng-src="{{profile.myFace}}" style="height: 90%; width: 90%; max-height: 200px; max-width: 300px" alt="Foto"
-             layout-align-xs="20" flex="40">
-        <div flex="60" layout-align-xs="80">
+      <div layout="column" layout-align="space-around center">
+        <img layout-align-xs="20" flex="40" ng-src="{{profile.myFace}}"
+             style="height: calc(50px + 20vh); width: calc(50px + 30vw); max-height: 400px; max-width: 300px" alt="Foto">
+          <br>
+        <br>
+        <div flex = "60" flex-gt-sm="40" >
           <form ng-submit="profile.submit()">
             <div class="form-group">
               <label for="">Текущий пароль</label>
@@ -111,10 +113,12 @@
           <form ng-submit="profile.removeFace()">
             <div class="form-group">
               <label for="">Изменить фото</label>
-              <input type="file" name="" id="" file-model="profile.face.image">
+              <!--<input type="file" name="" id="" file-model="profile.face.image">-->
+              <label class="md-button md-raised"><b style ="font-family: 'sans-serif'; font-size: 12px">Новое фото</b>  <input type="file" name="" id="" file-model="profile.face.image" hidden></label>
+
               <p></p>
             </div>
-            <md-button type="submit">Отправить</md-button>
+            <md-button type="submit" class="md-raised md-primary">Отправить</md-button>
 
           </form>
         </div>

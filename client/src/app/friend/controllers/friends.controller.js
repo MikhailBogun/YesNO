@@ -127,6 +127,7 @@ export class FriendController {
     vm.deleteFollows1 = function (followers) {
       vm.UserAction.DeleteFollow(followers.id).then(res => {
         vm.res = res;
+        vm.onlyFriendsData.loadedPages={}
       })
 
       for (let key in followers) {
@@ -139,6 +140,7 @@ export class FriendController {
       })
       vm.toastr.info('Подписались на  <a  target="_blank"><b>' + subs.login + '</b></a>');
       let bufer = {};
+      vm.onlyFriendsData.loadedPages={}
       for (let key in subs) {
         bufer[key] = subs[key];
         delete subs[key];
@@ -174,7 +176,7 @@ export class FriendController {
     }
 
     vm.showPost = function (id) {
-      console.log(vm.document[0].body.clientWidth)
+
       if(this.document[0].body.clientWidth<=600) {
         vm.checkMobilePost = true;
       }

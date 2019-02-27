@@ -8,7 +8,7 @@
       <div layout-xs="column" layout-align-xs="start end" ng-show="privatePost.checkMobilePost" 	show-xs	show-xs >
         <md-button lex-xs="100" aria-label="Open menu with custom trigger" class="md-icon-button"
                    ng-click="privatePost.showUser()">
-          <md-icon>perm_identity</md-icon>
+          <md-icon >reply</md-icon>
         </md-button>
 
       </div>
@@ -19,7 +19,7 @@
       <div flex-gt-sm="20" flex="30" flex-xs="0" layout-align="start center" ng-hide="privatePost.checkMobilePost">
 
         <div class="virtualRepeatdemoDeferredLoading">
-          <md-content layout="column">
+          <md-content layout="column" class="contentPost">
             <md-virtual-repeat-container id="vertical-friend-container">
               <a style="text-align: center;" ng-click="privatePost.allPrivatePost()"><h4>AllPosts</h4></a>
               <div md-virtual-repeat="friend in privatePost.onlyFriendsData" md-on-demand
@@ -38,22 +38,23 @@
         <md-button ng-if="privatePost.checkNewPosts" ng-click="privatePost.newPost()" style=" width: 120vh">Отобразить
           новые посты
         </md-button>
-        <div class="virtualRepeatdemoDeferredLoading ng-cloak" >
-          <md-content layout="column">
-            <md-virtual-repeat-container id="verticall-container" ng-cloak>
-              <div md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
+        <div class="virtualRepeatdemoDeferredLoading container" >
+          <md-content layout="column" class="contentPost">
+            <md-virtual-repeat-container id="verticall-container" >
+              <div layout="column" layout-align="center stretch"  md-virtual-repeat="posts in privatePost.allprivatePosts" md-on-demand
                    class="repeate-item">
                 <b class="postText">{{posts.message+" "+posts.name}}</b><br>
-                <div><p ><img ng-src="{{posts.image}}"  class="imgMyOne" s style alt='Фотография'></p>
+                <div flex="70"><img ng-src="{{posts.image}}"  class="imgMyOne" alt='Фотография'>
+                </div>
                   <div ng-if="!posts.reactions[0]" ng-cloak><br>
                     <button type="button" class="btn btn-success" ng-click="privatePost.getReaction(1,posts)">Yes
                     </button>
                     <button type="button" class="btn btn-danger" ng-click="privatePost.getReaction(0,posts)">No</button>
                   </div>
-                  <div class="progressB" ng-if="posts.reactions[0]"><br>
+                  <div flex ="10" class="progressB" ng-if="posts.reactions[0]"><br>
                     <prbar></prbar>
                   </div>
-                </div>
+
               </div>
             </md-virtual-repeat-container>
           </md-content>

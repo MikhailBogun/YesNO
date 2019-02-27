@@ -28,9 +28,9 @@
   </div>
 </div>
 
-
-<div class="virtualRepeatdemoDeferredLoading container" flex="100" ng-if="main.showPost==0">
-  <md-content layout="column">
+<div class ="center-block">
+<div class="virtualRepeatdemoDeferredLoading container"  flex="100" ng-if="main.showPost==0">
+  <md-content layout="column" class="contentPost">
     <md-virtual-repeat-container id="vertical-container">
       <div layout="column" layout-align="center stretch"
            md-virtual-repeat="posts in main.allPublicPosts" md-on-demand="true"
@@ -72,7 +72,7 @@
 </div>
 
 <div class="virtualRepeatdemoDeferredLoading container" flex="100" ng-if="main.showPost==1">
-  <md-content layout="column">
+  <md-content layout="column" class="contentPost">
     <md-virtual-repeat-container id="verticall-container">
       <div layout="column" layout-align="center stretch"
            md-virtual-repeat="posts in main.allPublicPosts" md-on-demand="true"
@@ -131,6 +131,5 @@
 </div>
 </div>
 
-
-
+</div>
 

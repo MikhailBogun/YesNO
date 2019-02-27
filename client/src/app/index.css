@@ -72,6 +72,12 @@
 
 
 }
+.md-content {
+  background-color: #ffffff;
+}
+.contentPost {
+  background-color: #ffffff;
+}
 
 .virtualRepeatdemoDeferredLoading #verticall-container {
   height:80vh;
@@ -126,9 +132,9 @@
   text-align: center;
   border-bottom: 0px solid #ddd;
   height: 600px;
-  width:100%;
+  width:140%;
   max-width:1000px;
-  max-height: 1000px;
+  max-height: 2000px;
   padding-top:50px; }
 
 .virtualRepeatdemoDeferredLoading .repeated-item {
@@ -182,7 +188,7 @@
   font-size:calc(12px + 1vw);
   max-font-size: 2vw;
   min-font-size: 8px;
-  font-family: 'Times New Roman', cursive;
+  font-family: 'sans-serif', cursive;
 }
 
 .friends-login {
