@@ -1,6 +1,7 @@
 <div class="center-block" style=" width:80%;" layout="row" layout-align-xs="space-between start">
+  <div layout="column" layout-align="space-around stretch" style="width: 100%">
   <acme-navbar creation-date="main.creationDate" flex></acme-navbar>
-
+  </div>
   <md-menu hide-gt-xs show-xs flex>
     <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
       <md-icon>note</md-icon>
@@ -73,8 +74,8 @@
                md-on-demand
                class="repeate-item ">
 
-            <b class='postText'>{{posts.message+" "+posts.name}}</b><br>
-            <div flex="70"><img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>
+            <b class='postText'>{{post.message+" "+post.name}}</b><br>
+            <div flex="70"><img ng-src="{{post.image}}" class="imgMyOne" alt='Фотография'>
 
               <br>
 
@@ -95,7 +96,7 @@
         <img layout-align-xs="20" flex="40" ng-src="{{profile.myFace}}"
              style="height: calc(50px + 20vh); width: calc(50px + 30vw); max-height: 400px; max-width: 300px" alt="Foto">
           <br>
-        <br>
+
         <div flex = "60" flex-gt-sm="40" >
           <form ng-submit="profile.submit()">
             <div class="form-group">
