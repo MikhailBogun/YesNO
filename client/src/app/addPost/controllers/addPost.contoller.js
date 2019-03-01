@@ -1,7 +1,8 @@
 export class addPostController {
-  constructor($document, $http, addPostService, $scope,$location) {
+  constructor($document, $http, addPostService, $scope,$location, mainService) {
     'ngInject'
     var vm = this;
+    vm.checkToken = mainService.checkAuth.checkToken()
     vm.document = $document;
     vm.addPost = addPostService.addData;
     vm.http = $http;

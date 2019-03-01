@@ -2,6 +2,7 @@ export class FriendController {
   constructor($timeout, friendsService, mainService, $http, $scope, toastr,$document) {
     'ngInject'
     var vm = this;
+    vm.checkToken = mainService.checkAuth.checkToken()
     vm.checkMySub = false;
     vm.searchText = '';
     vm.toastr = toastr;

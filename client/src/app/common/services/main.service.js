@@ -1,8 +1,28 @@
-export function MainService($http){
+export function MainService($http, $mdDialog,$location){
 
   'ngInject';
 
   return {
+    checkAuth:{
+      checkToken: function() {
+
+        if (!localStorage.getItem("id")) {
+          $mdDialog.show(
+            $mdDialog.confirm()
+              .clickOutsideToClose(false)
+              .title("Неавторизован")
+              .textContent("Авторизуйтесь для использования сообщения")
+              .ok("Ok")
+              .cancel()
+          ).then(function(){
+            $location.path('/')
+          })
+        } else {
+          return true;
+        }
+          }
+    },
+
     Mydata: {
       socket: function(url){
         var socket = io.connect(url);

@@ -2,6 +2,7 @@ export class PrivatePostController {
   constructor($scope, mainService, friendsService,$document,$location) {
     'ngInject';
     var vm = this;
+    vm.checkToken = mainService.checkAuth.checkToken();
     vm.document =$document;
     vm.Mydata = mainService.Mydata;
     vm.checkNewPosts = false;

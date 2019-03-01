@@ -1,20 +1,25 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<div layout="column" layout-align="center center" >
-<div  flex-order-gt-xs="80"  flex-order-xs="100"  style=" height: 100%">
+<div layout="row" layout-align="center center" >
+<div  flex-order-gt-xs="100"  flex-order-xs="100"  style=" height: 100%;">
 
 
-  <div style="width: 100%" layout="row">
-    <acme-navbar creation-date="main.creationDate"  ></acme-navbar>
-    <div layout="row" layout-align="start center" flex-order-gt-xs="20"  flex-order-xs="60">
-      <div class="input-group">
-        <input type="text" class="form-control" ng-model="main.searchText" placeholder="Поиск постов"
-               aria-describedby="addon">
-      </div>
-      <md-button class=" md-icon-button md-primary" data-dismiss="modal" type="submit" id="submit" value="Submit"
-                 ng-click="main.search(main.searchText)">
-        <md-icon>search</md-icon>
-      </md-button>
+  <div style="width: 100%; background-color: #f5f5f5; border-bottom: 2px solid #ddd;" layout="row" layout-align="space-between center">
+    <acme-navbar creation-date="main.creationDate"  flex="100"></acme-navbar>
+
+  </div>
+  <div layout="row" layout-align="end center" flex-order-gt-xs="20"  flex-order-xs="60" flex>
+    <div class="input-group">
+      <input type="text" class="form-control" ng-model="main.searchText" placeholder="Поиск постов"
+             aria-describedby="addon">
     </div>
+    <md-button class=" md-icon-button md-primary" data-dismiss="modal" type="submit" id="submit" value="Submit"
+               ng-click="main.search(main.searchText)">
+      <md-icon>search</md-icon>
+    </md-button>
+  </div>
+  <div ng-if="main.checkNewPosts" layout="row">
+    <div></div>
+    <md-button ng-click="main.newPost()" style=" width: 100vh" flex>Отобразить новые посты</md-button>
   </div>
 
   <div class="virtualRepeatdemoDeferredLoading container"  flex="100" ng-if="main.showPost==0">
@@ -26,7 +31,7 @@
           <md-card flex="100">
             <md-card-title>
               <md-card-title-text>
-                <span class="md-headline"> {{posts.message+" "+ posts.name}}</span>
+                <span class="md-headline"> <b style="font-family: 'sans-serif'; font-weight: 300;">{{posts.message+" "+ posts.name}}</span>
               </md-card-title-text>
             </md-card-title>
             <md-card-content>
@@ -47,53 +52,21 @@
                   <img ng-src="{{posts.User.face}}" width="35" height="35" alt='Фотография'>
 
                   <button ng-if="!posts.checkMyPost" type="button" class=" check-element animate-show-hide btn btn-success"
-                          ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]">Подписаться
+                          ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]" style="width:110px; height: 40px;">Подписаться
                   </button>
                   <button ng-if="!posts.checkMyPost" type="button" ng-show="posts.User.follows[0] " class="btn btn-warning"
-                          ng-click="main.deleteFollows(posts)">Отписаться
+                          ng-click="main.deleteFollows(posts)" style="width:110px; height: 40px;">Отписаться
                   </button>
 
                 </p>
               </div>
             </md-card-actions>
           </md-card>
-          <!--<p class="postText">{{posts.message+" "+posts.name}}</p><br>-->
-          <!--<div flex="70">-->
-
-            <!--<img ng-src="{{posts.image}}" class="imgMyOne" alt='Фотография'>-->
-          <!--</div>-->
-          <!--<div flex="10" class="progressB" ng-if="!posts.reactions[0]"><br>-->
-            <!--<button type="button" class="btn btn-success" ng-click="main.getReaction(1,posts)">Yes</button>-->
-            <!--<button type="button" class="btn btn-danger" ng-click="main.getReaction(0,posts)">No</button>-->
-          <!--</div>-->
-          <!--<div flex="none" class="progressB" ng-if="posts.reactions[0]"><br>-->
-            <!--<prbar></prbar>-->
-          <!--</div>-->
-
-
-          <!--<br>-->
-          <!--<div flex="10">-->
-            <!--<p>{{posts.User.login}}-->
-              <!--<img ng-src="{{posts.User.face}}" width="35" height="35" alt='Фотография'>-->
-
-              <!--<button ng-if="!posts.checkMyPost" type="button" class=" check-element animate-show-hide btn btn-success"-->
-                      <!--ng-click="main.showFollows(posts)" ng-show="!posts.User.follows[0]">Подписаться-->
-              <!--</button>-->
-              <!--<button ng-if="!posts.checkMyPost" type="button" ng-show="posts.User.follows[0] " class="btn btn-warning"-->
-                      <!--ng-click="main.deleteFollows(posts)">Отписаться-->
-              <!--</button>-->
-
-              <!--</h4>-->
-            <!--</p>-->
-          <!--</div>-->
-
-
         </div>
       </md-virtual-repeat-container>
     </md-content>
   </div>
   <div class ="center-block">
-
 
   <div class="virtualRepeatdemoDeferredLoading container" flex="100" ng-if="main.showPost==1">
     <md-content layout="column" class="contentPost">
@@ -127,40 +100,11 @@
             </p>
           </div>
         </div>
-        <!--<div flex="10" flex="none" class="progressB" ng-if="posts.reactions_id"><br>-->
-        <!--<prbar></prbar>-->
-        <!--</div>-->
-
-
-        <!--<br>-->
-        <!--<div flex="10">-->
-        <!--<p>{{posts.User_login}}-->
-        <!--<img ng-src="{{posts.User_face}}" width="35" height="35" alt='Фотография'>-->
-        <!--<button type="button" class=" check-element animate-show-hide btn btn-success"-->
-        <!--ng-click="main.showFollows(posts)" ng-show="!posts.User_follows_id">Подписаться-->
-        <!--</button>-->
-        <!--<button type="button" ng-show="posts.User_follows_id" class="btn btn-warning"-->
-        <!--ng-click="main.deleteFollows(posts)">Отписаться-->
-        <!--</button>-->
-        <!--</h4>-->
-        <!--</p>-->
-        <!--</div>-->
 
 
   </div>
 </div>
-
-
-
-
-  <div ng-if="main.checkNewPosts" layout="row">
-    <div></div>
-    <md-button ng-click="main.newPost()" style=" width: 100vh" flex>Отобразить новые посты</md-button>
-  </div>
 </div>
-
-
-
 </div>
 
 

@@ -12,7 +12,10 @@ export function routerConfig ($stateProvider, $urlRouterProvider,$locationProvid
       url:'/follows',
       templateUrl: 'app/friend/views/friend.html',
       controller:'FriendController',
-      controllerAs:'friend'
+      controllerAs:'friend',
+      // resolve: {
+      //
+      // }
     })
     .state('registr',{
     url:'/registration',

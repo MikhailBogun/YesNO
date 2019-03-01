@@ -1,67 +1,62 @@
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<md-toolbar class="md-menu-toolbar"  hide-xs flex >
-  <div >
+
+  <div hide-xs flex>
 
       <!--<h2 class="md-toolbar-tools"></h2>-->
-      <md-menu-bar  style="background-color: #f7f7f7" >
-        <md-menu >
-
-          <b class=" md-toolbar-tools postText"
-             style="font-family: 'Lobster', cursive; font-size:150%; color: #0f0f0f">YesNo</b></md-menu>
-        <md-menu class="md-primary">
-          <md-button ng-click="$mdMenu.open()" ui-sref="home" class="md-primary md-hue-1">
+  <div layout="column">
+    <div layout="row"   layout-align="space-between center" flex="none">
+          <b class=" postText" flex="none"
+             style="font-family: 'Lobster', cursive; font-size:200%; color: #0f0f0f; font-weight: 800;">YesNo</b>
+        <div  flex="none">
+          <md-button  ui-sref="home" class="md-primary md-hue-1" style="font-size: calc(12px + 0.1vh);" >
             Общие посты
           </md-button>
-        </md-menu>
-        <md-menu >
-          <md-button ng-click="$mdMenu.open()" ui-sref="follows" class="md-primary md-hue-1">
+        </div>
+        <div  flex="none">
+          <md-button ui-sref="follows" class="md-primary md-hue-1" style="font-size: calc(12px + 0.1vh);">
             Пользователи
           </md-button>
-        </md-menu>
-        <md-menu>
-          <md-button ng-click="$mdMenu.open()" ui-sref="addPost" class="md-primary md-hue-1">
+        </div>
+        <div  flex="none">
+          <md-button  ui-sref="addPost" class="md-primary md-hue-1" style="font-size: calc(12px + 0.1vh);">
             Добавить пост
           </md-button>
-        </md-menu>
-        <md-menu>
-          <md-button ng-click="$mdMenu.open()" ui-sref="privatePost" class="md-primary md-hue-1">
+        </div>
+        <div  flex="none" show-gt-sm hide-gt-xs>
+          <md-button ui-sref="privatePost" class="md-primary md-hue-1" style="font-size: calc(12px + 0.1vh); border-radius: 3px;">
             Приватные посты
           </md-button>
-        </md-menu>
-        <md-menu>
-          <md-button ng-click="$mdMenu.open()" ui-sref="profile" class="md-primary md-hue-1">
+        </div>
+        <div flex="none" show-gt-md hide-gt-xs>
+          <md-button  ui-sref="profile" class="md-primary md-hue-1" style="font-size: calc(12px + 0.1vh); border-radius: 3px;">
             Профиль
           </md-button>
-        </md-menu>
-        <span class="j1no7m2a j131f2eg jba3q6i tabs__indicator" style="left: 0px; width: 79px;"></span>
-      </md-menu-bar>
+        </div>
+    </div>
+    <!--<div flex="none"  hide-gt-md>-->
+      <!--<md-button  ui-sref="profile" class="md-primary md-hue-1" style="font-size: calc(12px + 0.1vh); border-radius: 3px;">-->
+        <!--Профиль-->
+      <!--</md-button>-->
+    <!--</div>-->
+
   </div>
-</md-toolbar>
-<!--<nav class="navbar navbar-static-top navbar-inverse" hide-xs flex>-->
-  <!--<div class="container-fluid">-->
-    <!--<div class="navbar-header">-->
-      <!--<a class="navbar-brand" >-->
-        <!--<span class="glyphicon glyphicon-globe"></span> <b class="postText" style="font-family: 'Lobster', cursive; font-size:150%;">YesNo</b>-->
-      <!--</a>-->
-    <!--</div>-->
+    <div flex="none"  hide-gt-md layout="row" layout-align="start start">
 
-    <!--<div   class=" navbar-collapse" id="bs-example-navbar-collapse-80">-->
-      <!--<ul layout="row" class="nav navbar-nav">-->
-        <!--<li flex="20"  class="active"><a ui-sref="home">Home</a></li>-->
-        <!--<li flex="20" class="active"><a ui-sref="follows">Folllows</a></li>-->
-        <!--<li flex="20" class="active"><a ui-sref="addPost">AddPost</a></li>-->
-        <!--<li flex="20" class="active"><a ui-sref="privatePost">Private</a></li>-->
-        <!--<li  flex="20" class="active"><a ui-sref="profile">Profile</a></li>-->
-      <!--</ul>-->
+      <md-button flex="20" hide-gt-md ui-sref="profile" class="md-primary md-hue-1" style="font-size: calc(11px + 0.1vh); border-radius: 3px;">
+        Профиль
+      </md-button>
+
+        <md-button flex="none" flex="20" flex="none" hide-gt-sm  ui-sref="privatePost" class="md-primary md-hue-1" style="font-size: calc(11px + 0.1vh); border-radius: 3px;">
+          Приватные посты
+
+      </div>
+    </div>
+    </div>
 
 
-      <!--&lt;!&ndash;<ul class="nav navbar-nav navbar-right acme-navbar-text">&ndash;&gt;-->
-      <!--&lt;!&ndash;</ul>&ndash;&gt;-->
 
-    <!--</div>-->
-  <!--</div>-->
-<!--</nav>-->
+
 
 <md-menu hide-gt-xs	show-xs flex>
   <md-button aria-label="YesNo" class="md-icon-button" ng-mouseenter="$mdMenu.open()">

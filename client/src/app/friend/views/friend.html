@@ -1,9 +1,11 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<div class="center-block" style=" width:80%;">
+<div layout="row" layout-align="center center">
+  <div flex="80"  style=" height: 100%;">
 
-  <div layout-xs="row" layout-align-xs="space-between center" style="width: 100%">
-    <acme-navbar creation-date="main.creationDate"></acme-navbar>
+
+  <div  style=" background-color: #f5f5f5; border-bottom: 2px solid #ddd;" layout="row" layout-align-xs="space-between center">
+    <acme-navbar creation-date="main.creationDate" flex="100"></acme-navbar>
     <div flex="10" hide-gt-xs	show-xs>
       <b class="postText" style="font-family: 'Lobster', cursive; font-size:150%;">YesNo</b>
     </div>
@@ -17,13 +19,13 @@
 
   </div>
 
-  <div layout="row" layout-xs="column">
+  <div layout="row" layout-xs="column" flex="100">
     <div flex-gt-sm="20" flex="30" flex-xs="0" layout-align="start center" ng-hide="!friend.checkMobilePost"></div>
     <div flex-gt-sm="20" flex="30" flex-xs="0" layout-align="start center" ng-hide="friend.checkMobilePost">
       <md-input-container>
 
-        <md-select ng-model="friendss" placeholder="Выберите тип оношения">
-          <md-option value="friend" ng-click="friend.showUsers(3)">Все пользователи</md-option>
+        <md-select ng-model="friendss" placeholder="Выберите тип оношения" >
+          <md-option value="friend" md-autofocus ng-click="friend.showUsers(3)">Все пользователи</md-option>
           <md-option value="friendd" ng-click="friend.showUsers(2)">Друзья</md-option>
           <md-option value="follows" ng-click="friend.showUsers(1)">Я подписан</md-option>
           <md-option value="subscriber" ng-click="friend.showUsers(0)">На меня подисаны</md-option>
@@ -118,5 +120,6 @@
         </md-content>
       </div>
     </div>
-  </div>
+  </div >
+</div>
 </div>

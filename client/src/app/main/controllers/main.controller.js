@@ -2,6 +2,7 @@ export class MainController {
   constructor($rootScope, $location,$window, $log, $timeout, $scope, mainService, toastr, $http, friendsService) {
     'ngInject';
     var vm = this;
+    vm.checkToken = mainService.checkAuth.checkToken()
     vm.Mydata = mainService.Mydata;
     vm.socket = vm.Mydata.socket($location.$$absUrl);
     vm.checkNewPosts = false;

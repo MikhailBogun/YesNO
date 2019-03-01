@@ -2,6 +2,7 @@ export class ProfileController {
   constructor($http, mainService, friendsService, $mdDialog, $document) {
     'ngInject'
     var vm = this;
+    vm.checkToken = mainService.checkAuth.checkToken();
     vm.http = $http;
     vm.document = $document;
     vm.dialog = $mdDialog;
