@@ -1,7 +1,10 @@
-<div class="center-block" style=" width:80%;" layout="row" layout-align-xs="space-between start">
-  <div layout="column" layout-align="space-around stretch" style="width: 100%">
-  <acme-navbar creation-date="main.creationDate" flex></acme-navbar>
+<div  layout="row" layout-align="center center" layout-align-xs="space-between start">
+  <div flex="70">
+  <div style=" background-color: #f5f5f5; border-bottom: 2px solid #ddd;" layout="row" layout-align="space-between center">
+  <acme-navbar creation-date="main.creationDate" flex="40"></acme-navbar>
   </div>
+  </div>
+
   <md-menu hide-gt-xs show-xs flex>
     <md-button aria-label="Open menu with custom trigger" class="md-icon-button" ng-mouseenter="$mdMenu.open()">
       <md-icon>note</md-icon>
@@ -22,7 +25,7 @@
   </md-menu>
 </div>
 
-<div class="center-block" style=" width:80%;">
+<div class="center-block" flex="70">
   <div>
 
     <div hide-xs flex>
@@ -127,3 +130,4 @@
     </div>
   </div>
 </div>
+

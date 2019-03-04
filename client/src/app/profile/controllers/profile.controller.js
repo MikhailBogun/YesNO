@@ -14,7 +14,6 @@ export class ProfileController {
     vm.mainService.Mydata.getMyImageFace().then(face => {
       vm.myFace = face.pathImg;
     })
-    ///localStorage.setItem('mykey','myvalue');
     vm.checkMenu = 0;
     vm.DynamicItems = function (data, privPosts) {
       this.loadedPages = {};

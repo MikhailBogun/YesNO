@@ -1,5 +1,5 @@
 
-export function fileModel($parse) {
+export function fileModel($parse, $document) {
   'ngInject';
 
   let directive =  {
@@ -11,8 +11,13 @@ export function fileModel($parse) {
       element.bind('change', function () {
         scope.$apply(function () {
           modelSetter(scope, element[0].files[0]);
+          var img = $document[0].createElement("img");
+          img.src = URL.createObjectURL(element[0].files[0]);
+          $document[0].querySelector('#preview').removeAttribute(img)
+          // $document[0].querySelector('#preview').appendChild(img);
         })
-      })
+      });
+
     }
   }
   return directive;
